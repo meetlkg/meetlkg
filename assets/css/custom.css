@@ -158,10 +158,7 @@
     margin-left: -220px;
     width: auto;
 }
-.timeline-inverted .date-info{
-        right: -140px;
-        
-}
+
 
 .date-info .month{
     position: absolute;
@@ -187,6 +184,7 @@
         left: 2.2%;
     }
     .timeline > li > .timeline-panel{
+        padding-top:30px;
         width: 94%;
     }
     .timeline > li.timeline-inverted > .timeline-panel {
@@ -205,19 +203,36 @@
         left: -10px;
         right: auto;
     }
-    .date-info {
+    .timeline .date-info {
         position: absolute;
-        top: -10px;
-        left: 90%;
-        margin-left: -24px;
+        left: 22%;
+        padding-top: 7px;
+        margin-left: 0px;
         width: auto;
     }
     .date-info .day {
-        font-size: 12px;
+        font-size: 20px;
     }
     .date-info .month,.date-info .year{
         position: initial;
         font-size: 12px;
     }
+    .show_in_mobile{
+        display: block;
+    } 
+    .hide_in_mobile{
+        display: none;
+    }
+}
+@media (min-width: 768px){
+    .timeline-inverted .date-info{
+        right: -140px;
 
+    }
+    .show_in_mobile{
+        display: none;
+    } 
+    .hide_in_mobile{
+        display: block;
+    }
 }
