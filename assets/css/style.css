@@ -213,7 +213,7 @@ header.pw_header_area {
     border-top: 0px solid rgba(255, 255, 255, 0);
 }
 
-.pw_menu ul > li:hover > ul {
+.pw_menu ul > li > ul {
     opacity: 1;
     transform: translateY(10px);
     visibility: visible;
@@ -359,6 +359,11 @@ pw GALLERY AREA
 .watch-gallery-nav ul li a:hover::before {
     width: 100%;
 }
+
+.watch-gallery-nav ul li a[class='active'] {
+    width: 100%;
+}
+
 
 .pw_gallery_img {
     position: relative;
