@@ -6,7 +6,7 @@
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 	</head>
 	<body>
-		<div class="container-fluid fill">
+		<div class="container-fluid fill" style="padding-top: 3px;">
 			<div class="row">
 			  <div class="col border border-dark fill">	
 				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
@@ -15,13 +15,13 @@
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 20vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">DATA CONTROL TOGGLE</span>
 					<div class="d-flex justify-content-center align-items-center" style="min-height:15vh;">
-						<input type="checkbox" checked data-toggle="toggle">
+						<input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="TURN OFF" data-off="TURN ON" data-onstyle="success" data-offstyle="danger">
 					</div>
 				</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 38vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">CONTROL STATION LOGS</span>
 					<div class="" style="min-height:35vh; background: #000;">
-						<section id="typeWriter">
+						<section id="typeWriter_cs">
 							Control Station Data Logging 
 						</section>
 					</div>
@@ -69,8 +69,8 @@
 							  <div class="ui text container" id="content">						  
 								<div class="ui three column stackable grid" id="row">
 								  <div class="four wide column">
-									<div id="compass-label">Wind Direction</div>
-									<div id="compass-label">Wind Speed</div>
+									<div id="compass-label">Wind Direction: <b><span id="wind_dir"></span></b> </div> 
+									<div id="compass-label">Wind Speed: <span id="wind_speed"></span></div>
 									<!-- <div class="animate" id="compass-deg">0.00</div> -->
 									<div class="compass">
 									  <img class="arrow" src="https://local-weather-app.netlify.com/images/arrow.svg" alt="arrow">
@@ -94,8 +94,7 @@
 			  </div>
 			</div>
 		  </div>
-
-		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>	
@@ -188,82 +187,118 @@
 	</script>
 	<script>
 		const data = [
-    [4.9, 246],
-    [4.1, 242],
-    [3.2, 262],
-    [1.5, 284],
-    [1.1, 294],
-    [0.4, 192],
-    [0.2, 30]];
+		[4.9, 246],
+		[4.1, 242],
+		[3.2, 262],
+		[1.5, 284],
+		[1.1, 294],
+		[0.4, 192],
+		[0.2, 30]];
 
-Highcharts.chart('container', {
-	credits: {
-    enabled: false
-},
-exporting: { enabled: false },
-    title: {
-        text: '',
-        align: 'left'
-    },
+	Highcharts.chart('container', {
+		credits: {
+		enabled: false
+	},
+	exporting: { enabled: false },
+		title: {
+			text: '',
+			align: 'left'
+		},
 
-    xAxis: {
-        type: 'datetime',
-        offset: 40
-    },
+		xAxis: {
+			type: 'datetime',
+			offset: 40
+		},
 
-    yAxis: {
-        title: {
-            text: ''
-        }
-    },
+		yAxis: {
+			title: {
+				text: ''
+			}
+		},
 
 
-    plotOptions: {
-        series: {
-            pointStart: Date.UTC(2022, 6, 30),
-            pointInterval: 36e5
-        }
-    },
+		plotOptions: {
+			series: {
+				pointStart: Date.UTC(2022, 6, 30),
+				pointInterval: 36e5
+			}
+		},
 
-    series: [{
-        type: 'windbarb',
-        data: data,
-        name: 'Wind',
-        color: Highcharts.getOptions().colors[1],
-        showInLegend: false,
-        tooltip: {
-            valueSuffix: ' m/s'
-        }
-    }, {
-        type: 'area',
-        keys: ['y'], // wind direction is not used here
-        data: data,
-        color: Highcharts.getOptions().colors[0],
-        fillColor: {
-            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-            stops: [
-                [0, Highcharts.getOptions().colors[0]],
-                [
-                    1,
-                    Highcharts.color(Highcharts.getOptions().colors[0])
-                        .setOpacity(0.25).get()
-                ]
-            ]
-        },
-        name: 'Wind speed',
-		showInLegend: false,
-        tooltip: {
-            valueSuffix: ' m/s'
-        },
-        states: {
-            inactive: {
-                opacity: 1
-            }
-        }
-    }]
+		series: [{
+			type: 'windbarb',
+			data: data,
+			name: 'Wind',
+			color: Highcharts.getOptions().colors[1],
+			showInLegend: false,
+			tooltip: {
+				valueSuffix: ' m/s'
+			}
+		}, {
+			type: 'area',
+			keys: ['y'], // wind direction is not used here
+			data: data,
+			color: Highcharts.getOptions().colors[0],
+			fillColor: {
+				linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+				stops: [
+					[0, Highcharts.getOptions().colors[0]],
+					[
+						1,
+						Highcharts.color(Highcharts.getOptions().colors[0])
+							.setOpacity(0.25).get()
+					]
+				]
+			},
+			name: 'Wind speed',
+			showInLegend: false,
+			tooltip: {
+				valueSuffix: ' m/s'
+			},
+			states: {
+				inactive: {
+					opacity: 1
+				}
+			}
+		}]
+	});
+	</script>
+	<script>
+		// JS for wind compass
+		function setCompass(degree) {
+			setTimeout(function() {
+				$(".arrow").css("transform", "rotate(" + degree + "deg)");
+			}, 1000);
+		}
 
-});
+		function get_weather_data(){
+			if($('#toggle-event').prop('checked')){
+				$.ajax({
+					url: "https://fcc-weather-api.glitch.me/api/current?lat=-19.5903889000&lon=128.8612862000",
+					type: 'GET',
+					dataType: 'json',
+					success: function(res) {
+						console.log(res);
+						setCompass(res["wind"]["deg"].toString());
+						$("#wind_dir").html(res["wind"]["deg"].toString());
+						$("#wind_speed").html(res["wind"]["speed"].toString())
+						const date = new Date();
+						//add_to_log("{speed:"+res["wind"]["speed"].toString()+", dir: "+res["wind"]["deg"]+", timestamp: "+date.toISOString()+"}");
+						add_to_log("{speed:"+res["wind"]["speed"].toString()+", dir: "+res["wind"]["deg"]+"}");
+						setTimeout(function(){get_weather_data();}, 3000);
+					}
+				});
+			}
+		}
 
+		$(function() {
+			$('#toggle-event').change(function() {
+				if($(this).prop('checked')){
+					get_weather_data();
+				}
+			})
+		})
+
+		
 	</script>
 	<style>
 		@font-face {
@@ -366,7 +401,7 @@ exporting: { enabled: false },
 		width: 100%;
 		max-width: 180px;
 		}
-		.arrow:hover {
+		/* .arrow:hover {
 		-webkit-transform: rotate(225deg);
 		-ms-transform: rotate(225deg);
 		transform: rotate(225deg);
@@ -375,7 +410,7 @@ exporting: { enabled: false },
 		-o-transition: transform 0.7s ease-in-out;
 		transition: transform 0.7s ease-in-out;
 		transition: transform 0.7s ease-in-out, -webkit-transform 0.7s ease-in-out;
-		}
+		} */
 		.disc {
 		/* position: absolute; */
 		z-index: 200;
