@@ -1,0 +1,445 @@
+<html>
+	<head>
+		<title>NTN Simulator</title>
+		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container-fluid fill">
+			<div class="row">
+			  <div class="col border border-dark fill">	
+				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
+					<span style="font-size: 25px;"><center>Control Station</center></span>
+			  	</div>
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 20vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">DATA CONTROL TOGGLE</span>
+					<div class="d-flex justify-content-center align-items-center" style="min-height:15vh;">
+						<input type="checkbox" checked data-toggle="toggle">
+					</div>
+				</div>
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 38vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">CONTROL STATION LOGS</span>
+					<div class="" style="min-height:35vh; background: #000;">
+						<section id="typeWriter">
+							Control Station Data Logging 
+						</section>
+					</div>
+				</div>
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 28vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">WIND BARD VIZ</span>
+					<div class="" style="min-height:25vh;">
+						<figure class="highcharts-figure">
+							<div id="container"></div>
+						</figure>
+					</div>
+				</div>
+			  	
+			  </div>
+			  <div class="col-6 border border-dark fill">
+				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
+					<span style="font-size: 25px;"><center>NTN Interface</center></span>
+			  	</div>
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 60vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">SATELLITE PATH VISUALISATION</span>
+					<div id="viz" style="min-height:65vh;">
+						<iframe src="path_viz_template.html" style="height: 70vh; width: 100%;"></iframe>
+					</div>
+				</div>
+
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 10vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">SATELLITE PATH VISUALISATION</span>
+					<div id="" class="container" style="min-height:15vh;">
+						<span>Satellite Latency</span><br/>
+						<span>Ground Latency</span><br/>
+						<span>No. Satellite / Hops</span>
+					</div>
+				</div>
+				
+			  </div>
+			  <div class="col border border-dark fill">
+				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
+					<span style="font-size: 25px;"><center>Remote Site</center></span>
+			  	</div>
+				  <div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 40vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">WIND DATA VIZ</span>
+					<div class="d-flex justify-content-center align-items-center" style="min-height:15vh;">
+						<main class="ui fluid container" role="main" id="main">
+							<section class="ui vertical masthead center aligned segment">
+							  <div class="ui text container" id="content">						  
+								<div class="ui three column stackable grid" id="row">
+								  <div class="four wide column">
+									<div id="compass-label">Wind Direction</div>
+									<div id="compass-label">Wind Speed</div>
+									<!-- <div class="animate" id="compass-deg">0.00</div> -->
+									<div class="compass">
+									  <img class="arrow" src="https://local-weather-app.netlify.com/images/arrow.svg" alt="arrow">
+									  <img class="disc" src="https://local-weather-app.netlify.com/images/disc.svg" alt="disc"> 
+									</div>
+								  </div> 
+								</div>
+							  </div> 
+							</section>		  
+						  </main>
+					</div>
+				</div>
+				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 48vh; border-radius: 4px; margin-top: 2vh;">
+					<span class="container" style="font-size: 15px;">REMOTE SITE LOGS</span>
+					<div class="" style="min-height:45vh; background: #000;">
+						<section id="typeWriter">
+							Control Station Data Logging 
+						</section>
+					</div>
+				</div>
+			  </div>
+			</div>
+		  </div>
+
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>	
+		<script src="https://code.highcharts.com/highcharts.js"></script>
+		<script src="https://code.highcharts.com/modules/windbarb.js"></script>
+		<script src="https://code.highcharts.com/modules/datagrouping.js"></script>
+		<script src="https://code.highcharts.com/modules/exporting.js"></script>
+		<script src="https://code.highcharts.com/modules/export-data.js"></script>
+		<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+	</body>
+	<script>
+		function TypeWriter(elmt) {
+			this.elmt = elmt;
+			this.selector = $(elmt);
+			this.linesToDisplay = [
+				"Starting ............."
+			];
+			this.firstDelay = 2000;
+			this.typingDelay = 20;
+			this.afterLineDelay = 500;
+			this.endTimeOut = 2000;
+			this.endText = "Loading...";
+		}
+
+		TypeWriter.prototype.typeIt = function(selector, text, n) {
+			var that = this;
+
+			if (n < (text.length)) {
+				$(that.elmt + ' ' + selector).html(text.substring(0, n + 1));
+				n++;
+				setTimeout(function() {
+				that.typeIt(selector, text, n);
+				}, that.typingDelay);
+			} else {
+				$.event.trigger("TypeWriter:linedisplayed");
+			}
+		};
+
+		TypeWriter.prototype.appendTypeWriterItem = function(...args) {
+			switch (args.length) {
+				case 0:
+					this.selector.append(
+						"<span class='typewriter-item'>"
+					);
+					break;
+				case 1:
+					this.selector.append(
+						"<span class='typewriter-item' data-text='" + args[0] + "'>"
+					);
+					break;
+				default:
+					break;
+			}
+		};
+
+		TypeWriter.prototype.start = function() {
+			var that = this;
+			var i = 0;
+
+			that.appendTypeWriterItem(that.linesToDisplay[i]);
+
+			setTimeout(function() {
+				that.typeIt('span.typewriter-item', that.linesToDisplay[i], 0);
+			}, that.firstDelay);
+
+			$(window).on('TypeWriter:linedisplayed', function() {
+				i++;
+
+				if (i < that.linesToDisplay.length) {
+					that.appendTypeWriterItem(that.linesToDisplay[i]);
+					setTimeout(function() {
+						that.typeIt('span.typewriter-item:last-child', that.linesToDisplay[i], 0);
+					}, that.afterLineDelay);
+				} else
+					that.appendTypeWriterItem();
+
+				if (i === that.linesToDisplay.length)
+					$.event.trigger("TypeWriter:finished");
+			});
+		};
+
+		var typeWriter = new TypeWriter('#typeWriter');
+		typeWriter.start();
+		function add_to_log(str){
+			typeWriter.appendTypeWriterItem(str);
+			setTimeout(function() {
+				typeWriter.typeIt('span.typewriter-item:last-child', str, 0);
+			}, typeWriter.afterLineDelay);
+		}
+	</script>
+	<script>
+		const data = [
+    [4.9, 246],
+    [4.1, 242],
+    [3.2, 262],
+    [1.5, 284],
+    [1.1, 294],
+    [0.4, 192],
+    [0.2, 30]];
+
+Highcharts.chart('container', {
+	credits: {
+    enabled: false
+},
+exporting: { enabled: false },
+    title: {
+        text: '',
+        align: 'left'
+    },
+
+    xAxis: {
+        type: 'datetime',
+        offset: 40
+    },
+
+    yAxis: {
+        title: {
+            text: ''
+        }
+    },
+
+
+    plotOptions: {
+        series: {
+            pointStart: Date.UTC(2022, 6, 30),
+            pointInterval: 36e5
+        }
+    },
+
+    series: [{
+        type: 'windbarb',
+        data: data,
+        name: 'Wind',
+        color: Highcharts.getOptions().colors[1],
+        showInLegend: false,
+        tooltip: {
+            valueSuffix: ' m/s'
+        }
+    }, {
+        type: 'area',
+        keys: ['y'], // wind direction is not used here
+        data: data,
+        color: Highcharts.getOptions().colors[0],
+        fillColor: {
+            linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+            stops: [
+                [0, Highcharts.getOptions().colors[0]],
+                [
+                    1,
+                    Highcharts.color(Highcharts.getOptions().colors[0])
+                        .setOpacity(0.25).get()
+                ]
+            ]
+        },
+        name: 'Wind speed',
+		showInLegend: false,
+        tooltip: {
+            valueSuffix: ' m/s'
+        },
+        states: {
+            inactive: {
+                opacity: 1
+            }
+        }
+    }]
+
+});
+
+	</script>
+	<style>
+		@font-face {
+			font-family:"ProggyClean";
+			src: url("ProggyClean.ttf") format("truetype");
+			size: 20px;
+		}
+		html, body {
+			height: 100%;
+			font-family: ProggyClean;
+			color: rgb(221, 221, 221);
+			font-size: 20px;
+			background-color: rgb(34, 34, 34);
+			overflow: hidden;
+		}
+		.fill { 
+			min-height: 100%;
+			height: 100%;
+			min-height: 100vh;
+		}
+		.fill-height {
+			flex-grow: 1;
+		}
+
+		/**************/
+		/* TYPEWRITER */
+		/**************/
+
+		#typeWriter {
+		width: 100%;
+		height: 100%;
+		color: #33d011;
+		font-family: 'VT323' ,courier;
+		font-size: 10px;
+		padding: 10px;
+		position: absolute;
+		z-index: 10;
+		}
+
+		#typeWriter span {
+		display: block;
+		font-size: 10px;
+		letter-spacing: 2px;
+		}
+
+		#typeWriter :last-child::after {
+		content: '|';
+		display: inline-block;
+		animation: blink 1s step-end infinite;
+		}
+
+		#typeWriter #init::after {
+		display: none;
+		}
+
+		#typeWriter span.typewriter-item::before {
+		content: '>';
+		display: inline-block;
+		margin-right: 10px;
+		}
+
+		@keyframes blink {
+			from, to {
+				opacity: 0;
+			}
+
+			50% {
+				opacity: 1;
+			}
+		}
+
+		/* Style for wind */
+
+		/* Compass left panel */
+		#compass-label {
+		margin: 0;
+		}
+		/* #compass-deg { margin-bottom:6px; } */
+
+		.compass {
+		margin: 10px 0;
+		position: relative;
+		width: 100%;
+		/* height:200px; */
+		}
+
+		.arrow {
+		position: absolute;
+		z-index: 300;
+		/* width: 160px;
+				height: 160px; */
+		-webkit-transform: rotate(0);
+		-ms-transform: rotate(0);
+		transform: rotate(0);
+		-webkit-transition: -webkit-transform 0.5s ease-in-out;
+		transition: -webkit-transform 0.5s ease-in-out;
+		-o-transition: transform 0.5s ease-in-out;
+		transition: transform 0.5s ease-in-out;
+		transition: transform 0.5s ease-in-out, -webkit-transform 0.5s ease-in-out;
+		width: 100%;
+		max-width: 180px;
+		}
+		.arrow:hover {
+		-webkit-transform: rotate(225deg);
+		-ms-transform: rotate(225deg);
+		transform: rotate(225deg);
+		-webkit-transition: -webkit-transform 0.7s ease-in-out;
+		transition: -webkit-transform 0.7s ease-in-out;
+		-o-transition: transform 0.7s ease-in-out;
+		transition: transform 0.7s ease-in-out;
+		transition: transform 0.7s ease-in-out, -webkit-transform 0.7s ease-in-out;
+		}
+		.disc {
+		/* position: absolute; */
+		z-index: 200;
+		/* width: 160px;
+				height: 160px; */
+		width: 100%;
+		max-width: 180px;
+		}
+		#compass-stats {
+		margin: 10px 0;
+		padding: 0.8em 0.6em;
+		}
+	
+	/* high chart for wind barb */
+	#container {
+		height: 200px;
+	}
+
+		#csv {
+			display: none;
+		}
+
+		.highcharts-figure,
+		.highcharts-data-table table {
+			min-width: 300px;
+			max-width: 300px;
+			margin: 1em auto;
+		}
+
+		.highcharts-data-table table {
+			font-family: Verdana, sans-serif;
+			border-collapse: collapse;
+			border: 1px solid #ebebeb;
+			margin: 10px auto;
+			text-align: center;
+			width: 100%;
+			max-width: 300px;
+		}
+
+		.highcharts-data-table caption {
+			padding: 1em 0;
+			font-size: 1.2em;
+			color: #555;
+		}
+
+		.highcharts-data-table th {
+			font-weight: 60;
+			padding: 0.5em;
+		}
+
+		.highcharts-data-table td,
+		.highcharts-data-table th,
+		.highcharts-data-table caption {
+			padding: 0.5em;
+		}
+
+		.highcharts-data-table thead tr,
+		.highcharts-data-table tr:nth-child(even) {
+			background: #f8f8f8;
+		}
+
+		.highcharts-data-table tr:hover {
+			background: #f1f7ff;
+		}
+
+	</style>
+</html>
