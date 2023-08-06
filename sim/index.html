@@ -4,6 +4,9 @@
 		<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+		<script src="https://cesium.com/downloads/cesiumjs/releases/1.57/Build/Cesium/Cesium.js"></script>
+		<link href="https://cesium.com/downloads/cesiumjs/releases/1.57/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+		<link href="https://fonts.cdnfonts.com/css/proggy-clean" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container-fluid fill" style="padding-top: 3px;">
@@ -14,13 +17,14 @@
 			  	</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 20vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">DATA CONTROL TOGGLE</span>
-					<div class="d-flex justify-content-center align-items-center" style="min-height:15vh;">
-						<input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="TURN OFF" data-off="TURN ON" data-onstyle="success" data-offstyle="danger">
+					<div class="" style="min-height:15vh;">
+						<center><span> Remote Mine (W.AUS) -> Sydney</span><br/><br/>
+						<input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="TURN OFF" data-off="TURN ON" data-onstyle="success" data-offstyle="danger"></center>
 					</div>
 				</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 38vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">CONTROL STATION LOGS</span>
-					<div class="" style="min-height:35vh; background: #000;">
+					<div id="console_cs" style="min-height:35vh; max-height:35vh; background: #000; overflow: auto;">
 						<section id="typeWriter_cs">
 							Control Station Data Logging 
 						</section>
@@ -34,8 +38,8 @@
 						</figure>
 					</div>
 				</div>
-			  	
 			  </div>
+
 			  <div class="col-6 border border-dark fill">
 				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
 					<span style="font-size: 25px;"><center>NTN Interface</center></span>
@@ -43,20 +47,21 @@
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 60vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">SATELLITE PATH VISUALISATION</span>
 					<div id="viz" style="min-height:65vh;">
-						<iframe src="path_viz_template.html" style="height: 70vh; width: 100%;"></iframe>
+						<!-- <iframe src="path_viz_template.html" style="height: 70vh; width: 100%;"></iframe> -->
+						<div id="cesiumContainer" style="height: 70vh; width: 100%;"></div>
 					</div>
 				</div>
 
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 10vh; border-radius: 4px; margin-top: 2vh;">
-					<span class="container" style="font-size: 15px;">SATELLITE PATH VISUALISATION</span>
+					<span class="container" style="font-size: 15px;">SATELLITE PATH METRICS</span>
 					<div id="" class="container" style="min-height:15vh;">
-						<span>Satellite Latency</span><br/>
-						<span>Ground Latency</span><br/>
-						<span>No. Satellite / Hops</span>
+						<span>Satellite Latency: <span id="rtt_update"></span></span><br/>
+						<span>No. Satellites: <span id="hop_update"></span> </span>
+						<div id="chartContainer" style="height: 7vh; width: 100%;"></div>
 					</div>
 				</div>
-				
 			  </div>
+
 			  <div class="col border border-dark fill">
 				<div class="container-fluid d-flex justify-content-center align-items-center border border-light" style="border-color: azure; min-height: 2vh;">
 					<span style="font-size: 25px;"><center>Remote Site</center></span>
@@ -73,8 +78,10 @@
 									<div id="compass-label">Wind Speed: <span id="wind_speed"></span></div>
 									<!-- <div class="animate" id="compass-deg">0.00</div> -->
 									<div class="compass">
-									  <img class="arrow" src="https://local-weather-app.netlify.com/images/arrow.svg" alt="arrow">
-									  <img class="disc" src="https://local-weather-app.netlify.com/images/disc.svg" alt="disc"> 
+									  <center>
+										<img class="arrow" src="https://local-weather-app.netlify.com/images/arrow.svg" alt="arrow">
+									 	<img class="disc" src="https://local-weather-app.netlify.com/images/disc.svg" alt="disc"> 
+									</center>
 									</div>
 								  </div> 
 								</div>
@@ -85,16 +92,16 @@
 				</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 48vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">REMOTE SITE LOGS</span>
-					<div class="" style="min-height:45vh; background: #000;">
-						<section id="typeWriter">
-							Control Station Data Logging 
+					<div id="console_remote" style="min-height:45vh; max-height: 45vh; background: #000; overflow: auto; flex-direction: column-reverse;">
+						<section id="typeWriter_remote">
+							Remote Site Data Logging 
 						</section>
 					</div>
 				</div>
 			  </div>
 			</div>
 		  </div>
-		  <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>	
@@ -104,16 +111,16 @@
 		<script src="https://code.highcharts.com/modules/exporting.js"></script>
 		<script src="https://code.highcharts.com/modules/export-data.js"></script>
 		<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+		<script type="text/javascript" src="https://cdn.canvasjs.com/canvasjs.min.js"></script>
 	</body>
 	<script>
 		function TypeWriter(elmt) {
 			this.elmt = elmt;
 			this.selector = $(elmt);
 			this.linesToDisplay = [
-				"Starting ............."
 			];
 			this.firstDelay = 2000;
-			this.typingDelay = 20;
+			this.typingDelay = 10;
 			this.afterLineDelay = 500;
 			this.endTimeOut = 2000;
 			this.endText = "Loading...";
@@ -121,30 +128,28 @@
 
 		TypeWriter.prototype.typeIt = function(selector, text, n) {
 			var that = this;
-
-			if (n < (text.length)) {
-				$(that.elmt + ' ' + selector).html(text.substring(0, n + 1));
-				n++;
-				setTimeout(function() {
-				that.typeIt(selector, text, n);
-				}, that.typingDelay);
-			} else {
-				$.event.trigger("TypeWriter:linedisplayed");
+			if (text){
+				if (n < (text.length)) {
+					$(that.elmt + ' ' + selector).html(text.substring(0, n + 1));
+					n++;
+					setTimeout(function() {
+					that.typeIt(selector, text, n);
+					}, that.typingDelay);
+				} else {
+					$.event.trigger("TypeWriter:linedisplayed");
+				}
 			}
+			
 		};
 
 		TypeWriter.prototype.appendTypeWriterItem = function(...args) {
+			var that = this;
 			switch (args.length) {
-				case 0:
-					this.selector.append(
-						"<span class='typewriter-item'>"
-					);
-					break;
 				case 1:
-					this.selector.append(
-						"<span class='typewriter-item' data-text='" + args[0] + "'>"
-					);
-					break;
+					that.selector.append(
+							"<span class='typewriter-item' style='white-space: initial;' data-text='" + args[0] + "'>"
+						);
+						break;
 				default:
 					break;
 			}
@@ -176,91 +181,23 @@
 			});
 		};
 
-		var typeWriter = new TypeWriter('#typeWriter');
-		typeWriter.start();
-		function add_to_log(str){
-			typeWriter.appendTypeWriterItem(str);
+		var typeWriter_remote = new TypeWriter('#typeWriter_remote');
+		typeWriter_remote.start();
+		function add_to_log_remote(str){
+			typeWriter_remote.appendTypeWriterItem(str);
 			setTimeout(function() {
-				typeWriter.typeIt('span.typewriter-item:last-child', str, 0);
-			}, typeWriter.afterLineDelay);
+				typeWriter_remote.typeIt('span.typewriter-item:last-child', str, 0);
+			}, typeWriter_remote.afterLineDelay);
 		}
-	</script>
-	<script>
-		const data = [
-		[4.9, 246],
-		[4.1, 242],
-		[3.2, 262],
-		[1.5, 284],
-		[1.1, 294],
-		[0.4, 192],
-		[0.2, 30]];
 
-	Highcharts.chart('container', {
-		credits: {
-		enabled: false
-	},
-	exporting: { enabled: false },
-		title: {
-			text: '',
-			align: 'left'
-		},
-
-		xAxis: {
-			type: 'datetime',
-			offset: 40
-		},
-
-		yAxis: {
-			title: {
-				text: ''
-			}
-		},
-
-
-		plotOptions: {
-			series: {
-				pointStart: Date.UTC(2022, 6, 30),
-				pointInterval: 36e5
-			}
-		},
-
-		series: [{
-			type: 'windbarb',
-			data: data,
-			name: 'Wind',
-			color: Highcharts.getOptions().colors[1],
-			showInLegend: false,
-			tooltip: {
-				valueSuffix: ' m/s'
-			}
-		}, {
-			type: 'area',
-			keys: ['y'], // wind direction is not used here
-			data: data,
-			color: Highcharts.getOptions().colors[0],
-			fillColor: {
-				linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
-				stops: [
-					[0, Highcharts.getOptions().colors[0]],
-					[
-						1,
-						Highcharts.color(Highcharts.getOptions().colors[0])
-							.setOpacity(0.25).get()
-					]
-				]
-			},
-			name: 'Wind speed',
-			showInLegend: false,
-			tooltip: {
-				valueSuffix: ' m/s'
-			},
-			states: {
-				inactive: {
-					opacity: 1
-				}
-			}
-		}]
-	});
+		var typeWriter_cs = new TypeWriter('#typeWriter_cs');
+		typeWriter_cs.start();
+		function add_to_log_cs(str){
+			typeWriter_cs.appendTypeWriterItem(str);
+			setTimeout(function() {
+				typeWriter_cs.typeIt('span.typewriter-item:last-child', str, 0);
+			}, typeWriter_cs.afterLineDelay);
+		}
 	</script>
 	<script>
 		// JS for wind compass
@@ -270,45 +207,341 @@
 			}, 1000);
 		}
 
-		function get_weather_data(){
+		function getDateInFormat_yy_mm_dd_hh_mm_ss_SSS() {
+			function toString(number, padLength) {
+				return number.toString().padStart(padLength, '0');
+			}
+
+			let date = new Date();
+
+			let dateTimeNow =
+						toString( date.getFullYear().toString().substr(-2) )
+				+ '_'  + toString( date.getMonth() + 1,    2 )
+				+ '_'  + toString( date.getDate(),         2 )
+				+ '__' + toString( date.getHours(),        2 )
+				+ '_'  + toString( date.getMinutes(),      2 )
+				+ '_'  + toString( date.getSeconds(),      2 )
+				+ '_'  + toString( date.getMilliseconds(), 3 );
+
+			return dateTimeNow;
+		}
+		global_wind_chart_count = 0
+		function sim_start(current_time, update_interval, viz_update_time){
 			if($('#toggle-event').prop('checked')){
 				$.ajax({
 					url: "https://fcc-weather-api.glitch.me/api/current?lat=-19.5903889000&lon=128.8612862000",
 					type: 'GET',
 					dataType: 'json',
 					success: function(res) {
-						console.log(res);
 						setCompass(res["wind"]["deg"].toString());
-						$("#wind_dir").html(res["wind"]["deg"].toString());
-						$("#wind_speed").html(res["wind"]["speed"].toString())
+						var dir = res["wind"]["deg"].toString()+"°";
+						var speed = res["wind"]["speed"].toString()+ " ms/s";
+						$("#wind_dir").html(dir);
+						$("#wind_speed").html(speed)
 						const date = new Date();
-						//add_to_log("{speed:"+res["wind"]["speed"].toString()+", dir: "+res["wind"]["deg"]+", timestamp: "+date.toISOString()+"}");
-						add_to_log("{speed:"+res["wind"]["speed"].toString()+", dir: "+res["wind"]["deg"]+"}");
-						setTimeout(function(){get_weather_data();}, 3000);
+						add_to_log_remote("{speed:"+speed+", direction: "+dir+"} <br/> Timestamp:"+date.toISOString());
+						add_to_log_remote("");
+						scroll_remote()
+						$.ajax({
+							url: "http://64.62.141.241:8001/viz_data?time="+current_time,
+							type: 'GET',
+							dataType: 'json',
+							success: function(res) {
+								console.log(res);
+								update_sat_viz(res);								
+								$("#rtt_update").html(res["gen_time_rtt"].toString().substring(0,6) + " ms");
+								$("#hop_update").html((res["path_viz"].length - 1).toString());
+								// dataPoints.push({x: current_time, y: res["gen_time_rtt"]});
+								// line_live.series[0].addPoint(([current_time, res["gen_time_rtt"]], true, true));
+								// chart.render(); 
+								if (latency_chart_count == 10)
+								{
+									latency_chart.series[0].data[0].remove(false, false);
+								}
+								else{
+									latency_chart_count = latency_chart_count + 1;
+								}
+								latency_chart.series[0].addPoint(parseFloat(res["gen_time_rtt"]));
+
+								date.setMilliseconds(date.getMilliseconds() + res["gen_time_rtt"])
+
+								// Emulating the satellite transfer delay
+								setTimeout(function(){}, res["gen_time_rtt"]);
+								
+					
+								add_to_log_cs("{speed:"+speed+", deg: "+dir+"} <br/> Timestamp:"+date.toISOString());
+								add_to_log_cs("");
+								if (global_wind_chart_count == 6)
+								{
+									wind_chart.series[0].data[0].remove(false, false);
+									wind_chart.series[1].data[0].remove(false, false);
+								}
+								else{
+									global_wind_chart_count = global_wind_chart_count + 1;
+								}
+								wind_chart.series[0].addPoint([parseFloat(speed), parseInt(dir)]);
+								wind_chart.series[1].addPoint([parseFloat(speed), parseInt(dir)]);
+
+								scroll_cs()
+								update_time = update_time + viz_update_time;
+								setTimeout(function(){sim_start(update_time, update_interval, viz_update_time);}, update_interval);
+							}
+						});
 					}
 				});
 			}
 		}
 
+		var update_time = 0;
+		var change_interval = 5000;
+		var sat_viz_interval = 16000;
+
 		$(function() {
 			$('#toggle-event').change(function() {
 				if($(this).prop('checked')){
-					get_weather_data();
+					sim_start(update_time, change_interval, sat_viz_interval)
 				}
 			})
 		})
-
+	</script>
+	<script>
+		Cesium.Ion.defaultAccessToken = '<CESIUM_ACCESS_TOKEN>';
+			var viewer = new Cesium.Viewer('cesiumContainer', {
+			skyBox : false,
+			skyAtmosphere: false,
+			baseLayerPicker: false,
+			geocoder: false,
+			homeButton: false,
+			infoBox: false,
+			sceneModePicker: false,
+			navigationHelpButton: false,
+			shouldAnimate : true,
+			contextOptions : {
+				webgl: {
+					alpha: true
+				}
+			}
+		});
+	
+		var scene = viewer.scene;
+		scene.backgroundColor = Cesium.Color.WHITE;
+		scene.highDynamicRange = false;
+		var canvas = viewer.canvas;
+		canvas.setAttribute('tabindex', '0'); // needed to put focus on the canvas
+		canvas.onclick = function() {
+			canvas.focus();
+		};
+		var ellipsoid = scene.globe.ellipsoid;
+		var globe = viewer.scene.globe;
+		globe.imageryLayers.removeAll();
+		globe.baseColor = Cesium.Color.fromCssColorString('#f7fbff');
+	
+		var tonerLayer = globe.imageryLayers.addImageryProvider(
+			Cesium.createOpenStreetMapImageryProvider({
+				url : 'https://stamen-tiles.a.ssl.fastly.net/toner-background/',
+				credit : 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'
+			})
+		);
+		tonerLayer.alpha = 0.3;
+		tonerLayer.brightness = 3;
+		tonerLayer.contrast = 0.7;
+		viewer.resolutionScale = window.devicePixelRatio;
+	
 		
+		var points = "";
+		function update_sat_viz(data_from_api){
+			if($('#toggle-event').prop('checked')){
+				viewer.entities.removeAll();
+				viewer.dataSources.removeAll(false);
+				viewer.scene.primitives.remove(points);
+				points = viewer.scene.primitives.add(new Cesium.PointPrimitiveCollection());
+				sat_lat_lng = data_from_api["sat_lat_lng"]
+				sat_path_lat_lng = data_from_api["sat_path_lat_lng"]
+				path_viz = data_from_api["path_viz"]
+				gs_loc = data_from_api["gs_loc"]
+		
+				for (let i = 0; i < sat_lat_lng.length; i++) {
+					points.add({
+							position : Cesium.Cartesian3.fromDegrees(sat_lat_lng[i][0], sat_lat_lng[i][1], sat_lat_lng[i][2]),
+							pixelSize : 2,
+							color: Cesium.Color.BLACK.withAlpha(1)
+						});
+				}
+		
+				for (let i = 0; i < sat_path_lat_lng.length; i++) {
+					viewer.entities.add({
+						name : '',
+						polyline: { 
+							positions: Cesium.Cartesian3.fromDegreesArrayHeights([sat_path_lat_lng[i][0],sat_path_lat_lng[i][1],sat_path_lat_lng[i][2],sat_path_lat_lng[i][3],sat_path_lat_lng[i][4],sat_path_lat_lng[i][5]]),
+							width: 0.5, 
+							arcType: Cesium.ArcType.NONE, 
+							material: new Cesium.PolylineOutlineMaterialProperty({ color: Cesium.Color.GREY.withAlpha(0.3), outlineWidth: 0, outlineColor: Cesium.Color.BLACK})
+						}
+					});
+				}
+		
+				for (let i = 0; i < path_viz.length; i++) {
+					viewer.entities.add({
+						name : '',
+						polyline: { 
+							positions: Cesium.Cartesian3.fromDegreesArrayHeights(path_viz[i]),
+							width: 3.0, 
+							arcType: Cesium.ArcType.NONE, 
+							material: new Cesium.PolylineOutlineMaterialProperty({ color: Cesium.Color.RED.withAlpha(1.0), outlineWidth: 0, outlineColor: Cesium.Color.BLACK})
+						}
+					});
+				}
+		
+				source = gs_loc[0]
+				dest = gs_loc[1]
+		
+				viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(source[0], source[1], source[3]), ellipsoid : {radii : new Cesium.Cartesian3(50000.0, 50000.0, 50000.0), material : Cesium.Color.GREEN.withAlpha(1),}});
+				viewer.entities.add({name : '', position: Cesium.Cartesian3.fromDegrees(dest[0], dest[1], dest[3]), ellipsoid : {radii : new Cesium.Cartesian3(50000.0, 50000.0, 50000.0), material : Cesium.Color.GREEN.withAlpha(1),}});
+		
+				viewer.camera.setView({
+							destination : Cesium.Cartesian3.fromDegrees((source[0]+dest[0])/2,(source[1]+dest[1])/2, 10000000.0), //default - africa
+						});
+			}
+		}
+
+		// var dataPoints = [];
+
+		// var chart = new CanvasJS.Chart("chartContainer",
+		// {
+		// 	axisX:{
+		// 		gridThickness: 0,
+		// 		tickLength: 0,
+		// 		lineThickness: 0,
+		// 		labelFormatter: function(){
+		// 		return " ";
+		// 		}
+		// 	},
+		// 	data: [
+		// 		{
+		// 			type: "line",
+
+		// 			dataPoints: dataPoints
+		// 		}
+		// 	]
+		// });
+		// chart.render();
+
+		function scroll_remote(){
+			$("#console_remote").scrollTop($("#console_remote")[0].scrollHeight+10);
+		}
+
+		function scroll_cs(){
+			$("#console_cs").scrollTop($("#console_cs")[0].scrollHeight+10);
+		}
+	</script>
+	<script>
+		const data = [];
+		var global_wind_chart_count = 0
+		var wind_chart = Highcharts.chart('container', {
+			credits: {
+			enabled: false
+		},
+		exporting: { enabled: false },
+			title: {
+				text: '',
+				align: 'left'
+			},
+	
+			xAxis: {
+				title: {
+					text: ''
+				},
+				labels: {
+					enabled: false
+				}
+			},
+	
+			yAxis: {
+				title: {
+					text: ''
+				}
+			},
+
+			series: [{
+				type: 'windbarb',
+				data: data,
+				name: 'Wind',
+				color: Highcharts.getOptions().colors[1],
+				showInLegend: false,
+				tooltip: {
+					valueSuffix: ' m/s'
+				}
+			}, {
+				type: 'area',
+				keys: ['y'], // wind direction is not used here
+				data: data,
+				color: Highcharts.getOptions().colors[0],
+				fillColor: {
+					linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
+					stops: [
+						[0, Highcharts.getOptions().colors[0]],
+						[
+							1,
+							Highcharts.color(Highcharts.getOptions().colors[0])
+								.setOpacity(0.25).get()
+						]
+					]
+				},
+				name: 'Wind speed',
+				showInLegend: false,
+				tooltip: {
+					valueSuffix: ' m/s'
+				},
+				states: {
+					inactive: {
+						opacity: 1
+					}
+				}
+			}]
+		});
+	</script>
+	<script>
+		var latency_chart_count = 0;
+		var latency_chart = Highcharts.chart('chartContainer', {
+			credits: {
+				enabled: false
+			},
+			exporting: { enabled: false },
+			title: {
+				text: ''
+			},
+			yAxis: {
+				title: {
+					text: ''
+				},
+				labels: {
+					enabled: true
+				},
+			},
+			xAxis: {
+				title: {
+					text: ''
+				},
+				labels: {
+					enabled: false
+				},
+			},
+			series: [{
+				name: 'Sat Latency',showInLegend: false,
+				data: []
+			}]
+
+		});
 	</script>
 	<style>
-		@font-face {
+		/* @font-face {
 			font-family:"ProggyClean";
 			src: url("ProggyClean.ttf") format("truetype");
 			size: 20px;
-		}
+		} */
 		html, body {
 			height: 100%;
-			font-family: ProggyClean;
+			font-family: 'ProggyCleanTT', sans-serif;
 			color: rgb(221, 221, 221);
 			font-size: 20px;
 			background-color: rgb(34, 34, 34);
@@ -327,34 +560,46 @@
 		/* TYPEWRITER */
 		/**************/
 
-		#typeWriter {
+		#typeWriter_cs, #typeWriter_remote {
 		width: 100%;
 		height: 100%;
 		color: #33d011;
 		font-family: 'VT323' ,courier;
 		font-size: 10px;
 		padding: 10px;
-		position: absolute;
+		/* position:fixed; */
 		z-index: 10;
+		/* overflow-y: scroll; */
+		-webkit-scrollbar {  
+				display: none;  /* Safari and Chrome */		
+			}
+		overflow-y: scroll;
+		scrollbar-width: none; /* Firefox */
+		-ms-overflow-style: none;  /* Internet Explorer 10+ */
 		}
 
-		#typeWriter span {
+		#typeWriter_cs::-webkit-scrollbar, #typeWriter_remote::-webkit-scrollbar { /* WebKit */
+			width: 0;
+			height: 0;
+		}
+
+		#typeWriter_cs span, #typeWriter_remote span {
 		display: block;
 		font-size: 10px;
-		letter-spacing: 2px;
+		letter-spacing: 1px;
 		}
 
-		#typeWriter :last-child::after {
+		#typeWriter_cs :last-child::after, #typeWriter_remote :last-child::after {
 		content: '|';
 		display: inline-block;
 		animation: blink 1s step-end infinite;
 		}
 
-		#typeWriter #init::after {
+		#typeWriter_cs #init::after, #typeWriter_remote #init::after {
 		display: none;
 		}
 
-		#typeWriter span.typewriter-item::before {
+		#typeWriter_cs span.typewriter-item::before, #typeWriter_remote span.typewriter-item::before {
 		content: '>';
 		display: inline-block;
 		margin-right: 10px;
@@ -425,9 +670,9 @@
 		}
 	
 	/* high chart for wind barb */
-	#container {
-		height: 200px;
-	}
+		#container {
+			height: 200px;
+		}
 
 		#csv {
 			display: none;
@@ -476,5 +721,26 @@
 			background: #f1f7ff;
 		}
 
+	</style>
+	<style>
+		.cesium-viewer-bottom{
+			display: none;
+		}
+		
+		.cesium-viewer-toolbar{
+			display: none;
+		}
+		.cesium-viewer-animationContainer{
+			display: none;
+		}
+	   .cesium-viewer-timelineContainer{
+			display: none;
+		}
+		.cesium-viewer-fullscreenContainer{
+			display: none;
+		}
+		.canvasjs-chart-credit{
+			display: none;
+		}
 	</style>
 </html>
