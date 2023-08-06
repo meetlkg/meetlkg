@@ -6,7 +6,6 @@
 		<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
 		<script src="https://cesium.com/downloads/cesiumjs/releases/1.57/Build/Cesium/Cesium.js"></script>
 		<link href="https://cesium.com/downloads/cesiumjs/releases/1.57/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-		<link href="https://fonts.cdnfonts.com/css/proggy-clean" rel="stylesheet">
 	</head>
 	<body>
 		<div class="container-fluid fill" style="padding-top: 3px;">
@@ -17,8 +16,8 @@
 			  	</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 20vh; border-radius: 4px; margin-top: 2vh;">
 					<span class="container" style="font-size: 15px;">DATA CONTROL TOGGLE</span>
-					<div class="" style="min-height:15vh;">
-						<center><span> Remote Mine (W.AUS) -> Sydney</span><br/><br/>
+					<div class="" style="min-height:15vh;"><br/>
+						<center><span> Remote Mine (W.AUS) <-> Sydney</span><br/><br/>
 						<input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="TURN OFF" data-off="TURN ON" data-onstyle="success" data-offstyle="danger"></center>
 					</div>
 				</div>
@@ -31,7 +30,7 @@
 					</div>
 				</div>
 				<div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 28vh; border-radius: 4px; margin-top: 2vh;">
-					<span class="container" style="font-size: 15px;">WIND BARD VIZ</span>
+					<span class="container" style="font-size: 15px;">WIND BARD VISUALISATION</span>
 					<div class="" style="min-height:25vh;">
 						<figure class="highcharts-figure">
 							<div id="container"></div>
@@ -67,7 +66,7 @@
 					<span style="font-size: 25px;"><center>Remote Site</center></span>
 			  	</div>
 				  <div class=" border rounded" style="border-color: rgb(119, 123, 123); min-height: 40vh; border-radius: 4px; margin-top: 2vh;">
-					<span class="container" style="font-size: 15px;">WIND DATA VIZ</span>
+					<span class="container" style="font-size: 15px;">WIND DATA VISUALISATION</span>
 					<div class="d-flex justify-content-center align-items-center" style="min-height:15vh;">
 						<main class="ui fluid container" role="main" id="main">
 							<section class="ui vertical masthead center aligned segment">
@@ -226,7 +225,7 @@
 			return dateTimeNow;
 		}
 		global_wind_chart_count = 0
-		function sim_start(current_time, update_interval, viz_update_time){
+		function sim_start(current_time, update_interval, viz_update_time, loc_start, loc_stop){
 			if($('#toggle-event').prop('checked')){
 				$.ajax({
 					url: "https://fcc-weather-api.glitch.me/api/current?lat=-19.5903889000&lon=128.8612862000",
@@ -235,19 +234,19 @@
 					success: function(res) {
 						setCompass(res["wind"]["deg"].toString());
 						var dir = res["wind"]["deg"].toString()+"°";
-						var speed = res["wind"]["speed"].toString()+ " ms/s";
+						var speed = res["wind"]["speed"].toString()+ " m/s";
 						$("#wind_dir").html(dir);
 						$("#wind_speed").html(speed)
 						const date = new Date();
-						add_to_log_remote("{speed:"+speed+", direction: "+dir+"} <br/> Timestamp:"+date.toISOString());
+						add_to_log_remote("{speed:"+speed+", direction: "+dir+"} <br/> Timestamp: "+date.toISOString());
 						add_to_log_remote("");
 						scroll_remote()
 						$.ajax({
-							url: "http://64.62.141.241:8001/viz_data?time="+current_time,
+							url: "http://64.62.141.241:8001/viz_data?time="+current_time+"&start="+loc_start+"&stop="+loc_stop,
 							type: 'GET',
 							dataType: 'json',
 							success: function(res) {
-								console.log(res);
+								// console.log(res);
 								update_sat_viz(res);								
 								$("#rtt_update").html(res["gen_time_rtt"].toString().substring(0,6) + " ms");
 								$("#hop_update").html((res["path_viz"].length - 1).toString());
@@ -269,7 +268,7 @@
 								setTimeout(function(){}, res["gen_time_rtt"]);
 								
 					
-								add_to_log_cs("{speed:"+speed+", deg: "+dir+"} <br/> Timestamp:"+date.toISOString());
+								add_to_log_cs("{speed:"+speed+", direction: "+dir+"} <br/> Timestamp: "+date.toISOString());
 								add_to_log_cs("");
 								if (global_wind_chart_count == 6)
 								{
@@ -284,7 +283,7 @@
 
 								scroll_cs()
 								update_time = update_time + viz_update_time;
-								setTimeout(function(){sim_start(update_time, update_interval, viz_update_time);}, update_interval);
+								setTimeout(function(){sim_start(update_time, update_interval, viz_update_time, loc_start, loc_stop);}, update_interval);
 							}
 						});
 					}
@@ -294,12 +293,31 @@
 
 		var update_time = 0;
 		var change_interval = 5000;
-		var sat_viz_interval = 16000;
+		var sat_viz_interval = 20000;
 
 		$(function() {
 			$('#toggle-event').change(function() {
 				if($(this).prop('checked')){
-					sim_start(update_time, change_interval, sat_viz_interval)
+					
+					// W.AUS -> Sydney
+					var loc_start = 1584; var loc_stop = 1585;
+
+					// // W.AUS -> Perth
+					// var loc_start = 1584; var loc_stop = 1586;
+
+					// // W.AUS -> Melbourne
+					// var loc_start = 1584; var loc_stop = 1587;
+
+					// // W.AUS -> Canberra
+					// var loc_start = 1584; var loc_stop = 1588;
+
+					// // W.AUS -> Dublin
+					// var loc_start = 1584; var loc_stop = 1589;
+
+					// // W.AUS -> Bangalore
+					// var loc_start = 1584; var loc_stop = 1590;
+					
+					sim_start(update_time, change_interval, sat_viz_interval, loc_start, loc_stop)
 				}
 			})
 		})
@@ -534,14 +552,14 @@
 		});
 	</script>
 	<style>
-		/* @font-face {
+		@font-face {
 			font-family:"ProggyClean";
 			src: url("ProggyClean.ttf") format("truetype");
 			size: 20px;
-		} */
+		}
 		html, body {
 			height: 100%;
-			font-family: 'ProggyCleanTT', sans-serif;
+			font-family: ProggyClean;
 			color: rgb(221, 221, 221);
 			font-size: 20px;
 			background-color: rgb(34, 34, 34);
@@ -644,25 +662,16 @@
 		transition: transform 0.5s ease-in-out;
 		transition: transform 0.5s ease-in-out, -webkit-transform 0.5s ease-in-out;
 		width: 100%;
-		max-width: 180px;
+		max-width: 300px;
 		}
-		/* .arrow:hover {
-		-webkit-transform: rotate(225deg);
-		-ms-transform: rotate(225deg);
-		transform: rotate(225deg);
-		-webkit-transition: -webkit-transform 0.7s ease-in-out;
-		transition: -webkit-transform 0.7s ease-in-out;
-		-o-transition: transform 0.7s ease-in-out;
-		transition: transform 0.7s ease-in-out;
-		transition: transform 0.7s ease-in-out, -webkit-transform 0.7s ease-in-out;
-		} */
+
 		.disc {
 		/* position: absolute; */
 		z-index: 200;
 		/* width: 160px;
 				height: 160px; */
 		width: 100%;
-		max-width: 180px;
+		max-width: 300px;
 		}
 		#compass-stats {
 		margin: 10px 0;
@@ -671,7 +680,7 @@
 	
 	/* high chart for wind barb */
 		#container {
-			height: 200px;
+			height: 250px;
 		}
 
 		#csv {
@@ -680,8 +689,8 @@
 
 		.highcharts-figure,
 		.highcharts-data-table table {
-			min-width: 300px;
-			max-width: 300px;
+			min-width: 400px;
+			max-width: 400px;
 			margin: 1em auto;
 		}
 
