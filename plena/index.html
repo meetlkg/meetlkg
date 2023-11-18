@@ -1,17 +1,27 @@
-<html>
-	<body>
-		<div class="myclass">
-			<h1>Page used by Plena bot.</h1>
-			<h5>Please do not close/interact with this tab.</h5>
-		</div>
-	</body>
-	<style>
-		.myclass {
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			transform: translateX(-50%) translateY(-50%);
-			font-size: 1.5cm;
-		}
-	</style>
-</html>
+<html><head></head><body>
+    <div class="myclass">
+      <h1>Page used by Plena bot.</h1>
+      <h5>Please do not close/interact with this tab.</h5>
+    </div>
+  
+  <style>
+    .myclass {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      font-size: 1.5cm;
+    }
+  </style>
+  <script type="text/javascript">
+    window.onbeforeunload = () => true;
+    document
+      .querySelectorAll("a")
+      .forEach((element) =>
+        element.addEventListener(
+          "click",
+          () => (window.onbeforeunload = null)
+        )
+      );
+  </script>
+</body></html>
