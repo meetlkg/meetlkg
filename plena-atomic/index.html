@@ -1,33 +1,33 @@
-<html><head></head><body>
-    <div class="myclass">
-      <h1>Page used by Plena bot <span style="font-size: 1cm;">(atomic)</span></h1>
-      <h5>
-        <p style="font-size: 1cm;">Please do not close/interact with this tab. You can continue using other tabs!<p>
-          <p style="font-size: 0.3cm;"> Plena uses two peristant tabs to perform your automations. For questions, reach - hello@plena.io<p></h5>
-      </h5>
-      
-
-    </div>
-    <button style="display: none;" id="plena-new-window-button" onclick="window.open('https://gokul.fyi/plena/', 'plena_window', 'location=1,status=1,scrollbars=1, resizable=1, directories=1, toolbar=1, titlebar=1');"></button>
-    <a id="plena-new-window-a" href="https://gokul.fyi/plena/">&nbsp;</a>
-  <style>
-    .myclass {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translateX(-50%) translateY(-50%);
-      font-size: 1.5cm;
-    }
-  </style>
-  <script type="text/javascript">
-    window.onbeforeunload = () => true;
-    document
-      .querySelectorAll("a")
-      .forEach((element) =>
-        element.addEventListener(
-          "click",
-          () => (window.onbeforeunload = null)
-        )
-      );
-  </script>
-</body></html>
+<html>
+  <head></head>
+  <body>
+      <div class="myclass">
+        <h1>Page used by Plena bot <span style="font-size: 1cm;">(ATOMIC)</span></h1>
+        <h5>
+          <p style="font-size: 1cm;">Please do not close/interact with this tab. You can continue using other tabs!<p>
+            <p style="font-size: 0.3cm;"> Plena uses two peristant tabs to perform your automations. For questions, reach - hello@plena.io<p>
+        </h5>
+      </div>
+      <div id="plena-bot-ATOMIC-controlled-tab"><a id="plena-new-window-a" href="https://gokul.fyi/plena/">&nbsp;</a></div>
+    <style>
+      .myclass {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translateX(-50%) translateY(-50%);
+        font-size: 1.5cm;
+      }
+    </style>
+    <script type="text/javascript">
+      window.onbeforeunload = () => true;
+      document
+        .querySelectorAll("a")
+        .forEach((element) =>
+          element.addEventListener(
+            "click",
+            () => (window.onbeforeunload = null)
+          )
+        );
+    </script>
+  </body>
+</html>
