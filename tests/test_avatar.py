@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 import sys
 from threading import Thread
+from time import monotonic, sleep
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
@@ -43,6 +44,9 @@ class AvatarAPI(unittest.TestCase):
                           headers={"Content-Type": "application/json", **(headers or {})})
         try:
             with urlopen(request) as response:
+                if response.headers.get_content_type() == "application/x-ndjson":
+                    events = [json.loads(line) for line in response]
+                    return response.status, events[-1]
                 return response.status, json.load(response)
         except HTTPError as error:
             return error.code, json.load(error)
@@ -61,7 +65,7 @@ class AvatarAPI(unittest.TestCase):
             self.assertEqual(self.post({"messages": messages})[0], 400)
 
     def test_real_profile_is_added_server_side(self):
-        result = io.BytesIO(json.dumps({"message": {"content": "I led 13 engineers at Plena."}}).encode())
+        result = io.BytesIO((json.dumps({"message": {"content": "I led 13 engineers at Plena."}, "done": True}) + "\n").encode())
         with patch.object(avatar.HTTP, "open", return_value=result) as upstream:
             status, body = self.post({"messages": [{"role": "user", "content": "Tell me about Plena"}]})
             self.assertEqual((status, body["answer"]), (200, "I led 13 engineers at Plena."))
@@ -76,8 +80,22 @@ class AvatarAPI(unittest.TestCase):
             self.assertEqual(status, 503)
             self.assertIn("unavailable", body["error"])
             self.assertNotIn("private internal", body["error"])
-        self.assertTrue(avatar.SLOTS.acquire(blocking=False))
+        # The client can receive the body just before the handler's finally runs.
+        deadline = monotonic() + 1
+        acquired = avatar.SLOTS.acquire(blocking=False)
+        while not acquired and monotonic() < deadline:
+            sleep(.01)
+            acquired = avatar.SLOTS.acquire(blocking=False)
+        self.assertTrue(acquired)
         avatar.SLOTS.release()
+
+    def test_invalid_stream_does_not_leave_a_successful_reply(self):
+        result = io.BytesIO(b'{"message": null, "done": true}\n')
+        with patch.object(avatar.HTTP, "open", return_value=result):
+            status, body = self.post({"messages": [{"role": "user", "content": "Hi"}]})
+            self.assertEqual(status, 200)
+            self.assertIn("unavailable", body["error"])
+            self.assertNotIn("answer", body)
 
     def test_private_files_and_encoded_paths_are_not_served(self):
         for path in ["/.git/config", "/%2egit/config", "/scripts/avatar.py", "/%73cripts/avatar.py", "/tests/test_avatar.py"]:

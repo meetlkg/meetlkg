@@ -66,16 +66,33 @@ async function send(text) {
   stopSpeech();busy=true;const id=++operation;
   message('user',text);pending=message('assistant','Thinking about that…','pending');input.value='';
   feedback.textContent='Finding the details in my profile…';state();
-  request=new AbortController();const timeout=setTimeout(()=>request?.abort(),75000);
+  request=new AbortController();const timeout=setTimeout(()=>request?.abort(),95000);
   try{
-    const turns=[...history.slice(-8),{role:'user',content:text}];
+    const turns=[...history.slice(-4),{role:'user',content:text}];
     const response=await fetch('/api/avatar/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:turns}),signal:request.signal});
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok)throw new Error(data.error||'My conversation service is unavailable. Please try again later.');
+    if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||'My conversation service is unavailable. Please try again later.');}
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',completed=false;
+    while(true){
+      const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});
+      const lines=buffer.split('\n');buffer=lines.pop();
+      for(const line of lines){
+        if(!line.trim())continue;const event=JSON.parse(line);
+        if(event.error)throw new Error(event.error);
+        if(id!==operation){await reader.cancel();return;}
+        if(typeof event.delta==='string'){
+          answer+=event.delta;pending.classList.remove('pending');pending.querySelector('p').textContent=answer;
+          transcript.scrollTop=transcript.scrollHeight;feedback.textContent='Writing my reply…';
+        }
+        if(typeof event.answer==='string'){answer=event.answer;completed=true;}
+      }
+      if(done)break;
+    }
+    if(!completed)throw new Error('That reply was interrupted. Please try again.');
+    const data={answer};
     if(typeof data.answer!=='string'||!data.answer.trim())throw new Error('I couldn’t finish that reply. Please try again.');
     if(id!==operation)return;
     pending.classList.remove('pending');pending.querySelector('p').textContent=data.answer;pending=null;
-    history.push({role:'user',content:text},{role:'assistant',content:data.answer});history=history.slice(-8);
+    history.push({role:'user',content:text},{role:'assistant',content:data.answer});history=history.slice(-4);
     transcript.scrollTop=transcript.scrollHeight;feedback.textContent=voiceHint();
     busy=false;state();speak(data.answer);
   }catch(error){
@@ -83,7 +100,7 @@ async function send(text) {
     pending.classList.remove('pending');pending.classList.add('error');pending.querySelector('p').textContent=error.name==='AbortError'?'That took too long. Please try again.':error.message;pending=null;
     input.value=text;feedback.textContent='Your question is ready to retry.';
   }finally{
-    clearTimeout(timeout);if(id===operation){request=null;busy=false;state();}
+    clearTimeout(timeout);if(id===operation){request?.abort();request=null;busy=false;state();}
   }
 }
 function stopEverything() {
