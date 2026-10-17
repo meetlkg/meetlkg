@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import socket
 from pathlib import Path
 from threading import BoundedSemaphore, Lock
@@ -58,7 +59,7 @@ def validate_messages(payload):
     return [{"role": m["role"], "content": m["content"].strip()} for m in messages]
 
 
-def system_prompt():
+def system_prompt(messages=None):
     facts = json.loads((ROOT / "static/profile.json").read_text())
     # Strip visual metadata and make the chronological evidence easy for a small
     # model to use when answering broad questions about the career progression.
@@ -68,6 +69,10 @@ def system_prompt():
         + ". Outcome: " + entry["outcome"]
         for entry in facts["chapters"]
     )
+    question = messages[-1]["content"].lower() if messages else ""
+    overview = any(term in question for term in ("journey", "chronolog", "career from", "career timeline", "background"))
+    if overview:
+        timeline = "\n".join(f"{c['year']} | {c['company']} | {c['role']} | Focus: {c['skill']}" for c in facts["chapters"])
     projects = "\n".join(f"{p['name']}: {p['description']} {p['href']}" for p in facts["projects"])
     progression = " → ".join(f"{c['company']} ({c['year']}, {c['skill']})" for c in facts["chapters"])
     return (
@@ -83,7 +88,7 @@ def system_prompt():
         "CAREER PROGRESSION: " + progression + ". This career begins at Flytta in 2016.\n"
         "PROFILE:\n" + json.dumps(facts["profile"], ensure_ascii=False)
         + "\nCAREER, OLDEST FIRST:\n" + timeline
-        + "\nINDEPENDENT PROJECTS:\n" + projects
+        + ("\nINDEPENDENT PROJECTS:\n" + projects if not overview else "\nSummarize all five roles briefly, in order.")
     )
 
 
@@ -118,7 +123,7 @@ def chat(handler):
     try:
         request = Request(OLLAMA + "/api/chat", headers={"Content-Type": "application/json"},
                           data=json.dumps({"model": MODEL, "stream": True,
-                                           "messages": [{"role": "system", "content": system_prompt()}] + messages,
+                                           "messages": [{"role": "system", "content": system_prompt(messages)}] + messages,
                                            "options": {"temperature": 0.2, "num_predict": 160, "num_ctx": 4096,
                                                        "num_thread": int(os.environ.get("GOKUL_AVATAR_THREADS", "4"))}}).encode())
         with HTTP.open(request, timeout=70) as response:
@@ -149,7 +154,13 @@ def chat(handler):
                 if data.get("done"):
                     if not answer.strip():
                         raise ValueError("Empty model response")
-                    handler.wfile.write((json.dumps({"answer": answer.strip()}) + "\n").encode())
+                    shortened = data.get("done_reason") == "length"
+                    if shortened:
+                        endings = list(re.finditer(r"[.!?](?=\s|$)", answer))
+                        if not endings:
+                            raise ValueError("Incomplete sentence")
+                        answer = answer[:endings[-1].end()]
+                    handler.wfile.write((json.dumps({"answer": answer.strip(), "shortened": shortened}) + "\n").encode())
                     handler.wfile.flush()
                     break
             else:

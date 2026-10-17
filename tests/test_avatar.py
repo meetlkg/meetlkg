@@ -97,6 +97,13 @@ class AvatarAPI(unittest.TestCase):
             self.assertIn("unavailable", body["error"])
             self.assertNotIn("answer", body)
 
+    def test_token_limit_finishes_at_a_sentence_and_labels_shortening(self):
+        result = io.BytesIO(b'{"message":{"content":"A complete sentence. An unfinished"},"done":true,"done_reason":"length"}\n')
+        with patch.object(avatar.HTTP, "open", return_value=result):
+            _, body = self.post({"messages": [{"role": "user", "content": "Tell me about your work"}]})
+            self.assertEqual(body["answer"], "A complete sentence.")
+            self.assertTrue(body["shortened"])
+
     def test_private_files_and_encoded_paths_are_not_served(self):
         for path in ["/.git/config", "/%2egit/config", "/scripts/avatar.py", "/%73cripts/avatar.py", "/tests/test_avatar.py"]:
             for method in ["GET", "HEAD"]:

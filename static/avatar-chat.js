@@ -71,7 +71,7 @@ async function send(text) {
     const turns=[...history.slice(-4),{role:'user',content:text}];
     const response=await fetch('/api/avatar/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:turns}),signal:request.signal});
     if(!response.ok){const data=await response.json().catch(()=>({}));throw new Error(data.error||'My conversation service is unavailable. Please try again later.');}
-    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',completed=false;
+    const reader=response.body.getReader(),decoder=new TextDecoder();let buffer='',answer='',completed=false,shortened=false;
     while(true){
       const {value,done}=await reader.read();buffer+=decoder.decode(value,{stream:!done});
       const lines=buffer.split('\n');buffer=lines.pop();
@@ -83,7 +83,7 @@ async function send(text) {
           answer+=event.delta;pending.classList.remove('pending');pending.querySelector('p').textContent=answer;
           transcript.scrollTop=transcript.scrollHeight;feedback.textContent='Writing my reply…';
         }
-        if(typeof event.answer==='string'){answer=event.answer;completed=true;}
+        if(typeof event.answer==='string'){answer=event.answer;shortened=event.shortened===true;completed=true;}
       }
       if(done)break;
     }
@@ -93,7 +93,7 @@ async function send(text) {
     if(id!==operation)return;
     pending.classList.remove('pending');pending.querySelector('p').textContent=data.answer;pending=null;
     history.push({role:'user',content:text},{role:'assistant',content:data.answer});history=history.slice(-4);
-    transcript.scrollTop=transcript.scrollHeight;feedback.textContent=voiceHint();
+    transcript.scrollTop=transcript.scrollHeight;feedback.textContent=shortened?'Reply shortened. Ask about a specific role for more detail.':voiceHint();
     busy=false;state();speak(data.answer);
   }catch(error){
     if(id!==operation)return;
