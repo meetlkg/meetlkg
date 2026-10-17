@@ -20,6 +20,8 @@ It uses port 8874, or an available port if that one is busy. The printed URL is 
 
 The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. No build step, package installation, API key or backend is needed beyond Python 3. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
 
+For access from another device over LAN or Tailscale, run `./start.command --bind 0.0.0.0 --no-open` and open `http://<server-ip>:8874/` on that device. Use the printed port if the default port was busy.
+
 ## Interactions
 
 - Select a sculpture marker, numbered chapter control or case study to read a career story.

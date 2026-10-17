@@ -20,6 +20,7 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--bind", default="127.0.0.1", help="IPv4 address to listen on")
     parser.add_argument("--port", type=int, default=8874)
     parser.add_argument("--no-open", action="store_true", help="Do not open a browser")
     args = parser.parse_args()
@@ -29,15 +30,17 @@ def main():
     root = Path(__file__).resolve().parent.parent
     handler = partial(PreviewHandler, directory=str(root))
     try:
-        server = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
+        server = ThreadingHTTPServer((args.bind, args.port), handler)
     except OSError as error:
         if error.errno != errno.EADDRINUSE:
             raise
-        server = ThreadingHTTPServer(("127.0.0.1", 0), handler)
+        server = ThreadingHTTPServer((args.bind, 0), handler)
 
     with server:
-        url = "http://localhost:{}/".format(server.server_port)
+        browser_host = "localhost" if args.bind in ("0.0.0.0", "127.0.0.1") else args.bind
+        url = "http://{}:{}/".format(browser_host, server.server_port)
         print("\nPortfolio preview: {}".format(url), flush=True)
+        print("Listening on {}:{}".format(args.bind, server.server_port), flush=True)
         print("Keep this window open. Press Control+C to stop.\n", flush=True)
         if not args.no_open:
             Thread(target=webbrowser.open, args=(url,), daemon=True).start()
