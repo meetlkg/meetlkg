@@ -1,5 +1,5 @@
 /** A small, locally rendered sculpture. Its five details also open career chapters. */
-export async function mountSculpture(container, { reducedMotion = false, onSelect = () => {} } = {}) {
+export async function mountSculpture(container, { reducedMotion = false, onSelect = () => {}, interactive = true } = {}) {
   const THREE = await import('./vendor/three.module.js');
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
@@ -91,7 +91,7 @@ export async function mountSculpture(container, { reducedMotion = false, onSelec
   const invisible = own(new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, depthWrite: false }));
   const activeMaterial = own(new THREE.MeshStandardMaterial({ color: 0xc3ed68, roughness: 0.35, metalness: 0.15, emissive: 0x617b27, emissiveIntensity: 0.25 }));
   const dormantMaterial = own(new THREE.MeshStandardMaterial({ color: 0x73766b, roughness: 0.55, metalness: 0.1 }));
-  for (let index = 0; index < 5; index++) {
+  for (let index = 0; index < (interactive ? 5 : 0); index++) {
     const angle = -Math.PI * 0.35 + index * Math.PI * 2 / 5;
     const marker = new THREE.Mesh(markerGeometry, index === 0 ? activeMaterial : dormantMaterial);
     marker.position.set(Math.cos(angle) * 3.65, Math.sin(angle) * 3.22 + 0.2, 1.2);

@@ -1,6 +1,6 @@
-# gok03.com — Intelligence, made useful.
+# gok03.com — Gokulavasan Murali
 
-A minimal, interactive portfolio for Gokulavasan Murali. Editorial typography, an original chrome 3D sculpture, selected case studies and a resume-backed career timeline.
+A personal portfolio for Gokulavasan Murali, centered on his introduction, existing personal photo, selected work, experience, independent projects and interests. A small decorative 3D accent sits in the About section.
 
 ## Preview
 
@@ -24,21 +24,20 @@ For access from another device over LAN or Tailscale, run `./start.command --bin
 
 ## Interactions
 
-- Select a sculpture marker, numbered chapter control or case study to read a career story.
-- Expand the career timeline to explore roles from edge ML through deep learning and agent architecture.
-- Exploring a chapter records a subtle discovery marker, saved only in this browser’s localStorage. Reset discoveries clears it.
-- The sculpture rotates gently and responds to pointer movement. Pause motion stops it; system reduced-motion preferences are respected, with explicit manual override available.
-- Career content, project links and contact details remain readable in HTML without JavaScript or WebGL.
+- Open selected work to see my role, technical approach and outcomes.
+- Expand the experience timeline, with the current role first.
+- The decorative 3D accent loads near the About section and pauses offscreen. Its motion control and system reduced-motion preferences are supported.
+- Career content, photo, project links and contact details remain readable without JavaScript or WebGL.
 
 ## Files
 
 - `index.html`, `static/premium.css`: responsive editorial layout and complete HTML timeline
-- `static/premium.js`: story dialogs, chapter discovery and motion controls
-- `static/sculpture.js`: procedural chrome geometry, local studio reflections and interactive markers
-- `static/profile-data.js`: resume-backed career chapters
+- `static/premium.js`: project dialogs, scroll reveals, lazy 3D loading and motion controls
+- `static/sculpture.js`: procedural chrome geometry and local studio reflections
+- `static/profile-data.js`: resume-backed project and career details
 - `static/vendor/`: locally served Three.js 0.180.0 with MIT license
 - `RESEARCH.md`: primary-source portfolio references and content rationale
 - `archive.html`, `projects/`, `works.html`, `slm-talk/`: preserved earlier portfolio and project pages
 - `CNAME`: existing custom domain configuration
 
-Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The attachment itself is not published. No live AI service or fabricated benchmark scores are implied. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.
+Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The personal photo comes from the existing repository; education, community and hockey background come from the earlier portfolio. The attachment itself is not published. No live AI service or fabricated benchmark scores are implied. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.

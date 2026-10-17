@@ -1,5 +1,5 @@
 // Career facts and outcomes follow the owner-supplied Gokul.pdf résumé.
-// Game chapters organize this experience; they do not describe live AI agents.
+// Project and career details used by the personal portfolio.
 export const chapters = [
   {
     id: 'flytta',
