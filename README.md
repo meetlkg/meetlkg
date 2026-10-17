@@ -1,6 +1,6 @@
 # gok03.com — Gokulavasan Murali
 
-A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The avatar is a stylized, procedural bust based on the existing photo: dark hair, beard, sunglasses and a grey T-shirt. It is an AI representation, not a facial scan or a clone of Gokul’s voice.
+A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The avatar is a photo-textured 2.5D portrait built from the existing outdoor photo. It preserves Gokul’s actual face, swept hair, beard, aviator sunglasses, smile and grey T-shirt. A shallow 3D mesh adds gentle parallax, head movement and speech-driven mouth deformation; it is not a reconstructed full head or a clone of his voice.
 
 ## Preview
 
@@ -32,7 +32,7 @@ The default **On your device** mode renders the 3D avatar and runs chat, speech 
 
 | Component | Browser implementation | Model download, excluding runtime and caches |
 | --- | --- | --- |
-| 3D avatar | Existing locally vendored Three.js, procedural mesh | No neural-model download; the scene module is approximately 12 KB |
+| 3D avatar | Locally vendored Three.js, photo-textured relief | No neural-model download; reuses the homepage photo with two meshes and 8,064 triangles |
 | Chat with GPU | [WebLLM 0.2.86](https://github.com/mlc-ai/web-llm), SmolLM2-360M-Instruct q4 | Approximately 207 MB for q4f16; selects q4f32 on adapters without shader-f16 |
 | Chat without a GPU | [Transformers.js](https://huggingface.co/docs/transformers.js), SmolLM2-135M-Instruct q8, WASM | Approximately 137 MB; smaller model with more limited answer quality |
 | Speech input | Whisper Tiny English q8, Transformers.js WASM worker | Approximately 41 MB |
@@ -42,7 +42,7 @@ These are download sizes, not RAM requirements. GPU chat, graphics, speech model
 
 WebGPU requires HTTPS or localhost. Without an accessible GPU, chat uses the smaller WASM model on the CPU, including at an HTTP IP address. **Microphone access still requires HTTPS or localhost.** Typed questions and generated audio do not require microphone access. On a Mac, run `./start.command` and use its localhost URL for the full experience; Chrome or Edge with GPU acceleration is the recommended first target. The setup does not require Node, Python AI packages or an API key on the visitor’s device.
 
-Voice uses actual Kokoro inference, not browser `SpeechRecognition` or `speechSynthesis`, which may use vendor cloud services. HeadTTS phoneme timing supplies visemes to the procedural avatar; the model has a simplified mouth and jaw, not a full ARKit face rig. This remains a stylized likeness based on the existing photo, not a photoreal reconstruction or a clone of Gokul’s voice. A photo-faithful 3D asset would need a separate modeling step and a rigged GLB; rendering that asset would still remain local.
+Voice uses actual Kokoro inference, not browser `SpeechRecognition` or `speechSynthesis`, which may use vendor cloud services. HeadTTS phoneme timing supplies small mouth/jaw deformations to the photo-textured mesh. Rotation is limited to approximately ±13 degrees because the source is one frontal photo. The portrait uses its original lighting and expression, with 30 fps motion, a capped pixel ratio and no vertex-buffer updates while the mouth is at rest. It pauses offscreen and respects reduced motion. It is a 2.5D photo likeness, not a full ARKit rig, a head scan or a voice clone. Full side views would require additional reference photos and a separately modeled, rigged GLB.
 
 ### Optional preview-server chat
 
@@ -57,7 +57,7 @@ GitHub Pages cannot run the optional Python API. Its **On your device** mode nee
 - Open selected work to see my role, technical approach and outcomes.
 - Expand the experience timeline, with the current role first.
 - The decorative 3D accent loads near the About section and pauses offscreen. Its motion control and system reduced-motion preferences are supported.
-- The avatar loads near its section, follows the pointer gently and has rotate/pause controls. Listening, thinking and speaking states respond to the actual conversation. Both 3D scenes pause offscreen or when the page is hidden.
+- The photo-based avatar loads near its section, follows the pointer gently and has limited rotate/pause controls. Listening, thinking and speaking states respond to the actual conversation. Both 3D scenes pause offscreen or when the page is hidden.
 - Chat supports follow-up questions, stopping a reply, starting over, microphone input and optional spoken responses. Nothing auto-plays on arrival.
 - Career content, photo, project links and contact details remain readable without JavaScript or WebGL.
 
@@ -68,7 +68,7 @@ GitHub Pages cannot run the optional Python API. Its **On your device** mode nee
 - `static/sculpture.js`: procedural chrome geometry and local studio reflections
 - `static/profile-data.js`: resume-backed project and career details
 - `static/profile.json`: shared source of public facts for the website and AI avatar
-- `static/avatar-scene.js`: locally rendered 3D bust with a movable jaw and head
+- `static/avatar-scene.js`: photo-textured relief mesh, hand-traced silhouette, subtle jaw deformation and head movement
 - `static/avatar-chat.js`, `static/avatar.css`: explicit runtime selection, model loading, conversation and responsive avatar interface
 - `static/browser-ai.js`, `static/browser-chat-worker.js`: local retrieval, WebLLM GPU inference and Transformers.js WASM fallback
 - `static/browser-speech.js`, `static/browser-asr-worker.js`: Kokoro/Whisper workers, microphone lifecycle, audio playback and viseme timing

@@ -12,7 +12,7 @@ const secure=window.isSecureContext;
 const canRecord=Boolean(secure&&navigator.mediaDevices?.getUserMedia&&window.MediaRecorder);
 const canCompute=Boolean(window.Worker&&window.WebAssembly);
 let mode=new URLSearchParams(location.search).get('chat')==='server'?'server':'browser';
-let scene,sceneStarted=false,paused=reduced.matches;
+let scene,sceneRequest,sceneStarted=false,paused=reduced.matches;
 let localChat,speech,history=[],pending,request,operation=0,serviceCheck=0;
 let available=false,checked=false,busy=false,listening=false,speaking=false,preparingSpeech=false;
 let loading=false,loadingVoice=false,voiceReady=false,voiceReplies=false;
@@ -146,15 +146,16 @@ mic.addEventListener('click',async()=>{
 });
 async function loadScene(){
   if(sceneStarted)return;sceneStarted=true;
-  try{const {mountAvatar}=await import('./avatar-scene.js');scene=mountAvatar($('#avatar-canvas'));scene.setPaused(paused);state();}
-  catch(error){console.warn('3D avatar unavailable; conversation and photo remain accessible.',error);document.querySelectorAll('.avatar-scene-controls button').forEach(button=>button.disabled=true);}
+  const controller=new AbortController();sceneRequest=controller;
+  try{const {mountAvatar}=await import('./avatar-scene.js');scene=await mountAvatar($('#avatar-canvas'),{signal:controller.signal});scene.setPaused(paused);state();}
+  catch(error){if(controller.signal.aborted)return;console.warn('3D avatar unavailable; conversation and photo remain accessible.',error);document.querySelectorAll('.avatar-scene-controls button').forEach(button=>button.disabled=true);}
 }
 $('#avatar-turn-left').addEventListener('click',()=>scene?.rotate(-1));$('#avatar-turn-right').addEventListener('click',()=>scene?.rotate(1));
 function motion(){scene?.setPaused(paused);$('#avatar-motion').setAttribute('aria-pressed',String(paused));$('#avatar-motion').setAttribute('aria-label',paused?'Resume avatar animation':'Pause avatar animation');$('#avatar-motion').textContent=paused?'▷':'Ⅱ';}
 $('#avatar-motion').addEventListener('click',()=>{paused=!paused;motion();});reduced.addEventListener('change',event=>{paused=event.matches;motion();});motion();
 if('IntersectionObserver' in window){const observer=new IntersectionObserver(entries=>{if(entries.some(entry=>entry.isIntersecting)){loadScene();observer.disconnect();}},{rootMargin:'200px'});observer.observe(stage);}else loadScene();
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopEverything();});
-window.addEventListener('pagehide',()=>{stopEverything();localChat?.destroy();localChat=null;available=false;speech?.destroy();speech=null;voiceReady=false;voiceReplies=false;scene?.destroy();scene=null;sceneStarted=false;});
+window.addEventListener('pagehide',()=>{stopEverything();localChat?.destroy();localChat=null;available=false;speech?.destroy();speech=null;voiceReady=false;voiceReplies=false;sceneRequest?.abort();scene?.destroy();scene=null;sceneStarted=false;});
 window.addEventListener('pageshow',event=>{if(event.persisted){loadScene();checkService();}});
 async function checkService(){
   const id=++serviceCheck;checked=false;available=false;
