@@ -18,31 +18,39 @@ The launcher opens the website in your default browser. You can also double-clic
 
 It uses port 8874, or an available port if that one is busy. The printed URL is the correct address for that run. If you downloaded a ZIP and the launcher is not executable, run `chmod +x start.command` in its folder first.
 
-The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. The portfolio itself requires only Python 3 and has no build step. Conversation additionally needs Ollama as described below. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
+The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. The portfolio itself requires only Python 3 and has no build step. Browser conversation downloads its models on request; optional server conversation needs Ollama as described below. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
 
 For access from another device over LAN or Tailscale, run `./start.command --bind 0.0.0.0 --no-open` and open `http://<server-ip>:8874/` on that device. Use the printed port if the default port was busy.
 
-## Talk to the avatar
+## Talk to the avatar — entirely on your device
 
-1. Install and open [Ollama for Mac](https://ollama.com/download/mac) on the **server running the portfolio**. Linux is also supported.
-2. Run `ollama pull llama3.2:3b` once to download the default conversation model.
-3. Run `./start.command` and open the **localhost** URL. Ask a question using the text box, a suggested question or “Talk to me.” Allow microphone access when you choose voice input.
+The default **On your device** mode renders the 3D avatar and runs chat, speech recognition and speech generation in the visitor’s browser. It does not call the Python conversation API, Ollama or a hosted AI service. The site works with static hosting, including GitHub Pages. First-time model downloads require a connection; downloads go to Hugging Face/CDN providers, while questions and audio stay in the local worker pipeline. Browser model caches may be evicted or unavailable, especially in private browsing or insecure contexts; offline operation is not guaranteed.
 
-The server sends the public profile facts from `static/profile.json` with each conversation. It uses the real local [Ollama chat API](https://docs.ollama.com/api/chat); there are no canned AI responses. Replies stream into the chat, and stopping a reply closes the model response. The last two exchanges provide follow-up context. No API key is required. To use another installed model or server, set `GOKUL_AVATAR_MODEL` and `GOKUL_OLLAMA_URL` in the server environment. The defaults are `llama3.2:3b` and `http://127.0.0.1:11434`. A missing model or unavailable service is shown honestly in the interface. The first reply can take longer while the model loads and processes the profile; CPU inference speed depends on the server.
+1. Open the portfolio, go to the avatar and click **Load chat**. Model loading is explicit and cancelable; no weights download on arrival.
+2. Ask a question by typing or choosing a suggestion.
+3. Optionally click **Enable voice** to load the local speech models. Then use **Talk to me**, allow microphone access and click **Finish question**. Recording stops automatically after 15 seconds. Stop/reset/page hiding releases microphone tracks and stops audio playback.
 
-Voice input and spoken replies use the browser’s Web Speech APIs. [Speech recognition support varies, and some browsers send audio to their speech service](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition). Text chat stays available when voice input is unsupported. Voice is a browser voice, not Gokul’s recorded or cloned voice. The mouth movement is an approximate speaking animation, not phoneme-based lip synchronization. Audio starts only after a visitor opts into voice; listening ends after one question or when stopped.
+| Component | Browser implementation | Model download, excluding runtime and caches |
+| --- | --- | --- |
+| 3D avatar | Existing locally vendored Three.js, procedural mesh | No neural-model download; the scene module is approximately 12 KB |
+| Chat with GPU | [WebLLM 0.2.86](https://github.com/mlc-ai/web-llm), SmolLM2-360M-Instruct q4 | Approximately 207 MB for q4f16; selects q4f32 on adapters without shader-f16 |
+| Chat without a GPU | [Transformers.js](https://huggingface.co/docs/transformers.js), SmolLM2-135M-Instruct q8, WASM | Approximately 137 MB; smaller model with more limited answer quality |
+| Speech input | Whisper Tiny English q8, Transformers.js WASM worker | Approximately 41 MB |
+| Speech output + mouth timing | [HeadTTS 1.3.0](https://github.com/met4citizen/HeadTTS), timestamped Kokoro-82M q8 | Approximately 92 MB, plus one voice and the English dictionary |
 
-Remote microphone access requires **HTTPS**. An HTTP Tailscale IP works for text chat. If your tailnet has HTTPS Serve enabled, run this on the portfolio server:
+These are download sizes, not RAM requirements. GPU chat, graphics, speech models and worker memory coexist; runtime memory is higher. Small chat models can hallucinate or miss facts. Local retrieval selects public résumé context without an embedding model. A conservative lexical check replaces weakly grounded responses with visibly labelled public-profile excerpts; this is a heuristic, not a guarantee of factuality. Model output is displayed after this check. The UI discloses that answers may be wrong and links to direct contact.
 
-```bash
-tailscale serve --bg http://127.0.0.1:8874
-```
+WebGPU requires HTTPS or localhost. Without an accessible GPU, chat uses the smaller WASM model on the CPU, including at an HTTP IP address. **Microphone access still requires HTTPS or localhost.** Typed questions and generated audio do not require microphone access. On a Mac, run `./start.command` and use its localhost URL for the full experience; Chrome or Edge with GPU acceleration is the recommended first target. The setup does not require Node, Python AI packages or an API key on the visitor’s device.
 
-Use the HTTPS URL Tailscale prints. This stays inside your tailnet; it does not use Funnel. If Serve is disabled, a tailnet administrator needs to enable it using the link printed by Tailscale. Alternatively, run the site and Ollama on your Mac and use localhost.
+Voice uses actual Kokoro inference, not browser `SpeechRecognition` or `speechSynthesis`, which may use vendor cloud services. HeadTTS phoneme timing supplies visemes to the procedural avatar; the model has a simplified mouth and jaw, not a full ARKit face rig. This remains a stylized likeness based on the existing photo, not a photoreal reconstruction or a clone of Gokul’s voice. A photo-faithful 3D asset would need a separate modeling step and a rigged GLB; rendering that asset would still remain local.
 
-Conversations are kept in browser memory for the current page only; the application does not save transcripts or audio. Text is passed to the configured model server. The endpoint checks origin, bounds request sizes/history, rate-limits requests and runs one generation at a time. CPU inference defaults to four threads to avoid oversubscribing the preview host; set `GOKUL_AVATAR_THREADS` to tune it for another server. It never executes tools or makes commitments for Gokul. Model answers can still be wrong; the UI discloses this and links to direct contact.
+### Optional preview-server chat
 
-**Public hosting:** GitHub Pages can serve the portfolio and 3D avatar, but cannot run the Python conversation API. To make conversation work on `gok03.com`, host this server and its model behind HTTPS on that domain, or add a production backend with the same `/api/avatar/*` routes. Do not expose the raw Ollama port publicly. This branch does not change the live domain’s hosting.
+For the earlier server-backed experience, choose **On the preview server**, or open `/?chat=server#avatar`. That choice explicitly sends text to the local preview API and its installed Ollama model. Voice, if enabled, remains browser-local. The application never silently falls back from device inference to server inference.
+
+Install [Ollama](https://ollama.com/download), run `ollama pull llama3.2:3b` on the portfolio server and start the preview as before. `GOKUL_AVATAR_MODEL`, `GOKUL_OLLAMA_URL` and `GOKUL_AVATAR_THREADS` configure the server; defaults are `llama3.2:3b`, `http://127.0.0.1:11434` and four CPU threads. Server requests have origin checks, rate limits and bounded context. The application does not persist transcripts or audio.
+
+GitHub Pages cannot run the optional Python API. Its **On your device** mode needs only static hosting. Tailscale IP access remains available; no HTTPS Serve configuration is enabled by this change. To use the microphone remotely later, HTTPS will be necessary.
 
 ## Interactions
 
@@ -61,12 +69,15 @@ Conversations are kept in browser memory for the current page only; the applicat
 - `static/profile-data.js`: resume-backed project and career details
 - `static/profile.json`: shared source of public facts for the website and AI avatar
 - `static/avatar-scene.js`: locally rendered 3D bust with a movable jaw and head
-- `static/avatar-chat.js`, `static/avatar.css`: conversation, speech and responsive avatar interface
+- `static/avatar-chat.js`, `static/avatar.css`: explicit runtime selection, model loading, conversation and responsive avatar interface
+- `static/browser-ai.js`, `static/browser-chat-worker.js`: local retrieval, WebLLM GPU inference and Transformers.js WASM fallback
+- `static/browser-speech.js`, `static/browser-asr-worker.js`: Kokoro/Whisper workers, microphone lifecycle, audio playback and viseme timing
 - `scripts/avatar.py`: local Ollama API bridge and request limits
 - `tests/test_avatar.py`: API validation, failure handling and private-file boundary checks; run `python3 -m unittest discover -s tests -v`
-- `static/vendor/`: locally served Three.js 0.180.0 with MIT license
+- `tests/browser-ai.test.mjs`: generation cancellation, worker failure, microphone cleanup and grounded-profile fallback; run `node --test tests/browser-ai.test.mjs` with a current Node.js installation (development only)
+- `static/vendor/`: locally served Three.js 0.180.0 (MIT), WebLLM 0.2.86 (Apache 2.0) and HeadTTS 1.3.0 (MIT), with license files
 - `RESEARCH.md`: primary-source portfolio references and content rationale
 - `archive.html`, `projects/`, `works.html`, `slm-talk/`: preserved earlier portfolio and project pages
 - `CNAME`: existing custom domain configuration
 
-Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The personal photo comes from the existing repository; education, community and hockey background come from the earlier portfolio. The attachment itself is not published. Local conversation uses an installed model; no benchmark scores are fabricated. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.
+Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The personal photo comes from the existing repository; education, community and hockey background come from the earlier portfolio. The attachment itself is not published. Device conversation uses downloaded browser models; the optional preview-server mode uses an installed model. No benchmark scores are fabricated. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.

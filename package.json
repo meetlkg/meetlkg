@@ -1,0 +1,8 @@
+{
+  "name": "gok03-portfolio",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test tests/browser-ai.test.mjs"
+  }
+}

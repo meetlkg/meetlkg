@@ -133,7 +133,7 @@ export function mountAvatar(container) {
   shadow.rotation.x=-Math.PI/2;shadow.position.y=-.93;scene.add(shadow);
 
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
-  let state='idle',paused=reduced.matches,visible=true,frame=0,yaw=-.13,targetYaw=-.13,pointerX=0,pointerY=0,destroyed=false;
+  let state='idle',viseme='sil',paused=reduced.matches,visible=true,frame=0,yaw=-.13,targetYaw=-.13,pointerX=0,pointerY=0,destroyed=false;
   let epoch=performance.now(),lastTime=epoch;
   function render(now) {
     frame=0;if(destroyed||!visible||document.hidden)return;
@@ -141,17 +141,19 @@ export function mountAvatar(container) {
     yaw+=(targetYaw-yaw)*Math.min(delta*7,1);figure.rotation.y=yaw;
     if(!paused){
       const talking=state==='speaking';
-      const opening=talking?(Math.sin(elapsed*19)*.5+.5)*(.45+.55*Math.sin(elapsed*7)**2):0;
+      const shapes={sil:[0,1],PP:[0,.9],FF:[.15,1],TH:[.25,1],DD:[.3,1],kk:[.35,.95],CH:[.35,.8],SS:[.15,1.1],nn:[.2,1],RR:[.35,.85],aa:[1,1.1],E:[.55,1.2],I:[.3,1.25],O:[.75,.7],U:[.4,.6]};
+      const [opening,width]=talking?(shapes[viseme]||shapes.sil):shapes.sil;
       head.rotation.y=pointerX*.13+Math.sin(elapsed*.6)*.025;
       head.rotation.x=pointerY*.045+(state==='listening'?-.045:0)+Math.sin(elapsed*(talking?2.5:.8))*.013;
       head.rotation.z=Math.sin(elapsed*.65)*.017+(state==='thinking'?.035:0);
       torso.scale.y=1+Math.sin(elapsed*1.6)*.006;
       mouth.scale.y=.016+opening*.045;
+      mouth.scale.x=.18*width;
       mouth.position.y=-.395-opening*.02;
       jaw.position.y=-.45-opening*.055;
       lowerLip.position.y=-opening*.018;
     }else{
-      mouth.scale.y=.016;jaw.position.y=-.45;lowerLip.position.y=0;head.rotation.set(0,0,0);torso.scale.y=1;
+      mouth.scale.y=.016;mouth.scale.x=.18;jaw.position.y=-.45;lowerLip.position.y=0;head.rotation.set(0,0,0);torso.scale.y=1;
     }
     ring.material.color.set(state==='listening'?'#649b75':state==='speaking'?'#588c6b':'#95aa91');
     renderer.render(scene,camera);
@@ -168,6 +170,7 @@ export function mountAvatar(container) {
   resize();
   return {
     setState(value){state=value;wake();},
+    setViseme(value){viseme=value;wake();},
     rotate(direction){targetYaw=THREE.MathUtils.clamp(targetYaw+direction*.35,-.85,.85);wake();},
     setPaused(value){paused=value;wake();},
     destroy(){destroyed=true;cancelAnimationFrame(frame);observer.disconnect();intersection.disconnect();container.removeEventListener('pointermove',pointer);container.removeEventListener('pointerleave',leave);document.removeEventListener('visibilitychange',visibility);scene.traverse(object=>{object.geometry?.dispose();if(object.material){const materials=Array.isArray(object.material)?object.material:[object.material];materials.forEach(material=>material.dispose());}});shadowTexture.dispose();renderer.dispose();renderer.domElement.remove();}

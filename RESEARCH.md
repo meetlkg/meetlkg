@@ -20,3 +20,19 @@ This is a **personal portfolio**, with Gokulavasan Murali’s name, existing per
 The visual direction remains restrained: warm ivory, charcoal, muted green, readable type and a small decorative 3D accent in About. Project dialogs provide additional depth. Discovery counters, collectible controls and game language have been removed. The 3D accent is deferred until it approaches the viewport and supports reduced motion.
 
 Career facts and outcome metrics follow the supplied resume. Education, community and hockey background follow the earlier personal portfolio; the photo is an existing repository asset. No new employment claims, private project links, testimonials or model benchmark scores are invented.
+
+## Browser-local avatar tooling
+
+The chosen stack keeps rendering and inference on the visitor's device. Model files are downloaded only after an explicit click. A small portfolio knowledge base uses local keyword retrieval rather than an additional embedding model.
+
+| Task | Choice and rationale | Primary source |
+| --- | --- | --- |
+| Lightweight 3D | Procedural Three.js bust; no neural reconstruction weights. Simplified jaw/viseme animation rather than a full face rig. | [Three.js](https://threejs.org/docs/) |
+| GPU chat | SmolLM2-360M q4 with WebLLM, approximately 207 MB of weights. Smaller than Qwen2.5-0.5B's approximately 290 MB MLC artifact. | [SmolLM2 files](https://huggingface.co/mlc-ai/SmolLM2-360M-Instruct-q4f16_1-MLC/tree/main), [WebLLM](https://webllm.mlc.ai/docs/user/basic_usage.html) |
+| CPU chat | SmolLM2-135M q8 through Transformers.js, approximately 137 MB. Enables typed questions at an HTTP IP address. Its weak instruction following requires a clearly labelled profile-excerpt fallback. | [SmolLM2-135M](https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct) |
+| Speech recognition | Whisper Tiny English q8, approximately 41 MB. Pinned to Transformers.js 3.8.1: the v4 runtime rejected the quantized decoder graph during browser testing. | [Whisper artifacts](https://huggingface.co/onnx-community/whisper-tiny.en/tree/main/onnx), [Transformers.js](https://huggingface.co/docs/transformers.js) |
+| Voice and lip timing | Timestamped Kokoro-82M q8 through HeadTTS, approximately 92 MB plus a voice and dictionary. Supplies phoneme timing for local mouth animation. | [HeadTTS](https://github.com/met4citizen/HeadTTS), [Kokoro artifacts](https://huggingface.co/onnx-community/Kokoro-82M-v1.0-ONNX-timestamped/tree/main/onnx) |
+
+These sizes exclude runtime files, caches and working memory. The browser used for development exposes no usable WebGPU adapter, so real inference was exercised on the WASM path; GPU performance and Mac-specific behavior need verification on a supported device. Browser microphone access and WebGPU need HTTPS or localhost. HTTP Tailscale IP access remains usable for CPU text chat.
+
+The avatar is a stylized representation based on the existing outdoor photo. It is not a photoreal image reenactment or a voice clone. A closer 3D likeness would require a separately authored, optimized, rigged GLB asset; it would not require a neural reconstruction model to run in every visitor's browser.
