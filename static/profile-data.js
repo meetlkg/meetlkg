@@ -1,0 +1,144 @@
+// Career facts and outcomes follow the owner-supplied Gokul.pdf résumé.
+// Game chapters organize this experience; they do not describe live AI agents.
+export const chapters = [
+  {
+    id: 'flytta',
+    year: '2016–2019',
+    company: 'Flytta',
+    role: 'Co-founder & CTO',
+    title: 'Edge origins',
+    short: 'From pixels and sensor streams to decisions on the device.',
+    skill: 'Edge ML',
+    badge: 'edge-ml',
+    color: '#edb85a',
+    summary: 'Co-founded a mobility company and built its technology, from enterprise relocation platforms to machine learning running on mobile devices and Raspberry Pi.',
+    details: [
+      'Shipped YOLOv2 object detection with transfer learning and on-device inference for instant mobile cost estimation, replacing manual quotation visits.',
+      'Built LSTM anomaly detection on Raspberry Pi sensor streams for real-time edge inference and cargo damage prevention.',
+      'Built corporate portals, a vendor management system and Android/iOS apps. Scaled the company to 22 people and co-owned finance and operations.'
+    ],
+    skills: ['YOLOv2', 'Transfer learning', 'LSTM', 'Edge inference', 'IoT', '0→1 leadership'],
+    outcome: '22-person company · $1.5M Series A raised',
+    links: [
+      { label: 'Flytta project', href: 'projects/goflytta.html' },
+      { label: 'On-device loading estimator', href: 'projects/logistic_loading.html' }
+    ]
+  },
+  {
+    id: 'pramati',
+    year: '2020–2021',
+    company: 'Pramati',
+    role: 'Labs Senior Engineer',
+    title: 'Neural frontier',
+    short: 'Language, vision and knowledge become working systems.',
+    skill: 'Deep learning',
+    badge: 'deep-learning',
+    color: '#a48cf6',
+    summary: 'Connected language models, knowledge graphs and audio-visual deep learning while engineering automated compliance pipelines.',
+    details: [
+      'Engineered compliance extraction across PDF, web, Excel, image and XML sources for all US states, using SciPy, Selenium and Airflow orchestration.',
+      'Evaluated LEGAL-BERT for contract review and built a Neo4j knowledge graph for private-equity competitive intelligence with automated entity linking.',
+      'Developed an audio-visual deep learning framework for real-time speech synthesis and video generation driven by 3D face models and one-shot learning.'
+    ],
+    skills: ['LEGAL-BERT', 'Neo4j', 'Entity linking', 'One-shot learning', 'Speech synthesis', 'Airflow'],
+    outcome: 'Multi-format compliance extraction across all US states',
+    links: []
+  },
+  {
+    id: 'accenture',
+    year: '2021–2023',
+    company: 'Accenture Labs',
+    role: 'Product & Platform Specialist',
+    title: 'Orbital intelligence',
+    short: 'Take ML from documents and language to low Earth orbit.',
+    skill: 'ML systems',
+    badge: 'ml-systems',
+    color: '#66c4ed',
+    summary: 'Owned technical direction and architecture across physics-informed ML, document intelligence, language systems and large-scale data pipelines.',
+    details: [
+      'Owned technical direction for LEO satellite orbit prediction using physics-informed ML and synthetic data generation pipelines.',
+      'Led entity resolution and sentiment-analysis R&D: RAG pipelines, deep learning entity matching and aspect-based sentiment with HuggingFace transformers.',
+      'Architected document intelligence spanning OCR, NER, dewarping and summarization. Built Tamr connectors handling terabytes across sources and a product testing framework.'
+    ],
+    skills: ['Physics-informed ML', 'Synthetic data', 'RAG', 'Transformers', 'Document AI', 'Data platforms'],
+    outcome: 'Terabyte-scale connectors · ML across language, documents and satellite systems',
+    links: []
+  },
+  {
+    id: 'plena',
+    year: '2023–2025',
+    company: 'Plena Data Inc.',
+    role: 'Head of Engineering',
+    title: 'Agent collective',
+    short: 'Five specialized agents. One continuous workflow.',
+    skill: 'Multi-agent systems',
+    badge: 'multi-agent',
+    color: '#ed87a3',
+    summary: 'Led 13 engineers shipping AI product verticals from 0→1, including a desktop sales platform and self-serve multi-agent workflows.',
+    details: [
+      'Architected a desktop sales platform with five specialized agents using existing user sessions for lead research, AI-assisted enrichment and multi-channel outreach.',
+      'Built drag-and-drop, self-serve multi-agent workflows with context engineering for task continuity. Improved sales by 25% for non-standard lead generation.',
+      'The agentic self-serve platform directly drove the company’s acquisition. Led post-acquisition integration and cloud platform migration.'
+    ],
+    skills: ['Multi-agent orchestration', 'Context engineering', 'Workflow engines', 'Desktop automation', 'Engineering leadership'],
+    outcome: '13 engineers led · 25% sales improvement for non-standard lead generation',
+    links: []
+  },
+  {
+    id: 'launchai',
+    year: '2025–present',
+    company: 'LaunchAI',
+    role: 'Product',
+    title: 'Agent architect',
+    short: 'Build the harness. Shape the context. Measure the behavior.',
+    skill: 'Agent architecture',
+    badge: 'agent-architecture',
+    color: '#7cd7ad',
+    summary: 'Own product direction for enterprise desktop process automation, building vision-first RPA and agentic workflows for accounts payable and ERP-connected finance.',
+    details: [
+      'Architected deterministic agent workflows with dynamic context switching, guardrails and prompt-management templates, including organization-wide standards for MCP servers and tool and function calling.',
+      'Used modular agent architectures with hot-swappable model components to bring time to market from 3 months to 2 weeks and save $15K per month per customer.',
+      'Defined evaluation strategy for small vision-language and language models, including fine-tuning, benchmarking, agent tracing and LLM observability.'
+    ],
+    skills: ['Agent harnesses', 'MCP', 'Tool calling', 'Context engineering', 'Guardrails', 'SLM / SVLM evals', 'Observability'],
+    outcome: '3 months → 2 weeks to market · $15K/month saved per customer',
+    links: [
+      { label: 'Related talk: Small Models, Big Impact', href: 'slm-talk/' }
+    ]
+  }
+];
+
+export const projects = [
+  {
+    name: 'Refuse.dev',
+    category: 'Agent security',
+    description: 'An MCP security layer that blocks malicious or vulnerable package installs requested by AI agents.',
+    href: 'https://refuse.dev/',
+    skills: ['MCP', 'Agent security', 'Guardrails']
+  },
+  {
+    name: 'slm.expert',
+    category: 'Model discovery',
+    description: 'A curated directory of open-weight small language models with use-case filters and benchmarks.',
+    href: 'https://slm.expert/',
+    skills: ['Open-weight models', 'SLMs', 'Benchmarks']
+  },
+  {
+    name: 'Agentend.ai',
+    category: 'Open source',
+    description: 'An open-source framework for replacing existing backend architecture.',
+    href: 'https://agentend.ai/',
+    skills: ['Backend architecture', 'Open source']
+  }
+];
+
+export const profile = {
+  name: 'Gokulavasan Murali',
+  email: 'gokul.0369@gmail.com',
+  summary: 'Product and engineering architect with 10+ years shipping products from 0→1. From resource-efficient on-device models to multi-agent platforms, I build and lead teams delivering agent architectures, durable pipelines and computer vision into production.',
+  links: [
+    { label: 'Email', href: 'mailto:gokul.0369@gmail.com' },
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/gok03/' },
+    { label: 'GitHub', href: 'https://github.com/gok03' }
+  ]
+};
