@@ -8,6 +8,9 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from threading import Thread
 import webbrowser
+from urllib.parse import unquote, urlsplit
+
+import avatar
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -16,6 +19,35 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         ".js": "text/javascript",
         ".mjs": "text/javascript",
     }
+
+    def do_GET(self):
+        path = unquote(urlsplit(self.path).path)
+        if path == "/api/avatar/status":
+            return avatar.status(self)
+        # The network preview must never expose local configuration or Git internals.
+        if any(part.startswith(".") for part in path.split("/")) or path.startswith(("/scripts/", "/tests/")):
+            return self.send_error(404)
+        return super().do_GET()
+
+    def do_HEAD(self):
+        return self.do_GET() if urlsplit(self.path).path.startswith("/api/") else self._static_head()
+
+    def _static_head(self):
+        path = unquote(urlsplit(self.path).path)
+        if any(part.startswith(".") for part in path.split("/")) or path.startswith(("/scripts/", "/tests/")):
+            return self.send_error(404)
+        return super().do_HEAD()
+
+    def do_POST(self):
+        if urlsplit(self.path).path == "/api/avatar/chat":
+            try:
+                return avatar.chat(self)
+            except (BrokenPipeError, ConnectionResetError):
+                return  # A visitor stopped the reply or closed the tab.
+        self.send_error(404)
+
+    def list_directory(self, path):
+        self.send_error(404)
 
 
 def main():
