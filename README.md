@@ -17,6 +17,6 @@ Run `python3 -m http.server 8765 --bind 127.0.0.1` from this directory, then ope
 
 ## Content notes
 
-The refresh uses the existing portfolio, the repository's PyConf Hyderabad 2026 talk page, and the public LinkedIn profile at https://www.linkedin.com/in/gok03/. LaunchAI.work is linked as current work without assigning an unverified job title or employment dates. Earlier experience remains historical; the refresh does not infer an Accenture end date.
+Career dates, roles, technical competencies, project descriptions and outcome metrics follow the owner-supplied Gokul.pdf resume. The homepage presents the progression from edge ML (Flytta, 2016–2019), deep learning (Pramati, 2020–2021), ML platforms (Accenture Labs, 2021–2023), multi-agent systems (Plena Data, 2023–2025), to agent architectures and harnesses (LaunchAI, 2025–present). The PDF itself is not published. The existing talk and historical project pages remain linked.
 
 Publishing follows this repository's existing hosting configuration. A local preview does not change the live website.
