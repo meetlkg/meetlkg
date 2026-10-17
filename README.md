@@ -4,9 +4,21 @@ A minimal, interactive portfolio for Gokulavasan Murali. Editorial typography, a
 
 ## Preview
 
-From this directory: `python3 -m http.server 8874 --bind 127.0.0.1`
+### Run on a Mac
 
-Open http://localhost:8874/. No build step, package installation, API key or backend.
+Install Python 3 if it is not already available, then run in Terminal:
+
+```bash
+git clone --branch refresh-portfolio https://github.com/meetlkg/meetlkg.git meetlkg-preview
+cd meetlkg-preview
+./start.command
+```
+
+The launcher opens the website in your default browser. You can also double-click `start.command` in Finder after cloning. Keep its Terminal window open; press Control+C to stop the preview.
+
+It uses port 8874, or an available port if that one is busy. The printed URL is the correct address for that run. If you downloaded a ZIP and the launcher is not executable, run `chmod +x start.command` in its folder first.
+
+The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. No build step, package installation, API key or backend is needed beyond Python 3. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
 
 ## Interactions
 
