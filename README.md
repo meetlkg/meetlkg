@@ -1,33 +1,30 @@
-# gok03.com — The Intelligence Archipelago
+# gok03.com — Intelligence, made useful.
 
-A playable 3D portfolio for Gokulavasan Murali. Pilot a small agent between five floating islands, inspect career chapters and collect technical skill milestones. A conventional profile below the game keeps all career facts and contact links directly accessible.
+A minimal, interactive portfolio for Gokulavasan Murali. Editorial typography, an original chrome 3D sculpture, selected case studies and a resume-backed career timeline.
 
 ## Preview
 
-From this directory: `python3 -m http.server 8873 --bind 127.0.0.1`
+From this directory: `python3 -m http.server 8874 --bind 127.0.0.1`
 
-Open http://localhost:8873/. No build step, package installation, API keys or backend.
+Open http://localhost:8874/. No build step, package installation, API key or backend.
 
-## Interaction
+## Interactions
 
-- Choose an island or collection slot to send the agent there. Open its chapter and collect the skill.
-- Desktop: select Enable keyboard, then WASD or arrows to move and E to discover nearby islands. Escape or Tab exits keyboard mode.
-- Mobile: tap an island or collection slot. No joystick required.
-- Motion toggle pauses ambient animation and makes island travel immediate. OS reduced-motion preference is respected.
-- Discoveries persist only in localStorage on this browser; Reset journey clears them.
-- A full HTML profile works without JavaScript. If WebGL is unavailable, chapter buttons still open the same career dossiers.
+- Select a sculpture marker, numbered chapter control or case study to read a career story.
+- Expand the career timeline to explore roles from edge ML through deep learning and agent architecture.
+- Exploring a chapter records a subtle discovery marker, saved only in this browser’s localStorage. Reset discoveries clears it.
+- The sculpture rotates gently and responds to pointer movement. Pause motion stops it; system reduced-motion preferences are respected, with explicit manual override available.
+- Career content, project links and contact details remain readable in HTML without JavaScript or WebGL.
 
 ## Files
 
-- `index.html`, `static/world.css`: game interface and readable profile
-- `static/world.js`: travel, collectibles, keyboard input, dialogs, state and renderer lifecycle
-- `static/world-models.js`: original procedural 3D islands, landmarks and agent avatar
-- `static/profile-data.js`: resume-backed career chapters and public project descriptions
-- `static/vendor/`: pinned Three.js 0.180.0, with MIT license, served locally
-- `RESEARCH.md`: portfolio research and design rationale
+- `index.html`, `static/premium.css`: responsive editorial layout and complete HTML timeline
+- `static/premium.js`: story dialogs, chapter discovery and motion controls
+- `static/sculpture.js`: procedural chrome geometry, local studio reflections and interactive markers
+- `static/profile-data.js`: resume-backed career chapters
+- `static/vendor/`: locally served Three.js 0.180.0 with MIT license
+- `RESEARCH.md`: primary-source portfolio references and content rationale
 - `archive.html`, `projects/`, `works.html`, `slm-talk/`: preserved earlier portfolio and project pages
 - `CNAME`: existing custom domain configuration
 
-Career facts, dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The PDF itself is not published. The game is a local portfolio exploration experience; its character is not a live AI service. There are no inference requests, simulated tool traces or fabricated model benchmark scores.
-
-Publishing uses the repository’s existing hosting configuration. A preview does not change the live website.
+Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The attachment itself is not published. No live AI service or fabricated benchmark scores are implied. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.

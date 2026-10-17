@@ -13,12 +13,10 @@ Six primary-source expert portfolios informed the content structure:
 | [swyx](https://swyx.io/about) | Visitor-intent navigation and progressively deeper biography. | Offer a direct career list alongside exploration, with contact and work easy to reach. |
 | [Eugene Yan](https://eugeneyan.com/) | Selected prototypes and architecture writing support the headline expertise. | Link genuine public projects and the existing small-model talk; avoid invented private project links. |
 
-For interaction design, [Bruno Simon’s portfolio](https://bruno-simon.com/) demonstrates spatial navigation, discovery and achievements as a way to explore a developer’s work. This site uses original procedural career islands, a small agent avatar and collectible resume milestones.
+## Final design direction
 
-## Game-world direction
+The owner selected a **minimal, premium interactive portfolio**. The final layout centers resume-backed case studies and a readable career timeline, with generous whitespace, ivory and charcoal tones, quiet green accents and an original procedural chrome sculpture. Five chapter controls and sculpture markers reveal relevant experience. A subtle discovery count connects the five periods without gating content or introducing an arcade interface.
 
-The requested experience is a **game world for exploring Gokul’s career**, rather than a tool playground or simulated customer-workflow dashboard. Visitors move through five career landmarks and discover a technical skill badge at each: edge ML, deep learning, ML systems, multi-agent systems and agent architecture. Motion, spatial composition and discovery reinforce the career story.
+The career progression remains edge ML → deep learning → ML platforms → multi-agent systems → agent architecture. All outcomes remain attached to their role and period. Career details and public work remain accessible without completing interactions. Reduced motion, keyboard-native dialogs and static HTML content support different browsing preferences.
 
-Each landmark opens readable résumé evidence. Outcomes stay attached to the employer and period where they occurred. Progress records which chapters the visitor has explored; it is not a score of Gokul’s proficiency. The game never gates basic profile information, project links or contact details. A direct chapter list supports visitors who prefer reading, keyboard navigation or reduced motion.
-
-The experience should communicate agent expertise through real architecture, context engineering, tool calling, guardrails and evaluation work. The interactive world is presentation, not a claim of a live AI service. Visual identity and prose are original; the reference sites inform content organization only.
+The interactive sculpture is presentation, not a claim of a live AI service. Visual identity and prose are original; reference sites inform content organization only.
