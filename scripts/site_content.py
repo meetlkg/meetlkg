@@ -13,6 +13,8 @@ NAV=[('Home','/'),('Technical','/technical/'),('Open Source Ventures','/ventures
 KINDS={'paragraph','heading','list','quote','code','image','callout','table','divider'}
 def now():return datetime.now(timezone.utc).isoformat(timespec='seconds')
 def e(value):return escape(str(value),quote=True)
+def ui_icon(name):return f'<svg class="ui-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><use href="/static/world-icons.svg#{e(name)}"/></svg>'
+ARROW=ui_icon('arrow-up-right')
 def slugify(value):return re.sub(r'[^a-z0-9]+','-',value.lower()).strip('-')[:100]
 def safe_url(value,images=False):
  value=str(value).strip()
@@ -152,7 +154,7 @@ def clean_legacy(node,source):
   return f'<img src="{e(src)}" alt="{e(node.attrs.get("alt") or "Project image from Gokul’s archive")}" loading="lazy" decoding="async">' if src else ''
  if tag=='iframe':
   src=safe_url(node.attrs.get('src',''),True)
-  return f'<p><a href="{e(src)}">Watch the original demo or presentation ↗</a></p>' if src else ''
+  return f'<p><a href="{e(src)}">Watch the original demo or presentation {ARROW}</a></p>' if src else ''
  if tag in ['h1','h2','h3','h4','h5','h6']:tag='h3'
  if tag in ['p','h3','strong','b','em','i','ul','ol','li','code','pre','blockquote','table','thead','tbody','tr','th','td']:return f'<{tag}>'+inner+f'</{tag}>'
  if tag in ['br','hr']:return '<'+tag+'>'
@@ -175,7 +177,7 @@ def legacy_data():
   if path.stem=='final_year':title='Defence personnel transfer — undergraduate thesis'
   if path.stem=='inbrowser_mouse':
    summary='An unfinished browser mouse-movement experiment from the original project archive.'
-   body='<p>This archived entry was never documented: its original page contains a reused Flytta description. Technical implementation details are not available in the source record.</p><p><a href="/projects/inbrowser_mouse.html">View the original archived entry ↗</a></p>'
+   body='<p>This archived entry was never documented: its original page contains a reused Flytta description. Technical implementation details are not available in the source record.</p><p><a href="/projects/inbrowser_mouse.html">View the original archived entry '+ARROW+'</a></p>'
   category='Software & products'
   name=path.stem
   if name in ['hmrt_v1','hmrt_v2','poseidon','panoptes','medivisor','tollmate','iarus','sense_me','screen_opening']:category='Robotics & systems'
