@@ -9,7 +9,7 @@
   "cover": "",
   "coverAlt": "",
   "canonical": "",
-  "publishedAt": "2026-10-18T10:18:32+00:00",
+  "publishedAt": "2026-03-15T00:00:00+05:30",
   "tags": [
     "Small models",
     "Agents",
@@ -135,5 +135,5 @@
       "answer": "No. Check the license of each model and any relevant components before deciding how to use it."
     }
   ],
-  "updatedAt": "2026-10-18T10:18:32+00:00"
+  "updatedAt": "2026-10-18T12:51:45+00:00"
 }

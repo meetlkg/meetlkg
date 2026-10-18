@@ -20,7 +20,7 @@ posts=[
 for p in posts:
  path=ROOT/'content/posts'/f'{p["slug"]}.json'
  if path.exists():continue
- p.update(publishedAt=now(),updatedAt=now(),coverAlt='',seoTitle=p['title'][:70],seoDescription=p['excerpt'][:180],canonical='')
+ p.update(publishedAt='2026-03-15T00:00:00+05:30',updatedAt='2026-03-15T00:00:00+05:30',coverAlt='',seoTitle=p['title'][:70],seoDescription=p['excerpt'][:180],canonical='')
  validated=validate_post(p);validated['updatedAt']=p['updatedAt']
  write(path,json.dumps(validated,indent=2,ensure_ascii=False)+'\n')
  print('Migrated:',p['title'])
