@@ -3,24 +3,64 @@ import { chapters, profile, projects } from './profile-data.js';
 const $ = selector => document.querySelector(selector);
 const reduced = matchMedia('(prefers-reduced-motion: reduce)');
 const panel = $('#avatar-chat-panel');
-const compact = matchMedia('(max-width: 700px)');
+const compact = matchMedia('(max-width: 1100px), (hover: none) and (pointer: coarse)');
 const stage = $('.avatar-stage');
+const chatPortrait = $('.chat-portrait');
+const questionInput = $('#avatar-question');
+const chatLog = $('#avatar-transcript');
 const stageHome = document.createComment('Central portrait position');
 stage.before(stageHome);
-let returnFocus;
+let returnFocus, lockedScroll, viewportFrame;
+
+function syncChatViewport() {
+  if (!document.body.classList.contains('chat-modal')) return;
+  const viewport = window.visualViewport;
+  const height = viewport?.height || innerHeight;
+  const nearEnd = chatLog.scrollHeight - chatLog.clientHeight - chatLog.scrollTop < 64;
+  panel.style.setProperty('--chat-height', `${Math.round(height)}px`);
+  panel.style.setProperty('--chat-top', `${Math.round(viewport?.offsetTop || 0)}px`);
+  document.body.classList.toggle('chat-keyboard', document.activeElement === questionInput && height < Math.max(innerHeight, document.documentElement.clientHeight) - 140);
+  if (nearEnd) chatLog.scrollTop = chatLog.scrollHeight;
+}
+function scheduleChatViewport() {
+  cancelAnimationFrame(viewportFrame);
+  viewportFrame = requestAnimationFrame(syncChatViewport);
+}
 
 function layoutConversation() {
   const modal = !panel.hidden && compact.matches;
   panel.setAttribute('role', modal ? 'dialog' : 'region');
   if (modal) panel.setAttribute('aria-modal', 'true');
   else panel.removeAttribute('aria-modal');
-  document.querySelectorAll('main, .site-head, .site-footer').forEach(element => element.inert = modal);
+  document.querySelectorAll('main, .site-head, .site-footer, .skip').forEach(element => element.inert = modal);
+  if (modal && lockedScroll === undefined) {
+    lockedScroll = window.scrollY;
+    document.body.style.setProperty('--chat-page-top', `${-lockedScroll}px`);
+  }
   document.body.classList.toggle('chat-modal', modal);
-  // Move the single live renderer above the mobile sheet; never duplicate it.
-  if (modal) document.body.append(stage);
-  else stageHome.after(stage);
+  // Keep one portrait inside the full-screen conversation, including on tablets.
+  if (modal) {
+    if (stage.parentElement !== chatPortrait) chatPortrait.append(stage);
+    syncChatViewport();
+  } else {
+    if (stageHome.nextSibling !== stage) stageHome.after(stage);
+    document.body.classList.remove('chat-keyboard');
+    panel.style.removeProperty('--chat-height');
+    panel.style.removeProperty('--chat-top');
+    if (lockedScroll !== undefined) {
+      const top = lockedScroll;
+      lockedScroll = undefined;
+      document.body.style.removeProperty('--chat-page-top');
+      window.scrollTo({ top, behavior: 'instant' });
+    }
+  }
 }
 function openChat(question = '', source = document.activeElement) {
+  if (!panel.hidden) {
+    if (question) questionInput.value = question;
+    if (!compact.matches) questionInput.focus({ preventScroll: true });
+    return;
+  }
   returnFocus = source;
   panel.hidden = false;
   document.body.classList.add('has-chat');
@@ -29,13 +69,15 @@ function openChat(question = '', source = document.activeElement) {
   if (question) $('#avatar-question').value = question;
   const portrait = $('#avatar-canvas');
   const rect = portrait.getBoundingClientRect();
-  if (innerWidth > 700 && (rect.top < 0 || rect.bottom > innerHeight)) {
+  if (!compact.matches && (rect.top < 0 || rect.bottom > innerHeight)) {
     portrait.scrollIntoView({ block: 'center', behavior: reduced.matches ? 'instant' : 'smooth' });
   }
-  $('#avatar-question').focus({ preventScroll: true });
+  // Opening the conversation must not also open/zoom the phone keyboard.
+  (compact.matches ? panel : questionInput).focus({ preventScroll: true });
   document.dispatchEvent(new CustomEvent('portfolio:chat-open'));
 }
 function closeChat() {
+  if (panel.hidden) return;
   // Closing the conversation also cancels generation, recording and speech.
   document.dispatchEvent(new CustomEvent('portfolio:chat-close'));
   panel.hidden = true;
@@ -49,15 +91,26 @@ document.querySelectorAll('[data-chat-question]').forEach(button => button.addEv
 $('#chat-close').addEventListener('click', closeChat);
 document.addEventListener('keydown', event => {
   if ($('#contact-card').open) return;
-  if (event.key === 'Escape' && !panel.hidden) { event.preventDefault(); closeChat(); }
+  if (event.key === 'Escape' && !panel.hidden && !event.isComposing) {
+    event.preventDefault();
+    // Dismissing the input/keyboard is separate from leaving the conversation.
+    if (compact.matches && document.activeElement === questionInput) panel.focus({ preventScroll: true });
+    else closeChat();
+  }
   if (event.key === 'Tab' && !panel.hidden && compact.matches) {
     const focusable = [...panel.querySelectorAll('button, textarea, select, a[href], [tabindex="0"]')].filter(element => !element.disabled && element.getClientRects().length);
     const first = focusable[0], last = focusable.at(-1);
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    if (event.shiftKey && (document.activeElement === first || document.activeElement === panel)) { event.preventDefault(); last.focus(); }
     else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
   }
 });
 compact.addEventListener('change', layoutConversation);
+window.addEventListener('resize', scheduleChatViewport);
+window.addEventListener('pageshow', layoutConversation);
+window.visualViewport?.addEventListener('resize', scheduleChatViewport);
+window.visualViewport?.addEventListener('scroll', scheduleChatViewport);
+panel.addEventListener('focusin', scheduleChatViewport);
+panel.addEventListener('focusout', scheduleChatViewport);
 // Preserve links from earlier portfolio previews to the conversation.
 if (location.hash === '#avatar') openChat();
 window.addEventListener('hashchange', () => { if (location.hash === '#avatar') openChat(); });
