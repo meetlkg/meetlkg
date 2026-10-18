@@ -1,6 +1,6 @@
 # gok03.com — Gokulavasan Murali
 
-A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The active portrait is an OMG-Avatar-derived 159,654-Gaussian reconstruction of the approved studio image, using the existing Pixel3DMM identity fit. One live portrait appears large and centered on arrival, stays visible alongside the conversation, turns its head toward the cursor with coordinated eye movement, and gives a small smile, brow lift and soft blink over clickable elements. Native FLAME eyes, eyelids and jaw drive seventeen exported expression fields, including seven speech-specific poses. The geometry is a single-image reconstruction; speech uses the owner's existing custom Inworld voice.
+A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The active portrait is an OMG-Avatar-derived 159,654-Gaussian reconstruction of the approved studio image, using the existing Pixel3DMM identity fit. A static portrait appears large and centered on arrival, then becomes a live 3D portrait after the first paint when visible. It stays visible alongside the conversation, turns its head toward the cursor with coordinated eye movement, and gives a small smile, brow lift and soft blink over clickable elements. Native FLAME eyes, eyelids and jaw drive seventeen exported expression fields, including seven speech-specific poses. The geometry is a single-image reconstruction; speech uses the owner's existing custom Inworld voice.
 
 ## Preview
 
@@ -55,7 +55,7 @@ The single-image reconstruction still infers unseen geometry, mouth interior and
 
 `/portfolio-before-world.html` retains the larger generative models and explicit model-loading controls for comparison. Its optional server mode is `/portfolio-before-world.html?chat=server#avatar`, requiring an installed Ollama model. The root portfolio no longer uses that pipeline. Server configuration remains `GOKUL_AVATAR_MODEL`, `GOKUL_OLLAMA_URL` and `GOKUL_AVATAR_THREADS`; defaults are `llama3.2:3b`, `http://127.0.0.1:11434` and four CPU threads. No new HTTPS Serve configuration is enabled.
 
-The opening loader uses illustrated progress steps for profile initialization, page images/fonts and the 3D portrait. It dismisses when those assets settle, with an escape option if loading is slow. Audio and chat-model downloads remain on demand. Favicons use the `g.` monogram at standard browser and touch-icon sizes; the portrait remains in the page content.
+The page opens without a loading overlay. The visible portrait loads its renderer and compressed 3D assets in an idle slot after the static page has painted; offscreen or hidden portraits wait until visible. The existing photo stays in place until the first 3D render is ready, including if loading fails. Chat-model downloads start only when the conversation opens, and audio downloads only for an enabled spoken reply. Favicons use the `g.` monogram at standard browser and touch-icon sizes; the portrait remains in the page content.
 
 ## Interactions
 

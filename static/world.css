@@ -21,32 +21,6 @@ body.chat-modal{overflow:hidden}
 @media(max-width:700px){.logo-flower{width:25px;height:25px}.object-plus{width:17px;height:17px;right:4px;top:10px}.object-plus svg{width:10px;height:10px}.chat-panel{top:auto;bottom:8px;max-height:76dvh}.avatar-transcript{height:clamp(140px,28dvh,260px)}.metric-arrow{transform:rotate(-90deg);margin:0}.metric .metric-line{font-size:inherit}.metric:has(.metric-line){display:block}.contact-card{padding:28px 22px 23px;border-radius:23px}.contact-card h2{font-size:36px}.contact-card-mark,.contact-card-mark svg{width:76px;height:76px}.social-profiles{margin-top:22px}.hello-link .ui-icon,.site-footer .ui-icon{width:13px;height:13px}.poster-link>.ui-icon{width:29px;height:29px;padding:7px}.reply-actions>a{font-size:9px}.avatar-prompts button{font-size:9px}}
 @media(max-width:480px){.site-head nav{display:none}.site-head .hello-link{white-space:nowrap}.site-head{gap:12px}}
 
-/* Illustrated loading state follows real page and portrait readiness. */
 .social-phone{background:#e8f3e9;color:#507e59}
-body.portfolio-loading{overflow:hidden}
-.portfolio-loader{position:fixed;inset:0;z-index:100;background:#faf9f6;display:grid;place-items:center;padding:24px;overflow:auto;margin:0;border:0;width:100vw;height:100dvh;max-width:none;max-height:none;box-sizing:border-box}
-.portfolio-loader[hidden]{display:none}
-.loader-card{width:min(580px,100%);text-align:center;color:var(--ink)}
-.loader-avatar{position:relative;width:88px;height:88px;margin:0 auto 30px}
-.loader-avatar img{width:88px;height:88px;display:block;border-radius:28px;border:2px solid #fff;box-shadow:0 6px 0 #e5ddef;transform:rotate(-5deg)}
-.loader-avatar>svg{position:absolute;right:-20px;top:-11px;width:31px;height:31px;color:#aa8cc9;animation:loader-spark 4s ease-in-out infinite}
-.loader-card>.eyebrow{font-size:9px;letter-spacing:1.8px;color:#9474aa;margin-bottom:13px}
-.loader-card h2{font-size:clamp(29px,5vw,42px);letter-spacing:-1.5px;font-weight:500;margin:0 0 34px}
-.loader-map{display:flex;align-items:center;justify-content:center;gap:5px;margin-bottom:29px}
-.loader-map>div{width:124px;position:relative}
-.loader-map>div>svg{width:100px;height:100px;display:block;margin:auto;animation:loader-bob 2s ease-in-out infinite}
-.loader-map>div:nth-of-type(2)>svg{animation-delay:-.7s}.loader-map>div:nth-of-type(3)>svg{animation-delay:-1.4s}
-.loader-map>div>span{display:block;font-size:11px;color:#8b7c97;margin-top:12px}
-.loader-map i{position:absolute;right:12px;top:6px;width:19px;height:19px;border-radius:50%;background:#e7def0;border:2px solid #faf9f6;transition:background .2s}
-.loader-map [data-loaded=true] i{background:#8dbd9a}.loader-map [data-loaded=true] i:after{content:'✓';color:white;font:12px/15px sans-serif}
-.loader-map [data-loaded=true]>svg{animation:none}.loader-map [data-loaded=true]>span{color:#473753}
-.loader-trail{color:#c9b9d6;font-size:21px;letter-spacing:3px;margin-top:-18px}
-.loader-card progress{appearance:none;width:180px;height:4px;border:0;border-radius:10px;background:#e7deec;color:#aa8cc9;overflow:hidden}
-.loader-card progress::-webkit-progress-bar{background:#e7deec;border-radius:10px}.loader-card progress::-webkit-progress-value{background:#aa8cc9;border-radius:10px;transition:width .3s}.loader-card progress::-moz-progress-bar{background:#aa8cc9}
-.loader-status{font-size:11px;line-height:1.8;color:#8b7c97;min-height:20px;margin:14px 0 0}
-.loader-skip{background:none;border:0;border-bottom:1px solid #d7c8e2;padding:8px 0;color:#76518f;font-size:11px;margin-top:20px}
-@keyframes loader-bob{50%{transform:translateY(-7px) rotate(3deg)}}@keyframes loader-spark{50%{transform:rotate(35deg) scale(1.12)}}
-@media(max-width:480px){.loader-trail{font-size:15px;letter-spacing:0}.loader-map>div{width:90px}.loader-map>div>svg{width:78px;height:78px}.loader-map>div>span{font-size:9px}.loader-map i{right:0;top:0}.loader-card h2{margin-bottom:26px}}
-@media(prefers-reduced-motion:reduce){.loader-avatar>svg,.loader-map>div>svg{animation:none}.loader-card progress::-webkit-progress-value{transition:none}}
 
 .avatar-status:empty::before{display:none}
