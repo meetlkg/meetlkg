@@ -153,11 +153,16 @@
   "profile": {
     "name": "Gokulavasan Murali",
     "email": "gokul.0369@gmail.com",
+    "phone": "+91-8220869194",
     "summary": "Product and engineering architect with 10+ years shipping products from 0→1. From resource-efficient on-device models to multi-agent platforms, I build and lead teams delivering agent architectures, durable pipelines and computer vision into production.",
     "links": [
       {
         "label": "Email",
         "href": "mailto:gokul.0369@gmail.com"
+      },
+      {
+        "label": "Phone",
+        "href": "tel:+918220869194"
       },
       {
         "label": "LinkedIn",
@@ -177,6 +182,15 @@
     ],
     "interests": [
       "Field hockey, including state and national competitions."
+    ],
+    "talks": [
+      {
+        "title": "Small Models, Big Impact",
+        "event": "PyConf Hyderabad",
+        "year": 2026,
+        "description": "A talk about the possibilities of small language models, with slides and resources available on this portfolio.",
+        "href": "slm-talk/"
+      }
     ]
   },
   "projects": [

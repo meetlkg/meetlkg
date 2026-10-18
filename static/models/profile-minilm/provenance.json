@@ -1,0 +1,57 @@
+{
+  "source": "https://huggingface.co/Xenova/paraphrase-MiniLM-L3-v2",
+  "revision": "4b544e74dfc3256b2b56849ea5d7064fee1ac846",
+  "baseModelLicense": "Apache-2.0",
+  "transformersJS": "2.17.2",
+  "onnxRuntime": "1.14.0",
+  "files": {
+    "static/models/profile-minilm/tokenizer.json": {
+      "bytes": 711649,
+      "sha256": "2fc687b11de0bc1b3d8348f92e3b49ef1089a621506c7661fbf3248fcd54947e"
+    },
+    "static/models/profile-minilm/tokenizer_config.json": {
+      "bytes": 366,
+      "sha256": "9261e7d79b44c8195c1cada2b453e55b00aeb81e907a6664974b4d7776172ab3"
+    },
+    "static/models/profile-minilm/README.md": {
+      "bytes": 1109,
+      "sha256": "e84a6b7a16664013bfe83fc9d3f0fc1bb60fbabbe537b4c3d9dc81d93f5a9b31"
+    },
+    "static/models/profile-minilm/special_tokens_map.json": {
+      "bytes": 125,
+      "sha256": "b6d346be366a7d1d48332dbc9fdf3bf8960b5d879522b7799ddba59e76237ee3"
+    },
+    "static/models/profile-minilm/config.json": {
+      "bytes": 657,
+      "sha256": "c8bcaca23b245d64047ee04fa2edcc55867064b67cbbe2772f660cdbdfb1978c"
+    },
+    "static/models/profile-minilm/LICENSE": {
+      "bytes": 11338,
+      "sha256": "624b030fd62b8b989dd502d5bb6322cbc0dbb524ab9c9708f32efe33d7275735"
+    },
+    "static/models/profile-minilm/onnx/model_quantized.onnx": {
+      "bytes": 17452106,
+      "sha256": "b190f50dd46296b9895ae8f274c3455762d08610f8788f4a9bd15019f4f7160c"
+    },
+    "static/vendor/transformers/transformers.min.js": {
+      "bytes": 897938,
+      "sha256": "bcf7cf304e51f470ed59409622b9d6ffbad80dfcf5baf6a40c919e4b9c4ff812"
+    },
+    "static/vendor/transformers/ort-wasm.wasm": {
+      "bytes": 9223228,
+      "sha256": "bbdcb6b3c7d294577d806077630460be4e13ca35a345acb5e81188e9649fa74a"
+    },
+    "static/vendor/transformers/ort-wasm-simd.wasm": {
+      "bytes": 10014674,
+      "sha256": "9bd07bababc65f53d061f457233eeae501be7ceb8a2adb9eef52d87fe776d865"
+    },
+    "static/vendor/transformers/ONNX-LICENSE": {
+      "bytes": 1073,
+      "sha256": "2f07c72751aed99790b8a4869cf2311df85a860b22ded05fa22803587a48922c"
+    },
+    "static/vendor/transformers/LICENSE": {
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    }
+  }
+}

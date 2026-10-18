@@ -30,16 +30,17 @@ function profileContext(facts,question){
   const ignored=new Set('what have you your about tell with that from were when where how can did the and are work built which more does this me some please'.split(' '));
   const words=text=>(text.toLowerCase().match(/[a-z0-9]+/g)||[]).map(w=>w.length>4?w.replace(/s$/,''):w);
   const query=new Set(words(question).filter(w=>w.length>2&&!ignored.has(w)));
+  const profile=facts.profile;
   const timeline=facts.chapters.map(c=>`${c.year}: ${c.company}, ${c.role}; ${c.skill}.`).join('\n');
   const documents=[
     ...facts.chapters.map(c=>({name:c.company,text:`${c.company}, ${c.role} (${c.year}). ${c.summary} ${c.details.join(' ')} ${c.outcome}`,keys:c.skills.join(' ')})),
-    ...facts.projects.map(p=>({name:p.name,text:`${p.name}: ${p.description}`,keys:p.skills.join(' ')}))
+    ...facts.projects.map(p=>({name:p.name,text:`${p.name}: ${p.description}`,keys:p.skills.join(' ')})),
+    ...(profile.talks||[]).map(t=>({name:t.title,text:`${t.title}: Gokul's talk at ${t.event} ${t.year}. ${t.description}`,keys:`talk talks speaking slides conference ${t.event}`}))
   ];
   const scored=documents.map(d=>({...d,score:words(`${d.name} ${d.keys} ${d.text}`).reduce((n,w)=>n+(query.has(w)?1:0),0)+(question.toLowerCase().includes(d.name.toLowerCase())?30:0)})).sort((a,b)=>b.score-a.score);
   const overview=/journey|chronolog|career|background/.test(question.toLowerCase());
   const selected=scored.filter(d=>d.score>0).slice(0,1);
   const detail=selected.map(d=>d.text).join('\n');
-  const profile=facts.profile;
   const projectOverview=/projects|side project|independent/.test(question.toLowerCase());
   const context=overview?timeline:projectOverview?facts.projects.map(p=>`${p.name}: ${p.description}`).join('\n'):detail||`${profile.name}: ${profile.summary} ${profile.education||''} ${(profile.community||[]).join(', ')}. ${(profile.interests||[]).join(' ')} Contact: ${profile.email}.`;
   const anchors=overview?facts.chapters.map(c=>c.company):projectOverview?facts.projects.map(p=>p.name):selected.length?selected.map(d=>d.name):[profile.name,'Gokul'];

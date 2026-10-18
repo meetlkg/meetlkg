@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "count": 202183,
+  "activeCount": 30599,
+  "channels": [
+    "jawOpen",
+    "blinkLeft",
+    "blinkRight"
+  ],
+  "components": 7,
+  "scales": [
+    0.05,
+    0.05,
+    0.05,
+    2,
+    2,
+    2,
+    1
+  ],
+  "sentinels": [
+    {
+      "index": 0,
+      "xyz": [
+        -0.20143583416938782,
+        -0.21832546591758728,
+        -0.0872482880949974
+      ]
+    },
+    {
+      "index": 17,
+      "xyz": [
+        -0.19155806303024292,
+        -0.19008901715278625,
+        -0.029567860066890717
+      ]
+    },
+    {
+      "index": 111,
+      "xyz": [
+        -0.035976484417915344,
+        -0.21815036237239838,
+        -0.008278818801045418
+      ]
+    },
+    {
+      "index": 202182,
+      "xyz": [
+        0.18071995675563812,
+        -0.1846850961446762,
+        -0.037739649415016174
+      ]
+    }
+  ],
+  "gaze": "Bounded photo-appearance remapping on the reconstructed eye surface; not a separately scanned eyeball",
+  "hover": "Procedural smile/brow accents and a brief soft blink",
+  "rotation": {
+    "yawDegrees": 15,
+    "pitchDegrees": 4
+  },
+  "sourceSha256": "9cc53c072421cf00b4c0e6109f15d13cca4d1056782425c780ec6d701c2fc550"
+}

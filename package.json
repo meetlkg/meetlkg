@@ -3,6 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node --test tests/browser-ai.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "build": "python3 scripts/build_site.py",
+    "test:cms": "python3 -m unittest discover -s tests -p test_cms.py -v"
   }
 }

@@ -1,6 +1,6 @@
 /** A small, locally rendered sculpture. Its five details also open career chapters. */
 export async function mountSculpture(container, { reducedMotion = false, onSelect = () => {}, interactive = true } = {}) {
-  const THREE = await import('./vendor/three.module.js');
+  const THREE = await import('./avatar3d/three.module.js');
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'low-power' });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.6));
   renderer.setClearColor(0x000000, 0);

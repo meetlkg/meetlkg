@@ -1,6 +1,6 @@
 # gok03.com — Gokulavasan Murali
 
-A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The avatar is a photo-textured 2.5D portrait built from the existing outdoor photo. It preserves Gokul’s actual face, swept hair, beard, aviator sunglasses, smile and grey T-shirt. A shallow 3D mesh adds gentle parallax, head movement and speech-driven mouth deformation; it is not a reconstructed full head or a clone of his voice.
+A personal portfolio for Gokulavasan Murali, with selected work, experience, independent projects and a conversational 3D avatar. The active portrait is an OMG-Avatar-derived 159,654-Gaussian reconstruction of the approved studio image, using the existing Pixel3DMM identity fit. One live portrait appears large and centered on arrival, stays visible alongside the conversation, turns its head toward the cursor with coordinated eye movement, and gives a small smile, brow lift and soft blink over clickable elements. Native FLAME eyes, eyelids and jaw drive seventeen exported expression fields, including seven speech-specific poses. The geometry is a single-image reconstruction; speech uses the owner's existing custom Inworld voice.
 
 ## Preview
 
@@ -18,58 +18,84 @@ The launcher opens the website in your default browser. You can also double-clic
 
 It uses port 8874, or an available port if that one is busy. The printed URL is the correct address for that run. If you downloaded a ZIP and the launcher is not executable, run `chmod +x start.command` in its folder first.
 
-The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. The portfolio itself requires only Python 3 and has no build step. Browser conversation downloads its models on request; optional server conversation needs Ollama as described below. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
+The same launcher works on Linux. To run the server without opening a browser, use `python3 scripts/preview.py --no-open`. The portfolio itself requires only Python 3 and has no build step. The compact semantic model warms when the conversation opens; speech recordings load per reply. Serve the site over HTTP; opening `index.html` directly will prevent the JavaScript modules from loading correctly.
 
-For access from another device over LAN or Tailscale, run `./start.command --bind 0.0.0.0 --no-open` and open `http://<server-ip>:8874/` on that device. Use the printed port if the default port was busy.
+For access from another device over LAN or Tailscale, run `./start.command --bind 0.0.0.0 --port 8881 --no-open` and open `http://<server-ip>:8881/` on that device. The active workspace preview uses `http://100.127.12.50:8881/`. Use the printed port if the requested port was busy.
 
-## Talk to the avatar — entirely on your device
+On the current Linux preview host, port 8881 is managed by the enabled user service `gokul-portfolio-preview.service`, so it survives the chat's terminal lifecycle and restarts after a failure or host reboot. Its unit is at `/home/gok03/.config/systemd/user/gokul-portfolio-preview.service`. Use `systemctl --user status gokul-portfolio-preview.service` to inspect it, `systemctl --user restart gokul-portfolio-preview.service` to restart, or `systemctl --user disable --now gokul-portfolio-preview.service` to stop it and disable automatic startup. Mac users can continue using the launcher above.
 
-The default **On your device** mode renders the 3D avatar and runs chat, speech recognition and speech generation in the visitor’s browser. It does not call the Python conversation API, Ollama or a hosted AI service. The site works with static hosting, including GitHub Pages. First-time model downloads require a connection; downloads go to Hugging Face/CDN providers, while questions and audio stay in the local worker pipeline. Browser model caches may be evicted or unavailable, especially in private browsing or insecure contexts; offline operation is not guaranteed.
+## Talk to the avatar — profile guide with recorded neural speech
 
-1. Open the portfolio, go to the avatar and click **Load chat**. Model loading is explicit and cancelable; no weights download on arrival.
-2. Ask a question by typing or choosing a suggestion.
-3. Optionally click **Enable voice** to load the local speech models. Then use **Talk to me**, allow microphone access and click **Finish question**. Recording stops automatically after 15 seconds. Stop/reset/page hiding releases microphone tracks and stops audio playback.
+Open **Talk to my AI self** and ask about Gokul’s work, projects or life outside work. The guide selects curated answers from the public profile. A compact semantic encoder improves matching after it warms; keyword matching answers immediately before that. Replies are short, first-person prose. Follow-ups such as “yes please”, “go on”, “give me an example” and “can you elaborate?” advance the previous topic one detail at a time. Curated question variants cover model evaluation, RAG, context engineering, agent security, product impact and the underlying career stories. Unresolved questions, requests for unverified availability or pricing, and requests to reach Gokul open the contact popup with email, social links and the owner-provided phone number. This is a profile guide, not an open-ended generative chatbot.
 
-| Component | Browser implementation | Model download, excluding runtime and caches |
+Spoken replies use **50 prerecorded conversational recordings** from the owner's existing **Gokul voice on Inworld**, generated at build time with `inworld-tts-2`. Audio starts muted on every page load. Visitors must enable voice before replies play or the replay controls become available. Each exact answer, including context-aware follow-ups and fallback replies, has its own recording. Only the selected clip and its validation metadata download. The speaker beside an answer replays it, reusing decoded audio when cached. Visitors do not call Inworld or download speech-model weights. The website contains no TTS API key and uses no system SpeechSynthesis voice.
+
+| Component | Implementation | Download |
 | --- | --- | --- |
-| 3D avatar | Locally vendored Three.js, photo-textured relief | No neural-model download; reuses the homepage photo with two meshes and 8,064 triangles |
-| Chat with GPU | [WebLLM 0.2.86](https://github.com/mlc-ai/web-llm), SmolLM2-360M-Instruct q4 | Approximately 207 MB for q4f16; selects q4f32 on adapters without shader-f16 |
-| Chat without a GPU | [Transformers.js](https://huggingface.co/docs/transformers.js), SmolLM2-135M-Instruct q8, WASM | Approximately 137 MB; smaller model with more limited answer quality |
-| Speech input | Whisper Tiny English q8, Transformers.js WASM worker | Approximately 41 MB |
-| Speech output + mouth timing | [HeadTTS 1.3.0](https://github.com/met4citizen/HeadTTS), timestamped Kokoro-82M q8 | Approximately 92 MB, plus one voice and the English dictionary |
+| Profile encoder | [paraphrase-MiniLM-L3-v2](https://huggingface.co/Xenova/paraphrase-MiniLM-L3-v2), q8 ONNX, CPU WASM | 17.45 MB model |
+| Encoder runtime/config | Self-hosted Transformers.js 2.17.2, matching ONNX Runtime and tokenizer | ~11.6 MB |
+| Selected reply audio | Gapless 128 kbps mono MP3, generated by Inworld at 48 kHz | Per-answer download, plus a small timing JSON; see `static/voice-inworld/README.md` for sizes |
+| Portrait | Gaussian renderer, Three.js and native expression fields | ~28.87 MB compressed geometry, attachment and expression data, separate from chat |
 
-These are download sizes, not RAM requirements. GPU chat, graphics, speech models and worker memory coexist; runtime memory is higher. Small chat models can hallucinate or miss facts. Local retrieval selects public résumé context without an embedding model. A conservative lexical check replaces weakly grounded responses with visibly labelled public-profile excerpts; this is a heuristic, not a guarantee of factuality. Model output is displayed after this check. The UI discloses that answers may be wrong and links to direct contact.
+The 10–20 MB target applies to the semantic model weights. Cold chat initialization including its runtime/tokenizer is approximately **29 MB**, plus the selected voice clip and the separate portrait assets. The full voice library is not downloaded on arrival or conversation opening. Browser caching can be evicted and differs on HTTP IP origins; offline availability is not guaranteed. Questions and matching remain on the visitor’s device. Tailscale HTTP IP works without WebGPU, microphone permission or API keys; no HTTPS Serve setting has changed.
 
-WebGPU requires HTTPS or localhost. Without an accessible GPU, chat uses the smaller WASM model on the CPU, including at an HTTP IP address. **Microphone access still requires HTTPS or localhost.** Typed questions and generated audio do not require microphone access. On a Mac, run `./start.command` and use its localhost URL for the full experience; Chrome or Edge with GPU acceleration is the recommended first target. The setup does not require Node, Python AI packages or an API key on the visitor’s device.
+Replies are **audio only**: playback never drives the portrait’s mouth, facial expressions, gaze or head motion. Cursor tracking, ordinary blinks and hover reactions remain independent. Stop, close, reset, mute, tab hiding and exit cancel audio. Muting also prevents replay from overriding the visitor’s choice. Speech-motion JSON is no longer requested by the portfolio player.
 
-Voice uses actual Kokoro inference, not browser `SpeechRecognition` or `speechSynthesis`, which may use vendor cloud services. HeadTTS phoneme timing supplies small mouth/jaw deformations to the photo-textured mesh. Rotation is limited to approximately ±13 degrees because the source is one frontal photo. The portrait uses its original lighting and expression, with 30 fps motion, a capped pixel ratio and no vertex-buffer updates while the mouth is at rest. It pauses offscreen and respects reduced motion. It is a 2.5D photo likeness, not a full ARKit rig, a head scan or a voice clone. Full side views would require additional reference photos and a separately modeled, rigged GLB.
+The earlier StreamingTalker/FLAME speech experiment and its exported fields are retained for the internal `/avatar-check.html` review page. Its original 40 recordings are listed in `static/voice-inworld/review-manifest.json`; new audio-only replies do not require speech-motion assets. Asset provenance and limitations are documented in `static/avatar-omg/README.md`.
 
-### Optional preview-server chat
+To rebuild after changing public profile answers, run `node scripts/prepare-voice-corpus.mjs <external-build-directory>` to enumerate all reachable answers from `static/profile.json`. Then run `python scripts/build-inworld-voice.py <external-build-directory>` in a Python environment containing PyAV. Supply `INWORLD_API_KEY` in the build environment or an owner-only credential file outside the repository (the default is `~/.config/inworld/portfolio-credentials.json`, with an `apiKey` property). Never put credentials in browser JavaScript or a served file. The builder sends public answer text to Inworld; successful recordings are cached so a resumed build skips them. It stages the complete, validated pack in `<build-directory>/ready/`; publish those assets to `static/voice-inworld/` only after the entire corpus passes validation. Build dependencies and raw WAV intermediates stay outside the served site. Audio IDs include the voice, answer and spoken text; runtime validation rejects mismatched narration. Tests check corpus coverage, alignment, playback cancellation and audio/track correspondence. The previous Kokoro pack and builder remain at `static/voice/` and `scripts/build-voice-pack.mjs` as an inactive alternative.
 
-For the earlier server-backed experience, choose **On the preview server**, or open `/?chat=server#avatar`. That choice explicitly sends text to the local preview API and its installed Ollama model. Voice, if enabled, remains browser-local. The application never silently falls back from device inference to server inference.
+The current host also has the official [Inworld CLI/MCP](https://docs.inworld.ai/tts/resources/vibe-coding) registered as `inworld` in Codex. Its launcher reads the external credential file; the key is absent from the MCP configuration. A new Codex connection/session may be needed to discover newly installed tools. This developer tool is separate from the browser player.
 
-Install [Ollama](https://ollama.com/download), run `ollama pull llama3.2:3b` on the portfolio server and start the preview as before. `GOKUL_AVATAR_MODEL`, `GOKUL_OLLAMA_URL` and `GOKUL_AVATAR_THREADS` configure the server; defaults are `llama3.2:3b`, `http://127.0.0.1:11434` and four CPU threads. Server requests have origin checks, rate limits and bounded context. The application does not persist transcripts or audio.
+The portfolio face follows the cursor up to ±10° horizontally and ±4° vertically. **Dragging, turn buttons and arrow-key rotation are disabled on the portfolio.** Manual turns are explicitly enabled only in the internal `avatar-check.html` review page. Beard and chin follow native facial anchors, the torso stays fixed, and each new pose waits for its corresponding full depth sort before display. Rendering pauses offscreen and in hidden tabs. These are exported native FLAME geometry/appearance fields; the research neural decoder does not run in the browser.
 
-GitHub Pages cannot run the optional Python API. Its **On your device** mode needs only static hosting. Tailscale IP access remains available; no HTTPS Serve configuration is enabled by this change. To use the microphone remotely later, HTTPS will be necessary.
+The single-image reconstruction still infers unseen geometry, mouth interior and teeth. [Active asset and license notes](static/avatar-omg/README.md) describe those limits. **The OMG-Avatar release is restricted to academic research and prohibits commercial use; this local preview is not a publication clearance.** The earlier FlexAvatar assets and their terms remain in `static/avatar3d/`.
+
+### Retained earlier chat experiment
+
+`/portfolio-before-world.html` retains the larger generative models and explicit model-loading controls for comparison. Its optional server mode is `/portfolio-before-world.html?chat=server#avatar`, requiring an installed Ollama model. The root portfolio no longer uses that pipeline. Server configuration remains `GOKUL_AVATAR_MODEL`, `GOKUL_OLLAMA_URL` and `GOKUL_AVATAR_THREADS`; defaults are `llama3.2:3b`, `http://127.0.0.1:11434` and four CPU threads. No new HTTPS Serve configuration is enabled.
+
+The opening loader uses illustrated progress steps for profile initialization, page images/fonts and the 3D portrait. It dismisses when those assets settle, with an escape option if loading is slow. Audio and chat-model downloads remain on demand. Favicons use the `g.` monogram at standard browser and touch-icon sizes; the portrait remains in the page content.
 
 ## Interactions
 
-- Open selected work to see my role, technical approach and outcomes.
-- Expand the experience timeline, with the current role first.
-- The decorative 3D accent loads near the About section and pauses offscreen. Its motion control and system reduced-motion preferences are supported.
-- The photo-based avatar loads near its section, follows the pointer gently and has limited rotate/pause controls. Listening, thinking and speaking states respond to the actual conversation. Both 3D scenes pause offscreen or when the page is hidden.
-- Chat supports follow-up questions, stopping a reply, starting over, microphone input and optional spoken responses. Nothing auto-plays on arrival.
-- Career content, photo, project links and contact details remain readable without JavaScript or WebGL.
+- The opening screen centers the actual 3D avatar, surrounded by six original illustrated objects. Pick a topic to reveal résumé-backed details, then use “Ask me about it” to prepare a related question in the conversation.
+- The illustrated career map lets visitors explore five roles chronologically. Each stop shows a factual story, a compact icon infographic, relevant skills and a clearly scoped outcome.
+- Illustrated project links lead to Refuse.dev, slm.expert and Agentend.ai. A talk poster and a hockey/community chapter give the page a more personal identity.
+- The same cursor-tracked portrait stays visible during audio-only replies. On compact screens, the existing renderer moves above the conversation sheet; it is never duplicated. Closing chat stops pending replies and speech. The sheet supports Escape, focus return and a mobile focus trap.
+- Eyes and head follow the pointer. Hovering or keyboard-focusing links/buttons triggers facial accents. The face follows the cursor only; it cannot be dragged or manually rotated. The renderer pauses when hidden or offscreen, and animation respects reduced motion.
+- Chat supports profile questions, simple follow-ups, stopping, starting over and spoken responses. The compact model warms when chat opens; voice starts muted and remains off until the visitor enables it. “Say hello” opens a keyboard-accessible social card with LinkedIn, GitHub and email.
+- The introduction, latest role, career map, projects, personal background and contact details remain readable without JavaScript. Interactive career details and conversation require JavaScript.
+- `/#avatar` still opens the conversation, preserving links from the older previews. The previous complete homepage is retained at `/portfolio-before-world.html`.
 
 ## Files
 
-- `index.html`, `static/premium.css`: responsive editorial layout and complete HTML timeline
-- `static/premium.js`: project dialogs, scroll reveals, lazy 3D loading and motion controls
-- `static/sculpture.js`: procedural chrome geometry and local studio reflections
+- `index.html`, `static/world.css`: avatar-centered illustrated personal portfolio and responsive conversation sheet
+- `static/world.js`: topic stories, career infographics and conversation layout/focus lifecycle
+- `static/world-icons.svg`: original lightweight comic-style SVG illustrations
+- `static/fonts/`: self-hosted Bricolage Grotesque, with its SIL Open Font License
+- `portfolio-before-world.html`, `static/premium.css`, `static/premium.js`, `static/sculpture.js`: retained earlier homepage and supporting code
 - `static/profile-data.js`: resume-backed project and career details
 - `static/profile.json`: shared source of public facts for the website and AI avatar
-- `static/avatar-scene.js`: photo-textured relief mesh, hand-traced silhouette, subtle jaw deformation and head movement
-- `static/avatar-chat.js`, `static/avatar.css`: explicit runtime selection, model loading, conversation and responsive avatar interface
+- `static/avatar-scene.js`: Gaussian portrait renderer, native geometry/appearance field interpolation, eye tracking and delegated hover/focus reactions
+- `static/portrait-depth-sort.js`: coalesced pose queue and synchronized geometry/depth ordering
+- `static/portrait-behavior.js`, `static/portrait-hero.js`: camera bounds, gaze mapping and hero lifecycle
+- `static/avatar-omg/`: active 3D portrait, 50 expression/motion/appearance fields, compressed delivery files, provenance and model terms
+- `static/avatar3d/`: earlier FlexAvatar bust, fallback texture, locally vendored renderer/Three.js 0.160.0 and retained licenses
+- `static/avatar-flex-scene.js`: preserved earlier renderer implementation
+- `avatar-check.html`: recorded-speech comparison, slow playback, frame seeking and small-angle views
+- `tests/avatar-asset.test.mjs`: packed geometry order, compression integrity and native motion checks
+- `tests/portrait-depth-sort.test.mjs`, `tests/portrait-renderer-sort.test.mjs`: animation/worker synchronization and the actual vendored stationary-camera sort regression
+- `tests/portrait-behavior.test.mjs`: camera bounds and gaze direction regression checks; run `npm test` for all browser-side tests
+- `static/portfolio-chat.js`, `static/profile-knowledge.js`, `static/profile-semantic.js`: curated conversation, semantic matching and shared portrait lifecycle
+- `static/profile-semantic.js`, `static/profile-semantic-worker.js`: semantic ranking in a local worker
+- `static/profile-voice.js`, `static/portrait-speech.js`, `static/voice-inworld/`: Gokul's prerecorded Inworld speech, audio-clock learned motion and cancellation
+- `static/portrait-neural-speech.js`, `static/voice-inworld/motion/`: validated signed motion tracks, interpolation and recording correspondence
+- `tests/portrait-neural-speech.test.mjs`: signed motion, rig validation, exact audio hashes and neutral boundaries
+- `scripts/build-inworld-voice.py`, `scripts/inworld-voice-assets.py`: credential-isolated batch synthesis, audio encoding and alignment validation
+- `static/models/profile-minilm/`, `static/vendor/transformers/`: pinned compact model, runtime and licenses
+- `tests/profile-voice.test.mjs`, `tests/portrait-speech.test.mjs`, `tests/profile-semantic.test.mjs`: corpus coverage, cancellation, worker recovery, phoneme transitions and audio lifecycle; earlier tests retain coverage of the archived experiments
+- `static/avatar-chat.js`: retained earlier large-model conversation
 - `static/browser-ai.js`, `static/browser-chat-worker.js`: local retrieval, WebLLM GPU inference and Transformers.js WASM fallback
 - `static/browser-speech.js`, `static/browser-asr-worker.js`: Kokoro/Whisper workers, microphone lifecycle, audio playback and viseme timing
 - `scripts/avatar.py`: local Ollama API bridge and request limits
@@ -80,4 +106,62 @@ GitHub Pages cannot run the optional Python API. Its **On your device** mode nee
 - `archive.html`, `projects/`, `works.html`, `slm-talk/`: preserved earlier portfolio and project pages
 - `CNAME`: existing custom domain configuration
 
-Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The personal photo comes from the existing repository; education, community and hockey background come from the earlier portfolio. The attachment itself is not published. Device conversation uses downloaded browser models; the optional preview-server mode uses an installed model. No benchmark scores are fabricated. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.
+Dates, roles and outcome metrics follow the owner-supplied Gokul.pdf resume. The portrait is reconstructed from the owner-approved studio image; education, community and hockey background come from the earlier portfolio. The attachment itself is not published. Device conversation uses downloaded browser models; the optional preview-server mode uses an installed model. No benchmark scores are fabricated. Publishing uses the repository’s existing hosting setup; local preview does not change the live site.
+
+
+## Personal portfolio concept
+
+`/expert-portfolio.html` is a separate design concept positioning Gokul around applied AI, LLM systems and agents. It includes résumé-backed case studies, an interactive conceptual framework, a technical career timeline, public projects and a personal chapter. It reuses the current portrait module and does not replace `index.html`.
+
+The rationale and research references are in `design/portfolio-direction.md`; `design/portfolio-concept.png` is an editorial concept board, not a browser screenshot. Regenerate the board with `python3 design/render-portfolio-board.py` (Pillow and the listed system fonts are development-only dependencies). The browser page needs no build step or new libraries.
+
+`/systems-portfolio.html` is Direction 02: a graphite/lime theme with a persistent identity rail, expertise selector, expandable work index, talk-led public chapter and a separate centered-avatar personal chapter. Its rationale and comparison are in `design/systems-direction.md`; `design/systems-concept.png` is the concept board. The current homepage and first concept remain available for comparison.
+
+## Current illustrated direction
+
+The root URL now serves “Gokul’s world”: a centered, interactive portrait with comic-style topic objects, an illustrated career map, public projects, and a personal hockey/community chapter. The two earlier concepts above are retained as comparisons. Research decisions and verification limits are in `design/world-direction.md`.
+
+The illustrated redesign, technical archive, ventures and published articles are deployed together through the repository’s `master` branch.
+
+## Navigation and blog studio
+
+The main navigation now has four destinations. Home keeps the interactive avatar experience. `/technical/` combines the latest résumé with the original portfolio’s skills, publications, community work, recognition, education and both historical timelines; 31 projects have redesigned detail pages. `/ventures/` explains Refuse.dev, slm.expert and Agentend.ai individually, linking to verified product and source-code pages. slm.expert is described as an open-weight model resource, not as an unverified open-source repository. `/blog/` contains searchable articles and topic archives.
+
+The public site is static HTML. The single-owner CMS runs in the existing Python preview server, using Python 3.10+ and the standard library only. It supports drafts separate from published articles, nine content-block types, private image uploads, alt text/captions, previews, categories/tags, publication dates, calculated reading time, scheduled publication, revisions, duplication, reversible archiving and JSON content export. Ctrl/Cmd+S saves a draft. Publishing rebuilds the article pages and their indexes on this server; it does not push Git or deploy to gok03.com.
+
+```bash
+python3 scripts/build_site.py
+python3 scripts/preview.py --bind 0.0.0.0 --port 8881 --no-open
+```
+
+The existing managed preview remains at `http://100.127.12.50:8881/`. Open `/admin/` to use the studio. On the server computer, `http://localhost:8881/admin/` recognizes the local owner; choose **Remote access** to set a passphrase, then sign in from the Mac through the Tailscale address. The initial generated passphrase is also saved in `~/.config/gokul-portfolio-cms/<repository-path-hash>/initial-password.txt`, with owner-only permissions. Changing it removes that initial file and expires existing sessions. Credentials are never included in public assets or Git.
+
+Scheduled publishing runs every 30 seconds while this Python server is running; overdue posts publish when it restarts. Static GitHub Pages hosting serves the generated pages, but cannot run the CMS or scheduler. To update the public site, publish in the studio and then deploy the resulting public files through the repository’s existing deployment process. The Git repository remains the source for the public site; the local studio is its authoring interface.
+
+### Content and recovery
+
+- `content/posts/*.json`: published article source; edit through the studio, then publish.
+- `content/ventures.json`: product descriptions, source links and architecture steps.
+- `content/generated-blog.json`: generated routes, used to remove unpublished article/topic pages during a rebuild.
+- `.cms/posts/`: private drafts, live snapshots and the last 30 revisions; ignored by Git and blocked by the preview server.
+- `.cms/assets/`: private uploads. Only images used by a published article are copied into public `media/`.
+- `scripts/site_content.py`, `scripts/build_site.py`, `scripts/cms.py`: safe rendering, static generation and authenticated authoring.
+- `admin/`, `static/studio.*`: the editor. `static/editorial.*`: public page layouts and search.
+
+Back up `.cms/`, `content/`, `media/` and the external CMS configuration directory for a complete recovery. The studio’s **Export backup** downloads article content, including drafts and revisions; it does not bundle image files. Archived articles can be restored in the studio. Unpublishing removes public article HTML and its listing, feed and sitemap entries while retaining the private draft. Already-published image files remain available to preserve references.
+
+### Search, sharing and answer engines
+
+Article text is rendered into HTML so it is readable without JavaScript. Generated pages include titles/descriptions, canonical URLs, Open Graph sharing data, a social preview image, author identity, publication/update dates, reading time and JSON-LD (`Person`, `WebSite`, `WebPage`, `BlogPosting` and breadcrumbs as appropriate). Articles support a concise answer, a table of contents, questions and answers, source citations, related writing and topic links. Technical and venture pages automatically link back to articles that reference them. Original archive URLs remain available with canonicals pointing at their redesigned equivalents.
+
+Publishing updates `/sitemap.xml`, `/robots.txt`, `/blog/feed.xml` and `/blog/search.json`. Admin/API paths are excluded from indexing; private previews are noindex. These are SEO and answer-discovery foundations, not a ranking or AI-citation guarantee. Public search indexing begins only after the generated site is deployed and crawled. There is no special AI schema required by Google; use accurate, visible content and ordinary search fundamentals. See [Google’s AI search guidance](https://developers.google.com/search/docs/appearance/ai-features) and [Article structured data](https://developers.google.com/search/docs/appearance/structured-data/article).
+
+The public blog contains the Small Models, Big Impact talk and resources, and Choosing an agent harness for my DGX Spark. The two introductory articles remain archived in the studio. The seed script only restores the talk article. Sources stay in the article column; related work appears in a separate card section below it.
+
+Validation: `npm test` runs the browser-side tests; `python3 -m unittest discover -s tests -v` covers the API and publication lifecycle, including remote authentication, same-origin mutations, draft privacy, upload publication, revisions, stale-edit conflicts, scheduling, rollback and archive migration.
+
+## Public deployment
+
+GitHub Pages publishes the generated files from `master` at [gok03.com](https://gok03.com/). Publish an article in the local studio, rebuild with `python3 scripts/build_site.py` when changing templates, and commit the generated pages and required static assets. Push the reviewed release to `master` without rewriting its history.
+
+`_config.yml` excludes the local studio, source content, scripts, tests and design previews from the Pages output. The editor and scheduler continue to run on the existing local server; GitHub Pages hosts the public static site. Private `.cms` data and external credentials are never committed.

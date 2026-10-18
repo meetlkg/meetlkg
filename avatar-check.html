@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gokul · Speech review</title>
+<script type="importmap">{"imports":{"three":"./static/avatar3d/three.module.js"}}</script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f6f5f1;color:#252a29;font:14px Arial,sans-serif}header{padding:16px 26px;display:flex;justify-content:space-between}a{color:inherit}main{display:grid;grid-template-columns:minmax(420px,1fr) 360px;max-width:1200px;margin:auto;gap:24px;padding:0 24px}.stage{height:660px;position:relative;background:#fff;border-radius:12px}.stage canvas{display:block}h1{font-size:25px;letter-spacing:-.6px}p{line-height:1.55;color:#59625d}label{display:block;margin:14px 0 5px}select,input,button{font:inherit;border:1px solid #cfd5cd;background:white;padding:9px;border-radius:6px}select{width:100%}button{cursor:pointer}button:hover{background:#dce7de}.row{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}input{width:95px}audio{width:100%;margin-top:15px}output{display:block;font:12px/1.5 monospace;overflow-wrap:anywhere}.portrait-diagnostics{display:none}.note{font-size:12px}#transcript{max-height:150px;overflow:auto}@media(max-width:800px){main{grid-template-columns:1fr}.stage{height:55svh}}
+</style></head><body><header><strong>gokul. / speech review</strong><a href="./">Back to portfolio ↗</a></header><main>
+<div id="face" class="stage" role="img" aria-label="Gokul’s reconstructed 3D avatar"></div>
+<section><h1>Frame by frame.</h1><p id="status" role="status">Loading the facial model…</p>
+<label for="clip">Recorded answer</label><select id="clip" disabled></select>
+<audio id="audio" controls preload="auto"></audio>
+<label for="motion-mode">Facial animation</label><select id="motion-mode"><option value="neural">New · learned speech motion</option><option value="legacy">Previous · seven mouth poses</option></select>
+<label for="rate">Playback speed</label><select id="rate"><option value="1">Normal speed</option><option value="0.5">Half speed</option><option value="0.25" selected>Quarter speed</option></select>
+<label><input id="performance" type="checkbox" checked style="width:auto"> Head, eyes and brow expression</label>
+<div class="row"><button id="play" disabled>Play</button><button id="pause">Pause</button><button id="restart">Restart</button></div>
+<label for="time">Time in seconds</label><div class="row"><input id="time" type="number" step="0.01" min="0" value="0"><button id="previous">−1 frame</button><button id="next">+1 frame</button></div>
+<div class="row"><button id="previous-cue">Previous sound</button><button id="next-cue">Next sound</button></div>
+<label for="pose">Isolate a mouth shape</label><select id="pose"><option value="audio">Follow the recording</option><option value="neutral">Rest</option><option value="speechAA">A · open vowel</option><option value="speechEE">E/I · spread vowel</option><option value="speechOO">O · round vowel</option><option value="speechUU">U · pursed vowel</option><option value="speechFF">F/V · lip and teeth</option><option value="speechDD">D/T · tongue consonant</option><option value="speechPP">M/B/P · lips closed</option></select>
+<output id="frame">Waiting for the recording.</output><p id="transcript"></p><p class="note">These controls are only on this review page. They use the portfolio’s 3D renderer, recorded voice and speech sampler.</p>
+<div class="row"><button data-view="-2">View left 10°</button><button data-view="0">Front view</button><button data-view="2">View right 10°</button></div>
+<button id="record-preview" disabled>Save a 20-second preview</button>
+</section></main><script type="module" src="./static/speech-review.js?v=7-2"></script></body></html>

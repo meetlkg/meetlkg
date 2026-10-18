@@ -1,0 +1,555 @@
+{
+  "version": 1,
+  "model": "OMG-Avatar",
+  "modelCommit": "2e7f493b205026f6cc44685f253a4836f5e01389",
+  "count": 159654,
+  "headCount": 134715,
+  "nativeHeadCount": 79936,
+  "headStart": 24939,
+  "channels": [
+    "blink",
+    "interested",
+    "jawOpen",
+    "mouthWide",
+    "mouthRound",
+    "lipPress",
+    "gazeLeft",
+    "gazeRight",
+    "gazeUp",
+    "gazeDown",
+    "speechAA",
+    "speechEE",
+    "speechOO",
+    "speechUU",
+    "speechFF",
+    "speechDD",
+    "speechPP",
+    "speechMotion00",
+    "speechMotion01",
+    "speechMotion02",
+    "speechMotion03",
+    "speechMotion04",
+    "speechMotion05",
+    "speechMotion06",
+    "speechMotion07",
+    "speechMotion08",
+    "speechMotion09",
+    "speechMotion10",
+    "speechMotion11",
+    "speechMotion12",
+    "speechMotion13",
+    "speechMotion14",
+    "speechMotion15",
+    "speechColor00",
+    "speechColor01",
+    "speechColor02",
+    "speechColor03",
+    "speechColor04",
+    "speechColor05",
+    "speechColor06",
+    "speechColor07",
+    "speechColor08",
+    "speechColor09",
+    "speechColor10",
+    "speechColor11",
+    "speechColor12",
+    "speechColor13",
+    "speechColor14",
+    "speechColor15",
+    "browLift"
+  ],
+  "components": 6,
+  "scales": [
+    0.05,
+    0.05,
+    0.05,
+    2,
+    2,
+    2
+  ],
+  "camera": {
+    "distance": 2.078270673751831,
+    "fov": 9.527283381452355,
+    "target": [
+      0.0,
+      -0.025,
+      -0.05
+    ]
+  },
+  "sentinels": [
+    {
+      "index": 0,
+      "xyz": [
+        -0.019373713061213493,
+        0.1481892168521881,
+        -0.10411927103996277
+      ]
+    },
+    {
+      "index": 17,
+      "xyz": [
+        0.01585122011601925,
+        0.1481892317533493,
+        -0.08832720667123795
+      ]
+    },
+    {
+      "index": 24939,
+      "xyz": [
+        -0.0792560800909996,
+        -0.04554785043001175,
+        -0.10716032236814499
+      ]
+    },
+    {
+      "index": 158085,
+      "xyz": [
+        -0.04455951973795891,
+        0.0014376211911439896,
+        -0.016638386994600296
+      ]
+    }
+  ],
+  "binary": "int16 little endian, channel-major/head-index/component; actual native geometry and neural appearance fields",
+  "beardBinding": {
+    "start": 24939,
+    "count": 1218,
+    "nativeStart": 26157,
+    "method": "Eight source-visible native surface anchors; jaw and expression displacement, fixed hair pigment",
+    "channels": [
+      "interested",
+      "jawOpen",
+      "mouthWide",
+      "mouthRound",
+      "lipPress",
+      "speechAA",
+      "speechEE",
+      "speechOO",
+      "speechUU",
+      "speechFF",
+      "speechDD",
+      "speechPP",
+      "speechMotion00",
+      "speechMotion01",
+      "speechMotion02",
+      "speechMotion03",
+      "speechMotion04",
+      "speechMotion05",
+      "speechMotion06",
+      "speechMotion07",
+      "speechMotion08",
+      "speechMotion09",
+      "speechMotion10",
+      "speechMotion11",
+      "speechMotion12",
+      "speechMotion13",
+      "speechMotion14",
+      "speechMotion15"
+    ],
+    "samples": [
+      {
+        "index": 24939,
+        "drivers": [
+          {
+            "index": 28663,
+            "weight": 0.17591416398351728
+          },
+          {
+            "index": 56925,
+            "weight": 0.14107178738274626
+          },
+          {
+            "index": 56926,
+            "weight": 0.13982329245420203
+          },
+          {
+            "index": 56924,
+            "weight": 0.13646357506427617
+          },
+          {
+            "index": 37597,
+            "weight": 0.10595266242721976
+          },
+          {
+            "index": 80999,
+            "weight": 0.10263253195904608
+          },
+          {
+            "index": 82010,
+            "weight": 0.1023279881630556
+          },
+          {
+            "index": 56923,
+            "weight": 0.0958139985659367
+          }
+        ]
+      },
+      {
+        "index": 25141,
+        "drivers": [
+          {
+            "index": 92984,
+            "weight": 0.16150479933428954
+          },
+          {
+            "index": 54098,
+            "weight": 0.15650292224791504
+          },
+          {
+            "index": 79910,
+            "weight": 0.14036245657074517
+          },
+          {
+            "index": 54116,
+            "weight": 0.11645927946462754
+          },
+          {
+            "index": 92988,
+            "weight": 0.11456400822390372
+          },
+          {
+            "index": 54115,
+            "weight": 0.112712871267048
+          },
+          {
+            "index": 54080,
+            "weight": 0.10890505022740721
+          },
+          {
+            "index": 79900,
+            "weight": 0.0889886126640637
+          }
+        ]
+      },
+      {
+        "index": 25344,
+        "drivers": [
+          {
+            "index": 82034,
+            "weight": 0.1792980518252231
+          },
+          {
+            "index": 37613,
+            "weight": 0.14214448598122686
+          },
+          {
+            "index": 82275,
+            "weight": 0.14190137412038709
+          },
+          {
+            "index": 37617,
+            "weight": 0.13306904800160307
+          },
+          {
+            "index": 82033,
+            "weight": 0.1187954465848429
+          },
+          {
+            "index": 56730,
+            "weight": 0.10800562414054887
+          },
+          {
+            "index": 57006,
+            "weight": 0.10121884402646004
+          },
+          {
+            "index": 82048,
+            "weight": 0.07556712531970798
+          }
+        ]
+      },
+      {
+        "index": 25547,
+        "drivers": [
+          {
+            "index": 37929,
+            "weight": 0.13420950567311393
+          },
+          {
+            "index": 38085,
+            "weight": 0.12797150482984654
+          },
+          {
+            "index": 82558,
+            "weight": 0.12656860367974399
+          },
+          {
+            "index": 82552,
+            "weight": 0.12576124269405842
+          },
+          {
+            "index": 82739,
+            "weight": 0.12411576473420206
+          },
+          {
+            "index": 82554,
+            "weight": 0.12232501554627605
+          },
+          {
+            "index": 28823,
+            "weight": 0.11958201044097971
+          },
+          {
+            "index": 57920,
+            "weight": 0.11946635240177934
+          }
+        ]
+      },
+      {
+        "index": 25750,
+        "drivers": [
+          {
+            "index": 28844,
+            "weight": 0.13487835124581324
+          },
+          {
+            "index": 58040,
+            "weight": 0.13336903560895036
+          },
+          {
+            "index": 38044,
+            "weight": 0.12400990061482758
+          },
+          {
+            "index": 37939,
+            "weight": 0.12381272709178479
+          },
+          {
+            "index": 57640,
+            "weight": 0.12267430784400414
+          },
+          {
+            "index": 58042,
+            "weight": 0.1225514405032738
+          },
+          {
+            "index": 82731,
+            "weight": 0.11939509438664027
+          },
+          {
+            "index": 57638,
+            "weight": 0.11930914270470573
+          }
+        ]
+      },
+      {
+        "index": 25953,
+        "drivers": [
+          {
+            "index": 73576,
+            "weight": 0.24247360282078304
+          },
+          {
+            "index": 75514,
+            "weight": 0.1424674811589349
+          },
+          {
+            "index": 34524,
+            "weight": 0.1399317882023509
+          },
+          {
+            "index": 35440,
+            "weight": 0.10106007944410127
+          },
+          {
+            "index": 56995,
+            "weight": 0.09637846789284155
+          },
+          {
+            "index": 37709,
+            "weight": 0.09619283301866541
+          },
+          {
+            "index": 82254,
+            "weight": 0.09144652137008352
+          },
+          {
+            "index": 77386,
+            "weight": 0.09004922609223934
+          }
+        ]
+      },
+      {
+        "index": 26156,
+        "drivers": [
+          {
+            "index": 34924,
+            "weight": 0.5425600767455361
+          },
+          {
+            "index": 76353,
+            "weight": 0.13682910091814512
+          },
+          {
+            "index": 76348,
+            "weight": 0.08814568081069818
+          },
+          {
+            "index": 76347,
+            "weight": 0.07938087177273058
+          },
+          {
+            "index": 50426,
+            "weight": 0.042549691091695194
+          },
+          {
+            "index": 34920,
+            "weight": 0.03784751117194359
+          },
+          {
+            "index": 50417,
+            "weight": 0.03642119164396251
+          },
+          {
+            "index": 50419,
+            "weight": 0.03626587584528871
+          }
+        ]
+      }
+    ]
+  },
+  "neckAttachment": {
+    "bottom": -0.176,
+    "top": -0.138,
+    "pivot": [
+      0,
+      -0.151,
+      -0.1
+    ],
+    "method": "Per-sample source jaw envelope and skin-only neck weights; local rigid rotations, no covariance stretch",
+    "weights": "attachment.bin",
+    "sha256": "febe9bb3fe8d49910c3df5975aa077c103babf56844c1f13ef6b4b0b29673b1a",
+    "fixedTorsoSamples": 7184
+  },
+  "poseBound": {
+    "combinedYawDegrees": 15,
+    "combinedPitchDegrees": 4
+  },
+  "runtime": "Native 3D field interpolation in WebGL; no neural image decoder or inference service in browser",
+  "limitations": [
+    "Learned speech motion is precomputed for the recorded answer corpus",
+    "Mouth and teeth appearance remain inferred from one image; no dental capture",
+    "Small-view portrait; hidden surfaces remain uncertain"
+  ],
+  "sourceSha256": "518976e00da06292823dc1562c6622e02795c0288bda293d015a3c193bedb834",
+  "downloadBytes": {
+    "portrait.ply": 6984205,
+    "expressions.bin": 21868812,
+    "attachment.bin": 15398
+  },
+  "viewControl": {
+    "camera": "Fixed source view",
+    "manualTurn": "Head rotation only",
+    "maximumYawDegrees": 15,
+    "maximumPitchDegrees": 4
+  },
+  "speechRig": {
+    "version": 7,
+    "channels": [
+      "speechAA",
+      "speechEE",
+      "speechOO",
+      "speechUU",
+      "speechFF",
+      "speechDD",
+      "speechPP"
+    ],
+    "mouthAnchors": {
+      "left": 36172,
+      "right": 91185,
+      "upper": 89710,
+      "lower": 89702
+    },
+    "controls": {
+      "speechAA": {
+        "jaw": 0.26,
+        "width": 0.94,
+        "aperture": 0.09
+      },
+      "speechEE": {
+        "jaw": 0.06,
+        "width": 1.08,
+        "aperture": 0.028
+      },
+      "speechOO": {
+        "jaw": 0.19,
+        "width": 0.6,
+        "pucker": 0.035,
+        "aperture": 0.075
+      },
+      "speechUU": {
+        "jaw": 0.08,
+        "width": 0.5,
+        "pucker": 0.055,
+        "aperture": 0.032
+      },
+      "speechFF": {
+        "jaw": 0.045,
+        "width": 0.98,
+        "lower_raise": 0.012,
+        "upper_raise": 0.02,
+        "lower_retract": 0.018
+      },
+      "speechDD": {
+        "jaw": 0.085,
+        "width": 0.98,
+        "aperture": 0.035
+      },
+      "speechPP": {
+        "jaw": 0,
+        "closed": true
+      }
+    },
+    "cavity": {
+      "start": 158086,
+      "count": 1568,
+      "method": "Recessed curved 3D surface following native inner lip contours; inferred oral appearance"
+    },
+    "method": "Recorded audio \u2192 StreamingTalker FLAME vertices \u2192 acoustic aperture, width, pucker and bilabial seal constraints \u2192 continuous geometry and mouth-local neural appearance fields",
+    "appearanceRegion": "Lips and mouth interior only; hair/eyes/torso pigment fixed",
+    "source": "Owner-approved existing identity; no new anatomy capture",
+    "motionRevision": "speech-20261018-7",
+    "motionModel": "StreamingTalker",
+    "motionChannels": [
+      "speechMotion00",
+      "speechMotion01",
+      "speechMotion02",
+      "speechMotion03",
+      "speechMotion04",
+      "speechMotion05",
+      "speechMotion06",
+      "speechMotion07",
+      "speechMotion08",
+      "speechMotion09",
+      "speechMotion10",
+      "speechMotion11",
+      "speechMotion12",
+      "speechMotion13",
+      "speechMotion14",
+      "speechMotion15",
+      "speechColor00",
+      "speechColor01",
+      "speechColor02",
+      "speechColor03",
+      "speechColor04",
+      "speechColor05",
+      "speechColor06",
+      "speechColor07",
+      "speechColor08",
+      "speechColor09",
+      "speechColor10",
+      "speechColor11",
+      "speechColor12",
+      "speechColor13",
+      "speechColor14",
+      "speechColor15"
+    ],
+    "geometryComponents": 16,
+    "appearanceComponents": 16,
+    "performanceChannels": [
+      "browLift"
+    ],
+    "modelCommit": "1f6452752dbd6c11f4bb1e94982e000e68d8f76d",
+    "checkpointSha256": "aaa2422eb829a6e03252e915fa4f4846d47efd1f9ccb199f75f039438b02da36"
+  }
+}

@@ -6,11 +6,12 @@ import errno
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from threading import Thread
+from threading import Thread, Event
 import webbrowser
 from urllib.parse import unquote, urlsplit
 
 import avatar
+import cms
 
 
 class PreviewHandler(SimpleHTTPRequestHandler):
@@ -22,6 +23,8 @@ class PreviewHandler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         path = unquote(urlsplit(self.path).path)
+        if path.startswith('/api/cms/'):
+            return cms.handle(self, self.server.cms)
         if path == "/api/avatar/status":
             return avatar.status(self)
         # The network preview must never expose local configuration or Git internals.
@@ -39,6 +42,8 @@ class PreviewHandler(SimpleHTTPRequestHandler):
         return super().do_HEAD()
 
     def do_POST(self):
+        if unquote(urlsplit(self.path).path).startswith('/api/cms/'):
+            return cms.handle(self, self.server.cms)
         if urlsplit(self.path).path == "/api/avatar/chat":
             try:
                 return avatar.chat(self)
@@ -69,6 +74,10 @@ def main():
         server = ThreadingHTTPServer((args.bind, 0), handler)
 
     with server:
+        server.cms = cms.Store(root)
+        server.cms.due()
+        stop_scheduler = Event()
+        Thread(target=cms.scheduler, args=(server.cms, stop_scheduler), daemon=True).start()
         browser_host = "localhost" if args.bind in ("0.0.0.0", "127.0.0.1") else args.bind
         url = "http://{}:{}/".format(browser_host, server.server_port)
         print("\nPortfolio preview: {}".format(url), flush=True)
@@ -80,6 +89,8 @@ def main():
             server.serve_forever()
         except KeyboardInterrupt:
             print("\nPreview stopped.")
+        finally:
+            stop_scheduler.set()
 
 
 if __name__ == "__main__":

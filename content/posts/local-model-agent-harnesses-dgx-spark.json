@@ -1,0 +1,389 @@
+{
+  "title": "Choosing an agent harness for my DGX Spark",
+  "slug": "local-model-agent-harnesses-dgx-spark",
+  "excerpt": "I wanted my local models to help with coding, research and everyday work. Here’s what I look for in the tools around them, from context and runtime to remote access and model management.",
+  "summary": "I want to give a local agent some work and come back later to see what it has done. Here, I compare ten tools on context, runtime, recovery, remote access, hardware access and model configuration.",
+  "category": "Agents & local inference",
+  "seoTitle": "Choosing a local agent harness for DGX Spark",
+  "seoDescription": "Ten local AI tools compared for DGX Spark: context, runtime, recovery, remote access, hardware access, Hugging Face model management and configuration.",
+  "cover": "",
+  "coverAlt": "",
+  "canonical": "",
+  "publishedAt": "2026-10-18T12:43:51+00:00",
+  "tags": [
+    "Agents",
+    "Small models",
+    "DGX Spark",
+    "Harnesses"
+  ],
+  "blocks": [
+    {
+      "type": "paragraph",
+      "text": "I wanted my local models to take on more of my everyday work: fixing code, looking things up, reading documents and working with files. I also wanted to close the browser, get on with something else and come back to find the work still running or the results ready.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "The models were already running on my DGX Spark. The next question was which agent harness to use with them. That’s the software that gives the model tools, keeps track of the task and works out the next step.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "That brought me to Agent Zero, OpenHands, OpenCode, Cline, Aider, Pi, Hermes, LangGraph with Deep Agents, LM Studio and Unsloth Studio. Model studios and agent harnesses handle different parts of the setup. I’m comparing them against the same requirements to understand where each fits.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "What I need the harness to take care of",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Getting a response from a local model is a start. Once I ask it to edit a file or run a command, I need to know a few more things. Which files can it access? Is the command running on my machine or inside a container? Can I see what it did? If it stops halfway, can I pick up from there?",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "I look at the setup in four parts. The model server runs inference. The harness prepares context and calls tools. The task layer keeps track of progress and handles interruptions. The browser or terminal lets me follow the work and guide it. Even when one product handles all four, it helps to know what each part is doing.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "So when a tool says it supports local models, I look a little closer. Can it connect to my endpoint? Can the model follow its tool format, use the context properly and recover when a step fails? All of these matter in day-to-day use.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "Along with context and tool compatibility, these are the practical things I look for:",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "list",
+      "text": "**Remote access:** A stable browser or API address, such as a [Cloudflare Tunnel hostname](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/), with authentication and a way to reconnect to the work.\n**Host and hardware access:** Access to the GPU, files, installed environments and cached models. I check what runs directly on the machine, inside a container or through a host connector.\n**Longer jobs:** The work should continue after I close the browser, with progress and results available when I return.\n**Model management:** Finding, downloading and importing models from Hugging Face, keeping track of exact revisions and reusing the cache. [Versioned downloads](https://huggingface.co/docs/huggingface_hub/guides/download) help me get the same model files again.\n**Configuration:** Controls for context, reasoning, quantisation, sampling and output limits, wherever the model supports them. I want to save these settings separately for each model.\n**Runtime control:** Task state, queues, delegation and parallel workers, plus ways to guide or cancel work while it is running.\n**Observability:** A clear view of tool calls, errors, changes and task results, so I can follow what happened.\n**Maintenance:** The effort to set things up, update dependencies and keep the runtime working with the model backend.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "ordered": false
+    },
+    {
+      "type": "heading",
+      "text": "The options I’m considering",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "These tools serve different needs. Some focus on editing a code repository. Others work more like a personal assistant, or provide the pieces to build one. This is how I compare them against what I need.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "table",
+      "text": "Tool | Main capabilities | What to consider\n[Agent Zero](https://github.com/agent0ai/agent-zero) | A workspace for mixed tasks, with projects, memory and delegation | Host access, longer conversations and interrupted tools\n[OpenHands + SDK](https://docs.openhands.dev/sdk/guides/convo-persistence) | Software tasks with defined execution environments and saved conversations | How my model uses the tools and resumes unfinished work\n[OpenCode](https://opencode.ai/docs/server/) | Coding sessions through a browser or terminal | Local-provider setup, background requests and restarts\n[Cline](https://docs.cline.bot/running-models-locally/overview) | Help from local models inside the editor | Whether compact prompts help my model stay on task\n[Aider](https://aider.chat/docs/usage/modes.html) | Focused repository edits I can review | Reliable edits and whether a separate planning model helps\n[Pi](https://github.com/earendil-works/pi) | A runtime for building my own agent workflow | Integration effort and setting up the sandbox\n[Hermes](https://hermes-agent.nousresearch.com/docs) | An assistant with memory, skills and recurring tasks | Useful recall and reliable tool use with local models\n[LangGraph + Deep Agents](https://docs.langchain.com/oss/python/deepagents/overview) | Control over an application’s workflow and state | Recovery behaviour and the integration work I need to handle\n[LM Studio](https://lmstudio.ai/docs/app/basics/lmstudio-vs-llmster-vs-lms) | Model discovery, chat, local APIs and headless serving | Hugging Face downloads, load settings, presets and remote access\n[Unsloth Studio](https://unsloth.ai/docs/new/studio) | Model management, inference, fine-tuning and code execution | Running natively or in a container, model settings and remote access",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "Agent Zero brings projects, memory and delegated tasks into one workspace. OpenHands lets me define where software tasks run, and its SDK covers [saving and restoring conversations](https://docs.openhands.dev/sdk/guides/convo-persistence). Its [local-model guide](https://github.com/OpenHands/docs/blob/main/openhands/usage/llms/local-llms.mdx) also explains that some features depend on the model. For either tool, I’d check how these capabilities fit my workflow, hardware and recovery needs.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "For coding, I’d start with how I prefer to work. OpenCode has a server API with asynchronous prompts and [local-provider configuration](https://opencode.ai/docs/providers/). Cline keeps the work inside the editor and offers a compact prompt for local models. Aider uses a [repository map](https://aider.chat/docs/repomap.html) for context, and its architect/editor modes separate planning from editing. It also [works with Ollama](https://aider.chat/docs/llms/ollama.html). Giving each tool the same small fixes makes it easier to compare the edits and see how often I need to step in.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "Pi and LangGraph are options when I want to build the workflow myself. Pi includes a durable runtime along with its agent and provider packages; permissions and sandboxing need to be set up as part of the deployment. LangGraph provides [persistent state](https://docs.langchain.com/oss/python/langgraph/persistence), while Deep Agents adds support for context, files and delegation. Both involve integration work on my side. Hermes covers recurring assistant tasks, with memory and skills to carry useful context from one task to the next.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "A brief setup example",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "In one setup, we ran Agent Zero in Docker with separate local inference services: a quantised 27B main model, a 9B utility model and CPU embeddings. A host connector gave it access to existing files, Python environments and GPU commands, using the host user’s permissions. A named Cloudflare Tunnel gave us a stable HTTPS address. It’s a simple example of how the workspace, inference, access to the machine and remote interface fit together.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "One address to reach the setup",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "I set up a named Cloudflare Tunnel to reach the workspace through a permanent HTTPS address. The hostname stayed the same across restarts, and the workspace remained behind its login. I could open the same address from another device without setting up a new URL each time.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "The agent and inference services ran on the Spark, so closing the browser did not stop them. That was useful for longer tasks and for switching between devices. The Spark still had to stay online; the browser was simply how I accessed it.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "Connecting the workspace to the machine",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The workspace ran in Docker, so its usual terminal worked inside the container. My existing Python environments, cached models and GPU tools were on the host. I connected those through a host connector, which gave the agent access under my normal user permissions.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "I checked the connection with identity and GPU queries on the Spark. This made the distinction clear: the container tools worked in their own environment, while the host tools worked on the machine where my files and models already lived.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "The models I tried",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "I tried these models across the main agent setup and my own harness work. Each had a different role, and the prompt and tool setup made a difference to the result.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "table",
+      "text": "Model and configuration | Where I used it | What stood out\nQwen3.8 27B Turbo/Fable — Q6_K MTP | Main agent model, with medium reasoning | Generated URL-validation code that passed six basic cases. Reasoning was part of the response budget.\nDefiant Fable 9B plusIQ-TOOLS — Q6 MTP | Utility model for extraction and summarisation, with reasoning off | The HTML-to-JSON check returned the required fields directly, without reasoning text.\nLlama 3.2 3B — Q4_K_M, on CPU | Classification and file tasks in my own harness | A shorter prompt fixed an alert-classification error. Exact file copying improved when the harness handled the copy operation itself.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "paragraph",
+      "text": "The 27B and 9B models became separate main and utility services. The 3B runs showed how much the prompt and tool interface could change the result, even with the same model weights. That made the model–harness combination an important part of my comparison.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "The settings behind each model",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "I saved context, reasoning, sampling and output limits separately for each model. The [llama.cpp server](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md) handled inference, while the harness presets selected the model for each role. For the 27B main model and 9B utility model, I used:",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "list",
+      "text": "**Context:** A 128k-token limit for each model, with the harness’s history ratio set to 65% to leave room for instructions, tools and generation.\n**Reasoning:** Medium reasoning for the main model; reasoning disabled for the utility model used for extraction and summarisation.\n**Output limits:** 16k tokens for the main model and 8k for the utility model. The main model’s limit included its reasoning output.\n**Requests:** One inference slot per model, with requests to each service queued. Both services still shared the Spark’s GPU.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "These choices also shaped the comparison. Alongside downloading and running a model, I looked at how easily each tool let me save its settings and load them again. Support for [per-model load settings](https://lmstudio.ai/docs/app/advanced/per-model) was one example of that.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    }
+  ],
+  "sources": [
+    {
+      "label": "Agent Zero — project and architecture",
+      "url": "https://github.com/agent0ai/agent-zero"
+    },
+    {
+      "label": "OpenHands SDK — conversation persistence",
+      "url": "https://docs.openhands.dev/sdk/guides/convo-persistence"
+    },
+    {
+      "label": "OpenHands — local-model guidance",
+      "url": "https://github.com/OpenHands/docs/blob/main/openhands/usage/llms/local-llms.mdx"
+    },
+    {
+      "label": "OpenCode — server API",
+      "url": "https://opencode.ai/docs/server/"
+    },
+    {
+      "label": "OpenCode — providers",
+      "url": "https://opencode.ai/docs/providers/"
+    },
+    {
+      "label": "Cline — running models locally",
+      "url": "https://docs.cline.bot/running-models-locally/overview"
+    },
+    {
+      "label": "Aider — chat and editing modes",
+      "url": "https://aider.chat/docs/usage/modes.html"
+    },
+    {
+      "label": "Aider — repository maps",
+      "url": "https://aider.chat/docs/repomap.html"
+    },
+    {
+      "label": "Aider — Ollama configuration",
+      "url": "https://aider.chat/docs/llms/ollama.html"
+    },
+    {
+      "label": "Pi — packages, runtime and execution boundary",
+      "url": "https://github.com/earendil-works/pi"
+    },
+    {
+      "label": "Hermes Agent — documentation",
+      "url": "https://hermes-agent.nousresearch.com/docs"
+    },
+    {
+      "label": "LangGraph — persistence",
+      "url": "https://docs.langchain.com/oss/python/langgraph/persistence"
+    },
+    {
+      "label": "Deep Agents — overview",
+      "url": "https://docs.langchain.com/oss/python/deepagents/overview"
+    },
+    {
+      "label": "NVIDIA — DGX Spark architecture and specifications",
+      "url": "https://www.nvidia.com/en-us/products/workstations/dgx-spark/"
+    },
+    {
+      "label": "llama.cpp — server documentation",
+      "url": "https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md"
+    },
+    {
+      "label": "LM Studio — app, headless service and CLI",
+      "url": "https://lmstudio.ai/docs/app/basics/lmstudio-vs-llmster-vs-lms"
+    },
+    {
+      "label": "Unsloth Studio — model management, inference and training",
+      "url": "https://unsloth.ai/docs/new/studio"
+    },
+    {
+      "label": "Cloudflare Tunnel — custom hostnames",
+      "url": "https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/"
+    },
+    {
+      "label": "Hugging Face — downloads, revisions and cache",
+      "url": "https://huggingface.co/docs/huggingface_hub/guides/download"
+    },
+    {
+      "label": "LM Studio — per-model load settings",
+      "url": "https://lmstudio.ai/docs/app/advanced/per-model"
+    }
+  ],
+  "related": [
+    {
+      "label": "Small Models, Big Impact",
+      "url": "/blog/small-models-big-impact/"
+    },
+    {
+      "label": "Explore slm.expert",
+      "url": "/ventures/slm-expert/"
+    },
+    {
+      "label": "The work behind these experiments",
+      "url": "/technical/"
+    }
+  ],
+  "faqs": [
+    {
+      "question": "How do you choose between these tools?",
+      "answer": "I look at how each tool fits the work, handles context and runtime, and recovers from interruptions. Remote access, hardware access, model management and configuration matter too. The choice depends on how the whole setup works together for the tasks I need."
+    },
+    {
+      "question": "Can I close the browser and let it keep working?",
+      "answer": "If the task runs on a separate server, it can continue after I close the browser. I’d check that I can reconnect and see its progress and results. Restarting the process or recovering an interrupted tool call needs separate checks."
+    },
+    {
+      "question": "Will adding more agents make it faster?",
+      "answer": "It can help when tasks spend time waiting for files or network requests. But model calls still share the GPU, so more workers can also mean a longer queue. I’d look at how long the full task takes and whether the main conversation stays responsive."
+    }
+  ],
+  "updatedAt": "2026-10-18T12:43:51+00:00"
+}

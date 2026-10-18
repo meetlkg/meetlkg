@@ -4,6 +4,17 @@
 * Test if we are in Node.js environment
 * @return {boolean} If true, we are in Node.js
 */
+// Local compatibility patch for the timestamped Kokoro ONNX export: its duration
+// output precedes the round/clamp operation used by the acoustic decoder.
+// Match torch.round (ties to even), then clamp to at least one 25 ms frame.
+export function acousticFrameDurations(values) {
+  return Array.from(values, value => {
+    if (!Number.isFinite(value)) throw new Error('Invalid acoustic duration.');
+    const floor = Math.floor(value);
+    return Math.max(1, value - floor === .5 ? floor + floor % 2 : Math.round(value));
+  });
+}
+
 export function isNode() {
   return typeof import.meta !== 'undefined' &&
     typeof import.meta.url === 'string' &&

@@ -147,8 +147,8 @@ mic.addEventListener('click',async()=>{
 async function loadScene(){
   if(sceneStarted)return;sceneStarted=true;
   const controller=new AbortController();sceneRequest=controller;
-  try{const {mountAvatar}=await import('./avatar-scene.js');scene=await mountAvatar($('#avatar-canvas'),{signal:controller.signal});scene.setPaused(paused);state();}
-  catch(error){if(controller.signal.aborted)return;console.warn('3D avatar unavailable; conversation and photo remain accessible.',error);document.querySelectorAll('.avatar-scene-controls button').forEach(button=>button.disabled=true);}
+  try{const {mountAvatar}=await import('./avatar-scene.js?v=depth-sort-20261018-1');scene=await mountAvatar($('#avatar-canvas'),{signal:controller.signal});delete $('#avatar-canvas').dataset.failed;scene.setPaused(paused);state();}
+  catch(error){if(controller.signal.aborted)return;$('#avatar-canvas').dataset.failed='true';console.warn('3D avatar unavailable; conversation and photo remain accessible.',error);document.querySelectorAll('.avatar-scene-controls button').forEach(button=>button.disabled=true);}
 }
 $('#avatar-turn-left').addEventListener('click',()=>scene?.rotate(-1));$('#avatar-turn-right').addEventListener('click',()=>scene?.rotate(1));
 function motion(){scene?.setPaused(paused);$('#avatar-motion').setAttribute('aria-pressed',String(paused));$('#avatar-motion').setAttribute('aria-label',paused?'Resume avatar animation':'Pause avatar animation');$('#avatar-motion').textContent=paused?'▷':'Ⅱ';}

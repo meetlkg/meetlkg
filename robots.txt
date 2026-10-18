@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /admin/
+Disallow: /.cms/
+Disallow: /avatar-check.html
+Sitemap: https://gok03.com/sitemap.xml

@@ -3,3 +3,6 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+.cms/
+.DS_Store

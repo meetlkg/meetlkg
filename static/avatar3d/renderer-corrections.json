@@ -1,0 +1,11 @@
+{
+  "upstream": "@mkkellogg/gaussian-splats-3d 0.4.7",
+  "original_preserved": "gaussian-splats-3d.module.js",
+  "patched": "gaussian-splats-3d.corrected.module.js",
+  "corrections": [
+    "Stable symmetric 2x2 covariance eigendecomposition without artificial 0.1 discriminant floor",
+    "Stable eigenvector for circular and axis-aligned splats"
+  ],
+  "configuration": "Floating-point distance sort, uncompressed full precision covariance, 20-bit distance buckets",
+  "original_sha256": "f273394134c9174e49bf42bb4ea0945caaad4fdd63023b8996cc6cd248f52a6b"
+}

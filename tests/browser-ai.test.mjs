@@ -1,9 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { BrowserChat, groundedReply } from '../static/browser-ai.js';
+import { BrowserChat, groundedReply, profileMessages } from '../static/browser-ai.js';
 import { BrowserSpeech } from '../static/browser-speech.js';
 import { readFileSync } from 'node:fs';
 const facts=JSON.parse(readFileSync(new URL('../static/profile.json',import.meta.url),'utf8'));
+
+test('the portfolio guide retrieves the conference talk shown on the homepage',()=>{
+  const question='Tell me about your Small Models, Big Impact talk at PyConf Hyderabad.';
+  const prompt=profileMessages(facts,question).at(-1).content;
+  assert.match(prompt,/Gokul's talk at PyConf Hyderabad 2026/);
+  const answer=groundedReply(facts,question,'Small Models, Big Impact is a talk about small language models at PyConf Hyderabad 2026.');
+  assert.equal(answer.excerpt,false);
+  assert.match(groundedReply(facts,question,'My talk was at NeurIPS in 2024.').text,/PyConf Hyderabad 2026/);
+});
 
 test('a fabricated generic agent answer becomes a clearly attributed profile excerpt',()=>{
   const result=groundedReply(facts,'What have you built with multi-agent systems?',

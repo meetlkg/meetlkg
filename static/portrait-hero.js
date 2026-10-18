@@ -1,0 +1,7 @@
+import {mountAvatar} from './avatar-scene.js?v=depth-sort-20261018-1';
+const container=document.querySelector('#hero-avatar'),button=document.querySelector('#portrait-motion'),status=document.querySelector('#portrait-status'),reduced=matchMedia('(prefers-reduced-motion: reduce)');
+let avatar,paused=reduced.matches,controller;
+function motion(){avatar?.setPaused(paused);button.setAttribute('aria-pressed',String(paused));button.setAttribute('aria-label',paused?'Resume portrait animation':'Pause portrait animation');button.title=paused?'Resume animation':'Pause animation';button.textContent=paused?'▷':'Ⅱ';status.textContent=paused?'Taking a moment.':'Here, and paying attention.'}
+async function start(){controller=new AbortController();try{avatar=await mountAvatar(container,{signal:controller.signal});motion()}catch(error){if(controller.signal.aborted)return;console.warn('Interactive portrait unavailable:',error);status.textContent='The real me is one hello away.';button.disabled=true;document.querySelector('#portrait-reset').disabled=true}}
+button.addEventListener('click',()=>{paused=!paused;motion()});document.querySelector('#portrait-reset').addEventListener('click',()=>avatar?.reset());reduced.addEventListener('change',e=>{paused=e.matches;motion()});
+window.addEventListener('pagehide',()=>{controller?.abort();avatar?.destroy();avatar=null});window.addEventListener('pageshow',e=>{if(e.persisted)start()});start();

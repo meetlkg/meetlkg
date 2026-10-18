@@ -373,7 +373,11 @@ async function process() {
     const { waveform, durations } = await model(inputs);
 
     // Generate timestamps from durations
-    const durationsFrames = Array.from(durations.data);
+    const durationsFrames = utils.acousticFrameDurations(durations.data);
+    if (settings.verifyDurationAlignment) {
+      const expected = durationsFrames.reduce((sum, value) => sum + value, 0) * settings.audioSampleRate / settings.frameRate;
+      if (Math.abs(expected - waveform.data.length) > 1) throw new Error('Acoustic duration and waveform length disagree.');
+    }
     updateTimestamps( metadata, durationsFrames, silences );
 
     // Encode audio

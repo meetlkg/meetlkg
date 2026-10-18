@@ -1,0 +1,15 @@
+# GitHub Pages serves the generated site; authoring and review tools stay local.
+exclude:
+  - README.md
+  - RESEARCH.md
+  - scripts
+  - tests
+  - admin
+  - design
+  - content
+  - package.json
+  - start.command
+  - avatar-check.html
+  - expert-portfolio.html
+  - systems-portfolio.html
+  - portfolio-before-world.html
