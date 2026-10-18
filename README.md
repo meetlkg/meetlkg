@@ -162,6 +162,14 @@ Validation: `npm test` runs the browser-side tests; `python3 -m unittest discove
 
 ## Public deployment
 
+### Analytics and session replay
+
+`static/analytics.js` loads the PostHog browser SDK asynchronously on `gok03.com` and `www.gok03.com`. The homepage and the shared static-page template include it; private draft previews, the editor, localhost and Tailscale previews do not collect analytics. The `phc_` project token in this file is intentionally public and cannot administer the PostHog account.
+
+Page views, page exits and clicks are captured, with named events for chat opens, topic and career selections, and contact actions. No question text is attached to custom events. Replay masks all inputs and the chat transcript; console recording, request/response body and header capture, and canvas recording are disabled. The animated 3D canvas is therefore not reproduced in replay. Browser Do Not Track and PostHog opt-outs are respected.
+
+Session replay must also remain enabled under PostHog's **Settings → Session replay → Record user sessions**. Sampling and recording triggers remain controlled by the project settings. Check the US PostHog project's Activity and Session Replay views after a production visit; browser content blockers may prevent collection.
+
 GitHub Pages publishes the generated files from `master` at [gok03.com](https://gok03.com/). Publish an article in the local studio, rebuild with `python3 scripts/build_site.py` when changing templates, and commit the generated pages and required static assets. Push the reviewed release to `master` without rewriting its history.
 
 `_config.yml` excludes the local studio, source content, scripts, tests and design previews from the Pages output. The editor and scheduler continue to run on the existing local server; GitHub Pages hosts the public static site. Private `.cms` data and external credentials are never committed.

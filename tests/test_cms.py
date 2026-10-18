@@ -127,6 +127,8 @@ class CmsStoreTests(unittest.TestCase):
         self.assertEqual([item['id'] for item in toc], ['a-section', 'a-section-2'])
         preview = article(validate_post(story()), preview=True)
         self.assertIn('noindex, nofollow', preview)
+        self.assertNotIn('/static/analytics.js', preview)
+        self.assertIn('/static/analytics.js', article(validate_post(story())))
 
     def test_failed_publication_restores_last_published_source(self):
         record = self.act(self.save(), 'publish')
