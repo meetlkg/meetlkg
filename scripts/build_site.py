@@ -135,7 +135,7 @@ def build(root=ROOT):
  write(root/'blog/search.json',json.dumps(indexes,ensure_ascii=False))
  items=''.join('<item><title>'+e(p['title'])+'</title><link>'+absolute('/blog/'+p['slug']+'/')+'</link><guid>'+absolute('/blog/'+p['slug']+'/')+'</guid><description>'+e(p['excerpt'])+'</description><pubDate>'+format_datetime(datetime.fromisoformat(p['publishedAt'].replace('Z','+00:00')))+'</pubDate></item>' for p in posts)
  write(root/'blog/feed.xml','<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gokul’s field notes</title><link>'+SITE+'/blog/</link><description>AI, agents and engineering.</description><language>en</language><atom:link href="'+SITE+'/blog/feed.xml" rel="self" type="application/rss+xml"/>'+items+'</channel></rss>')
- urls=['/']+paths+['/slm-talk/']
+ urls=['/']+paths+['/slm-talk/','/resume/']
  modified={'/blog/'+p['slug']+'/':p.get('updatedAt') or p['publishedAt'] for p in posts}
  write(root/'sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join('<url><loc>'+e(absolute(u))+'</loc>'+('<lastmod>'+e(modified[u])+'</lastmod>' if u in modified else '')+'</url>' for u in urls)+'</urlset>')
  write(root/'robots.txt','User-agent: *\nAllow: /\nDisallow: /api/\nDisallow: /admin/\nDisallow: /.cms/\nDisallow: /avatar-check.html\nSitemap: '+SITE+'/sitemap.xml\n')
