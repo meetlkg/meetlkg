@@ -1,11 +1,11 @@
 {
   "title": "Choosing an agent harness for my DGX Spark",
   "slug": "local-model-agent-harnesses-dgx-spark",
-  "excerpt": "I wanted my local models to help with coding, research and everyday work. Here’s what I look for in the tools around them, from context and runtime to remote access and model management.",
-  "summary": "I want to give a local agent some work and come back later to see what it has done. Here, I compare ten tools on context, runtime, recovery, remote access, hardware access and model configuration.",
+  "excerpt": "I compared ten tools for my DGX Spark setup. Multi-day jobs, context management for smaller models, configurable RAG and inference settings are still the gaps for me.",
+  "summary": "None of the tools in this comparison fully meets my needs yet. I need multi-day jobs that can resume, context management suited to smaller models, configurable RAG and inference profiles for each model. The setup examples below cover parts of this, but I’m still looking for the whole workflow.",
   "category": "Agents & local inference",
   "seoTitle": "Choosing a local agent harness for DGX Spark",
-  "seoDescription": "Ten local AI tools compared for DGX Spark: context, runtime, recovery, remote access, hardware access, Hugging Face model management and configuration.",
+  "seoDescription": "Ten local AI tools compared for DGX Spark, and the remaining gaps: multi-day jobs, small-model context management, configurable RAG and inference settings.",
   "cover": "",
   "coverAlt": "",
   "canonical": "",
@@ -35,7 +35,7 @@
     },
     {
       "type": "paragraph",
-      "text": "That brought me to Agent Zero, OpenHands, OpenCode, Cline, Aider, Pi, Hermes, LangGraph with Deep Agents, LM Studio and Unsloth Studio. Model studios and agent harnesses handle different parts of the setup. I’m comparing them against the same requirements to understand where each fits.",
+      "text": "That brought me to Agent Zero, OpenHands, OpenCode, Cline, Aider, Pi, Hermes, LangGraph with Deep Agents, LM Studio and Unsloth Studio. Model studios and agent harnesses handle different parts of the setup. I’m comparing them against the same requirements to understand where each fits. None of them fully fits my needs yet. The main gaps for me are multi-day work, context management for smaller models, configurable RAG and control over inference settings.",
       "url": "",
       "alt": "",
       "caption": "",
@@ -84,7 +84,7 @@
     },
     {
       "type": "list",
-      "text": "**Remote access:** A stable browser or API address, such as a [Cloudflare Tunnel hostname](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/), with authentication and a way to reconnect to the work.\n**Host and hardware access:** Access to the GPU, files, installed environments and cached models. I check what runs directly on the machine, inside a container or through a host connector.\n**Longer jobs:** The work should continue after I close the browser, with progress and results available when I return.\n**Model management:** Finding, downloading and importing models from Hugging Face, keeping track of exact revisions and reusing the cache. [Versioned downloads](https://huggingface.co/docs/huggingface_hub/guides/download) help me get the same model files again.\n**Configuration:** Controls for context, reasoning, quantisation, sampling and output limits, wherever the model supports them. I want to save these settings separately for each model.\n**Runtime control:** Task state, queues, delegation and parallel workers, plus ways to guide or cancel work while it is running.\n**Observability:** A clear view of tool calls, errors, changes and task results, so I can follow what happened.\n**Maintenance:** The effort to set things up, update dependencies and keep the runtime working with the model backend.",
+      "text": "**Remote access:** A stable browser or API address, such as a [Cloudflare Tunnel hostname](https://developers.cloudflare.com/cloudflare-one/networks/connectors/cloudflare-tunnel/routing-to-tunnel/dns/), with authentication and a way to reconnect to the work.\n**Host and hardware access:** Access to the GPU, files, installed environments and cached models. I check what runs directly on the machine, inside a container or through a host connector.\n**Multi-day jobs:** Work that continues over several days, with saved progress, checkpoints and a way to resume after interruptions. I need to return to a clear task state, including what is done and what is pending.\n**Context management:** A usable context budget for smaller models, with the task plan, decisions and relevant files carried forward as the job grows. Summaries and retrieval need to preserve the details needed for the next step.\n**RAG support and configuration:** Control over which documents are indexed, how they are split, the embedding model and what gets retrieved. I want to see the sources behind retrieved information and tune what enters the context.\n**Model management:** Finding, downloading and importing models from Hugging Face, keeping track of exact revisions and reusing the cache. [Versioned downloads](https://huggingface.co/docs/huggingface_hub/guides/download) help me get the same model files again.\n**Configuration:** Controls for context, reasoning, quantisation, sampling and output limits, wherever the model supports them. I want to save these settings separately for each model and role, and have them applied consistently when switching models or resuming a task.\n**Runtime control:** Task state, queues, delegation and parallel workers, plus ways to guide or cancel work while it is running.\n**Observability:** A clear view of tool calls, errors, changes and task results, so I can follow what happened.\n**Maintenance:** The effort to set things up, update dependencies and keep the runtime working with the model backend.",
       "url": "",
       "alt": "",
       "caption": "",
@@ -273,6 +273,40 @@
       "alt": "",
       "caption": "",
       "language": ""
+    },
+    {
+      "type": "heading",
+      "text": "Why I’m still looking",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "The setup got my models, tools and remote access working together. But none of the options in this comparison has given me the complete workflow I want yet. These are the gaps that still matter to me:",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
+    },
+    {
+      "type": "list",
+      "text": "**Keeping a job going for days:** I need the task plan, completed steps, pending work and outputs to survive interruptions. When I come back, I should be able to see where the job stands and resume it without rebuilding the task from the chat.\n**Keeping smaller models on track:** A multi-day job can produce far more history than the model can use at once. Even the 128k context configured in my setup is a finite budget shared by instructions, tools, retrieved material and responses. I need the harness to carry forward the right decisions and evidence, and give the model a focused next step.\n**Making RAG part of the workflow:** I want to choose the documents, chunking, embedding model and retrieval settings. The agent should be able to fetch relevant material as it works, show where it came from and keep unnecessary content out of the prompt.\n**Managing inference settings properly:** I configured the main and utility models separately. I still want those profiles to fit neatly into the agent workflow: context, reasoning, sampling and output limits, alongside the quantisation and load settings supported by the inference backend. Switching models or resuming work should retain the intended configuration.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": "",
+      "ordered": false
+    },
+    {
+      "type": "paragraph",
+      "text": "For now, I’m keeping these tools in the comparison. Each covers parts of what I need, but I haven’t settled on one for multi-day work with local models. I’m still looking for a setup that brings task continuity, context, retrieval and model configuration together.",
+      "url": "",
+      "alt": "",
+      "caption": "",
+      "language": ""
     }
   ],
   "sources": [
@@ -374,16 +408,16 @@
   "faqs": [
     {
       "question": "How do you choose between these tools?",
-      "answer": "I look at how each tool fits the work, handles context and runtime, and recovers from interruptions. Remote access, hardware access, model management and configuration matter too. The choice depends on how the whole setup works together for the tasks I need."
+      "answer": "None of the options fully meets my needs yet. I’m comparing them on multi-day task continuity, context management for smaller models, configurable RAG and inference settings, alongside remote access, hardware access, model management and recovery."
     },
     {
       "question": "Can I close the browser and let it keep working?",
-      "answer": "If the task runs on a separate server, it can continue after I close the browser. I’d check that I can reconnect and see its progress and results. Restarting the process or recovering an interrupted tool call needs separate checks."
+      "answer": "In my setup, the agent and inference services ran separately from the browser, so closing it did not stop those services. That solved access from different devices. For multi-day jobs, I still need saved task state, checkpoints and reliable recovery after interruptions."
     },
     {
       "question": "Will adding more agents make it faster?",
       "answer": "It can help when tasks spend time waiting for files or network requests. But model calls still share the GPU, so more workers can also mean a longer queue. I’d look at how long the full task takes and whether the main conversation stays responsive."
     }
   ],
-  "updatedAt": "2026-10-18T12:43:51+00:00"
+  "updatedAt": "2026-10-19T17:57:28+00:00"
 }
