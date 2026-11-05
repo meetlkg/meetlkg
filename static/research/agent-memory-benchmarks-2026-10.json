@@ -1,0 +1,1691 @@
+{
+  "title": "Agent memory experiments: aggregate results",
+  "article_date": "2026-11-05",
+  "measurement_dates": "2026-10-25 through 2026-10-31",
+  "classification": "Exploratory engineering measurements; separate workloads, not a universal product ranking",
+  "hardware": {
+    "architecture": "Linux ARM64",
+    "gpu": "NVIDIA GB10",
+    "cpu_cores": 20,
+    "system_ram_gib_approximately": 122,
+    "shared_development_host": true,
+    "smaller_target_machine_qualified": false
+  },
+  "functional_pilot": {
+    "events": 120,
+    "queries": 5,
+    "source_bytes_small": 10204,
+    "source_bytes_large": 2170204,
+    "hindsight": {
+      "version": "1.1.0",
+      "profile": "chunk extraction; RRF; observations disabled",
+      "originals_retained_large": 120,
+      "required_source_cases_after_original_fetch": 5,
+      "cases": 5,
+      "large_restart_source_recovery": 5,
+      "bounded_response_without_source_fetch_cases": 0
+    },
+    "honcho": {
+      "version": "3.4.1",
+      "profile": "PostgreSQL/pgvector; reasoning and summaries disabled",
+      "originals_retained_large": 120,
+      "initial_source_cases": 5,
+      "later_accumulated_namespace_audit_source_cases": 2,
+      "cases": 5,
+      "restart_causation_established": false,
+      "diagnostic": "Scoped ANN returned zero candidates for two missing cases; read-only exact scans found required sources."
+    },
+    "letta": {
+      "component": "Letta Code native transcript/FTS CLI",
+      "version": "0.34.24",
+      "source_cases": 5,
+      "cases": 5,
+      "ingestion_and_full_compaction_lifecycle_tested": false
+    },
+    "memos": {
+      "component": "local plugin",
+      "version": "2.0.16-beta.1",
+      "default_capture_characters": 4000,
+      "default_exact_full_large_originals": 0,
+      "large_originals_after_capture_cap_raised_to_64000": 120,
+      "required_source_cases_after_cap_change": 4,
+      "cases": 5
+    },
+    "limitations": [
+      "Tiny synthetic development fixture with repetitive padding.",
+      "Provider-native learned reasoning was not qualified.",
+      "No comparative latency or full-stack resource ranking was established."
+    ],
+    "upstream_pins": {
+      "honcho": {
+        "repository": "https://github.com/plastic-labs/honcho",
+        "commit": "5bf3b3489db4295d249c0fbe11797fee82e108ba"
+      },
+      "hindsight": {
+        "repository": "https://github.com/vectorize-io/hindsight",
+        "commit": "4822d66e093dadfd6b2b80186fd0395ef80926ca"
+      },
+      "letta": {
+        "repository": "https://github.com/letta-ai/letta-code",
+        "commit": "6f4e4886caa0934341eea75c306fc0364509218e"
+      },
+      "memos": {
+        "repository": "https://github.com/MemTensor/MemOS",
+        "commit": "adcb9f270c982f2b9ff8db9714792829d3bd6ab8"
+      }
+    }
+  },
+  "hindsight_5gb": {
+    "source": "English Wikipedia 20231101.en prefix",
+    "dataset_revision": "a634f78b1c435397c07001e175fa74cc4ad5e775",
+    "source_bytes": 5000000000,
+    "documents": 1584473,
+    "nonnull_vectors": 3759047,
+    "profile": {
+      "version": "1.1.0",
+      "source_revision": "4822d66e093dadfd6b2b80186fd0395ef80926ca",
+      "extraction": "chunks",
+      "llm_provider": "none",
+      "observations": false,
+      "reranker": "rrf",
+      "chunk_characters": 2000,
+      "postgres_memory_gib": 12,
+      "postgres_cpus": 8,
+      "embedding_cuda_allocator_gib": 4
+    },
+    "source_audit": {
+      "missing": 0,
+      "unexpected": 0,
+      "mismatched": 0,
+      "source_api_samples_matched": 79
+    },
+    "database_bytes_including_pilot_banks": 133312042675,
+    "postgres_directory_bytes_including_wal_and_pilots": 141947192251,
+    "baseline_fixed_cases": 40,
+    "repeats": 3,
+    "retrieval": [
+      {
+        "clients": 1,
+        "requests": 120,
+        "successful_requests": 86,
+        "errors": 34,
+        "source_matches": 35,
+        "recall_seconds": {
+          "p50": 30.592620651004836,
+          "p95": 54.42712988497806,
+          "max": 60.952242792991456
+        },
+        "total_seconds": {
+          "p50": 30.68282993201865,
+          "p95": 54.47050216799835,
+          "max": 61.00671528998646
+        },
+        "latency_quantiles": "successful requests only; errors and failure timing are separate"
+      },
+      {
+        "clients": 10,
+        "requests": 120,
+        "successful_requests": 99,
+        "errors": 21,
+        "source_matches": 43,
+        "recall_seconds": {
+          "p50": 24.460044701991137,
+          "p95": 54.488994344021194,
+          "max": 55.70372314998531
+        },
+        "total_seconds": {
+          "p50": 24.514934779988835,
+          "p95": 54.55396660900442,
+          "max": 55.77070093998918
+        },
+        "latency_quantiles": "successful requests only; errors and failure timing are separate"
+      },
+      {
+        "clients": 100,
+        "requests": 120,
+        "successful_requests": 15,
+        "errors": 105,
+        "source_matches": 5,
+        "recall_seconds": {
+          "p50": 103.8361847170163,
+          "p95": 119.07539286499377,
+          "max": 119.07539286499377
+        },
+        "total_seconds": {
+          "p50": 103.91185912300716,
+          "p95": 119.11190871600411,
+          "max": 119.11190871600411
+        },
+        "latency_quantiles": "successful requests only; errors and failure timing are separate"
+      }
+    ],
+    "limitations": [
+      "Latency quantiles are conditional on successful requests; errors stay in the denominator.",
+      "This chunk-only/RRF profile does not evaluate every Hindsight mode.",
+      "Wikipedia workload differs from the later agent-log workload.",
+      "Database storage includes approximately 110 MB of earlier pilot sources and tracing."
+    ]
+  },
+  "paired_archive_selector_pilot": {
+    "source_date": "2026-10-27",
+    "conversation_questions": 30,
+    "repeats": 4,
+    "packet_budget_reference_tokens": 8192,
+    "scale_raw_bytes": 5000000000,
+    "scale_semantic_input_bytes": 51200107,
+    "scale_semantic_coverage_percent_approximately": 1.024,
+    "conversation_semantic_policy": "First 1024 characters of each original <=4096-character piece; partial coverage.",
+    "rows": [
+      {
+        "policy": "latest eight pieces",
+        "all_required_sessions": 1,
+        "all_annotated_messages_represented": 0,
+        "service_p95_one_client_ms": 3.7,
+        "service_p95_100_client_burst_ms": 361
+      },
+      {
+        "policy": "SQLite FTS5",
+        "all_required_sessions": 29,
+        "all_annotated_messages_represented": 25,
+        "service_p95_one_client_ms": 54.0,
+        "service_p95_100_client_burst_ms": 2310
+      },
+      {
+        "policy": "SQLite FTS5 plus Qdrant",
+        "all_required_sessions": 30,
+        "all_annotated_messages_represented": 28,
+        "service_p95_one_client_ms": 123.4,
+        "service_p95_100_client_burst_ms": 3773
+      },
+      {
+        "policy": "SQLite FTS5 plus LanceDB, 16 probes",
+        "all_required_sessions": 28,
+        "all_annotated_messages_represented": 27,
+        "service_p95_one_client_ms": 127.8,
+        "service_p95_100_client_burst_ms": 4036
+      }
+    ],
+    "ann_diagnostic": {
+      "qdrant_exact_neighbor_recall_at32": 1.0,
+      "lancedb_16_probes": 0.7177,
+      "lancedb_all_128_partitions": 1.0
+    },
+    "utility_screening": {
+      "model": "Qwen3:0.6b Q4_K_M",
+      "device": "CPU",
+      "threads": 4,
+      "questions": 6,
+      "repeats": 1,
+      "service_p95_seconds": 27.99,
+      "fallbacks": 2,
+      "qualified_as_mandatory_step": false
+    },
+    "limitations": [
+      "Both vector variants share the same SQLite lexical branch.",
+      "Different ANN algorithms and recall settings; not a matched-recall brand comparison.",
+      "The synthetic 5 GB source was not fully semantically embedded.",
+      "The later experiment changes chunking and selection budget."
+    ]
+  },
+  "qdrant_partial_full_text": {
+    "observed_at_utc": "2026-10-31T08:42:24.398114+00:00",
+    "full_5gb_qualified": false,
+    "original_log_bytes": 5000000000,
+    "frozen_log_bytes": 2407443115,
+    "conversation_fixture_bytes": 15309333,
+    "measured_source_bytes": 2422752448,
+    "evidence_vectors": 1197544,
+    "sources": [
+      {
+        "source": 0,
+        "bytes": 2407443115,
+        "pieces": 601862,
+        "vectors": 1179648,
+        "raw_sha256": "eacbd833e23f1bce81f6d69565f76e57a95b077210e562af1feb1cddbffaf39a",
+        "metadata_sha256": "bdc0765b5bd374fa1999acc7398a5a44e05618d0d1e6d594c6cf563cb82d6aaf",
+        "complete_chunk_coverage": true
+      },
+      {
+        "source": 1,
+        "bytes": 15309333,
+        "pieces": 14897,
+        "vectors": 17896,
+        "raw_sha256": "cd486c673563e988554a2347ae500e4e6a8d550acd4bfebdc7b460bdcc3a70fc",
+        "metadata_sha256": "26c0c4c2d0042939a8164f59afaab86c6ecd793607fe6655fa5ca13405222ae9",
+        "complete_chunk_coverage": true
+      }
+    ],
+    "model": "nomic-e9b6763023c676ca8431644204f50c2b100d9aab-fp16-unit768-fulltext",
+    "dimensions": 768,
+    "hnsw_ef_for_timed_profiles": 128,
+    "chunk_characters": 2048,
+    "selected_parts": 8,
+    "candidate_parts": 32,
+    "repeats": 3,
+    "index_build": {
+      "seconds": 522.704310991001,
+      "indexed_fraction": 0.9980969384005932,
+      "queued_optimizations_after_ready": 0
+    },
+    "restart": {
+      "same_evidence_and_point_count": true,
+      "restart_and_verification_seconds": 1.4702046269958373
+    },
+    "timed_requests": 6570,
+    "timed_request_errors": 0,
+    "quality_outcomes_stable_across_repeats_and_client_caps": true,
+    "quality_by_family": [
+      {
+        "scope": "all-agents",
+        "family": "buried-log-exact",
+        "selector": "dense",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-exact",
+        "selector": "dense_candidates",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-substring",
+        "selector": "dense",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-substring",
+        "selector": "dense_candidates",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "spread-log-identifier",
+        "selector": "dense",
+        "unique_cases": 100,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "spread-log-identifier",
+        "selector": "dense_candidates",
+        "unique_cases": 100,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-exact",
+        "selector": "dense",
+        "unique_cases": 30,
+        "complete_evidence_cases": 3
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-exact",
+        "selector": "dense_candidates",
+        "unique_cases": 30,
+        "complete_evidence_cases": 7
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-substring",
+        "selector": "dense",
+        "unique_cases": 30,
+        "complete_evidence_cases": 2
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-substring",
+        "selector": "dense_candidates",
+        "unique_cases": 30,
+        "complete_evidence_cases": 5
+      },
+      {
+        "scope": "single-agent",
+        "family": "spread-log-identifier",
+        "selector": "dense",
+        "unique_cases": 100,
+        "complete_evidence_cases": 3
+      },
+      {
+        "scope": "single-agent",
+        "family": "spread-log-identifier",
+        "selector": "dense_candidates",
+        "unique_cases": 100,
+        "complete_evidence_cases": 4
+      },
+      {
+        "scope": "mission",
+        "family": "knowledge-update",
+        "selector": "dense",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "mission",
+        "family": "knowledge-update",
+        "selector": "dense_candidates",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "mission",
+        "family": "multi-session",
+        "selector": "dense",
+        "unique_cases": 7,
+        "complete_evidence_cases": 6,
+        "all_annotated_piece_cases": 6
+      },
+      {
+        "scope": "mission",
+        "family": "multi-session",
+        "selector": "dense_candidates",
+        "unique_cases": 7,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 6
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-assistant",
+        "selector": "dense",
+        "unique_cases": 7,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 7
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-assistant",
+        "selector": "dense_candidates",
+        "unique_cases": 7,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 7
+      },
+      {
+        "scope": "mission",
+        "family": "temporal-reasoning",
+        "selector": "dense",
+        "unique_cases": 10,
+        "complete_evidence_cases": 9,
+        "all_annotated_piece_cases": 4
+      },
+      {
+        "scope": "mission",
+        "family": "temporal-reasoning",
+        "selector": "dense_candidates",
+        "unique_cases": 10,
+        "complete_evidence_cases": 10,
+        "all_annotated_piece_cases": 9
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-user",
+        "selector": "dense",
+        "unique_cases": 2,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-user",
+        "selector": "dense_candidates",
+        "unique_cases": 2,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-preference",
+        "selector": "dense",
+        "unique_cases": 1,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 1
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-preference",
+        "selector": "dense_candidates",
+        "unique_cases": 1,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 1
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-exact",
+        "selector": "lexical",
+        "unique_cases": 30,
+        "complete_evidence_cases": 30
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-exact",
+        "selector": "hybrid",
+        "unique_cases": 30,
+        "complete_evidence_cases": 30
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-substring",
+        "selector": "lexical",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "buried-log-substring",
+        "selector": "hybrid",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "all-agents",
+        "family": "spread-log-identifier",
+        "selector": "lexical",
+        "unique_cases": 100,
+        "complete_evidence_cases": 100
+      },
+      {
+        "scope": "all-agents",
+        "family": "spread-log-identifier",
+        "selector": "hybrid",
+        "unique_cases": 100,
+        "complete_evidence_cases": 100
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-exact",
+        "selector": "lexical",
+        "unique_cases": 30,
+        "complete_evidence_cases": 30
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-exact",
+        "selector": "hybrid",
+        "unique_cases": 30,
+        "complete_evidence_cases": 30
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-substring",
+        "selector": "lexical",
+        "unique_cases": 30,
+        "complete_evidence_cases": 0
+      },
+      {
+        "scope": "single-agent",
+        "family": "buried-log-substring",
+        "selector": "hybrid",
+        "unique_cases": 30,
+        "complete_evidence_cases": 2
+      },
+      {
+        "scope": "single-agent",
+        "family": "spread-log-identifier",
+        "selector": "lexical",
+        "unique_cases": 100,
+        "complete_evidence_cases": 100
+      },
+      {
+        "scope": "single-agent",
+        "family": "spread-log-identifier",
+        "selector": "hybrid",
+        "unique_cases": 100,
+        "complete_evidence_cases": 100
+      },
+      {
+        "scope": "mission",
+        "family": "knowledge-update",
+        "selector": "lexical",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "mission",
+        "family": "knowledge-update",
+        "selector": "hybrid",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "mission",
+        "family": "multi-session",
+        "selector": "lexical",
+        "unique_cases": 7,
+        "complete_evidence_cases": 4,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "mission",
+        "family": "multi-session",
+        "selector": "hybrid",
+        "unique_cases": 7,
+        "complete_evidence_cases": 5,
+        "all_annotated_piece_cases": 5
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-assistant",
+        "selector": "lexical",
+        "unique_cases": 7,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 7
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-assistant",
+        "selector": "hybrid",
+        "unique_cases": 7,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 7
+      },
+      {
+        "scope": "mission",
+        "family": "temporal-reasoning",
+        "selector": "lexical",
+        "unique_cases": 10,
+        "complete_evidence_cases": 6,
+        "all_annotated_piece_cases": 4
+      },
+      {
+        "scope": "mission",
+        "family": "temporal-reasoning",
+        "selector": "hybrid",
+        "unique_cases": 10,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 4
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-user",
+        "selector": "lexical",
+        "unique_cases": 2,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-user",
+        "selector": "hybrid",
+        "unique_cases": 2,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-preference",
+        "selector": "lexical",
+        "unique_cases": 1,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 0
+      },
+      {
+        "scope": "mission",
+        "family": "single-session-preference",
+        "selector": "hybrid",
+        "unique_cases": 1,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 0
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "knowledge-update",
+        "selector": "dense",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 1
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "knowledge-update",
+        "selector": "dense_candidates",
+        "unique_cases": 3,
+        "complete_evidence_cases": 3,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "multi-session",
+        "selector": "dense",
+        "unique_cases": 7,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "multi-session",
+        "selector": "dense_candidates",
+        "unique_cases": 7,
+        "complete_evidence_cases": 5,
+        "all_annotated_piece_cases": 3
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-assistant",
+        "selector": "dense",
+        "unique_cases": 7,
+        "complete_evidence_cases": 5,
+        "all_annotated_piece_cases": 5
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-assistant",
+        "selector": "dense_candidates",
+        "unique_cases": 7,
+        "complete_evidence_cases": 5,
+        "all_annotated_piece_cases": 5
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "temporal-reasoning",
+        "selector": "dense",
+        "unique_cases": 10,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 0
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "temporal-reasoning",
+        "selector": "dense_candidates",
+        "unique_cases": 10,
+        "complete_evidence_cases": 7,
+        "all_annotated_piece_cases": 5
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-user",
+        "selector": "dense",
+        "unique_cases": 2,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 1
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-user",
+        "selector": "dense_candidates",
+        "unique_cases": 2,
+        "complete_evidence_cases": 2,
+        "all_annotated_piece_cases": 2
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-preference",
+        "selector": "dense",
+        "unique_cases": 1,
+        "complete_evidence_cases": 0,
+        "all_annotated_piece_cases": 0
+      },
+      {
+        "scope": "whole-corpus",
+        "family": "single-session-preference",
+        "selector": "dense_candidates",
+        "unique_cases": 1,
+        "complete_evidence_cases": 1,
+        "all_annotated_piece_cases": 0
+      }
+    ],
+    "profiles": [
+      {
+        "clients": 1,
+        "profile": "scoped-dense",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 43652,
+        "elapsed_seconds": 83.01043,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.241,
+                "p95": 27.569,
+                "p99": 28.042
+              },
+              "search_ms": {
+                "p50": 90.0,
+                "p95": 121.965,
+                "p99": 137.817
+              },
+              "dense_service_ms": {
+                "p50": 111.929,
+                "p95": 146.561,
+                "p99": 166.483
+              },
+              "dense_total_ms": {
+                "p50": 35258.148,
+                "p95": 70194.198,
+                "p99": 72530.892
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 25.672,
+                "p95": 27.363,
+                "p99": 27.607
+              },
+              "search_ms": {
+                "p50": 8.529,
+                "p95": 22.325,
+                "p99": 34.756
+              },
+              "dense_service_ms": {
+                "p50": 35.006,
+                "p95": 49.021,
+                "p99": 63.979
+              },
+              "dense_total_ms": {
+                "p50": 53135.889,
+                "p95": 82810.648,
+                "p99": 83005.728
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 26.283,
+                "p95": 27.696,
+                "p99": 28.172
+              },
+              "search_ms": {
+                "p50": 29.991,
+                "p95": 44.805,
+                "p99": 50.075
+              },
+              "dense_service_ms": {
+                "p50": 53.686,
+                "p95": 71.639,
+                "p99": 77.856
+              },
+              "dense_total_ms": {
+                "p50": 47871.972,
+                "p95": 80536.683,
+                "p99": 81704.591
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 1,
+        "profile": "scoped-hybrid",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 53572,
+        "elapsed_seconds": 81.892115,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 16.921,
+                "p95": 27.362,
+                "p99": 27.678
+              },
+              "search_ms": {
+                "p50": 90.003,
+                "p95": 119.261,
+                "p99": 136.273
+              },
+              "dense_service_ms": {
+                "p50": 110.327,
+                "p95": 139.836,
+                "p99": 161.461
+              },
+              "dense_total_ms": {
+                "p50": 37038.178,
+                "p95": 68902.588,
+                "p99": 71020.074
+              },
+              "lexical_ms": {
+                "p50": 0.532,
+                "p95": 0.821,
+                "p99": 1.073
+              },
+              "hybrid_service_ms": {
+                "p50": 110.843,
+                "p95": 140.222,
+                "p99": 162.186
+              },
+              "hybrid_total_ms": {
+                "p50": 37038.523,
+                "p95": 68902.96,
+                "p99": 71020.413
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.043,
+                "p95": 26.769,
+                "p99": 27.149
+              },
+              "search_ms": {
+                "p50": 9.056,
+                "p95": 23.678,
+                "p99": 37.143
+              },
+              "dense_service_ms": {
+                "p50": 28.51,
+                "p95": 44.792,
+                "p99": 65.581
+              },
+              "dense_total_ms": {
+                "p50": 53643.752,
+                "p95": 81665.99,
+                "p99": 81884.356
+              },
+              "lexical_ms": {
+                "p50": 4.045,
+                "p95": 10.344,
+                "p99": 10.952
+              },
+              "hybrid_service_ms": {
+                "p50": 34.635,
+                "p95": 48.659,
+                "p99": 71.162
+              },
+              "hybrid_total_ms": {
+                "p50": 53649.281,
+                "p95": 81668.962,
+                "p99": 81887.597
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 16.998,
+                "p95": 26.875,
+                "p99": 27.432
+              },
+              "search_ms": {
+                "p50": 30.517,
+                "p95": 44.779,
+                "p99": 49.503
+              },
+              "dense_service_ms": {
+                "p50": 50.798,
+                "p95": 68.092,
+                "p99": 74.663
+              },
+              "dense_total_ms": {
+                "p50": 49190.906,
+                "p95": 79204.667,
+                "p99": 80348.721
+              },
+              "lexical_ms": {
+                "p50": 0.66,
+                "p95": 0.829,
+                "p99": 1.071
+              },
+              "hybrid_service_ms": {
+                "p50": 51.277,
+                "p95": 68.421,
+                "p99": 75.019
+              },
+              "hybrid_total_ms": {
+                "p50": 49191.611,
+                "p95": 79204.998,
+                "p99": 80349.45
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 1,
+        "profile": "global-dense",
+        "requests": 90,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 31320,
+        "elapsed_seconds": 7.475024,
+        "scopes": {
+          "whole-corpus": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 26.594,
+                "p95": 27.589,
+                "p99": 28.295
+              },
+              "search_ms": {
+                "p50": 49.327,
+                "p95": 107.252,
+                "p99": 128.422
+              },
+              "dense_service_ms": {
+                "p50": 77.587,
+                "p95": 134.501,
+                "p99": 157.392
+              },
+              "dense_total_ms": {
+                "p50": 4970.048,
+                "p95": 7320.22,
+                "p99": 7473.463
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 10,
+        "profile": "scoped-dense",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 76772,
+        "elapsed_seconds": 21.118461,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 18.009,
+                "p95": 34.73,
+                "p99": 39.58
+              },
+              "search_ms": {
+                "p50": 89.213,
+                "p95": 129.896,
+                "p99": 150.402
+              },
+              "dense_service_ms": {
+                "p50": 112.209,
+                "p95": 154.303,
+                "p99": 174.357
+              },
+              "dense_total_ms": {
+                "p50": 9394.959,
+                "p95": 17896.548,
+                "p99": 20965.354
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 22.623,
+                "p95": 40.081,
+                "p99": 44.923
+              },
+              "search_ms": {
+                "p50": 8.783,
+                "p95": 16.847,
+                "p99": 24.927
+              },
+              "dense_service_ms": {
+                "p50": 39.173,
+                "p95": 51.931,
+                "p99": 56.416
+              },
+              "dense_total_ms": {
+                "p50": 13630.628,
+                "p95": 20809.081,
+                "p99": 20857.666
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 19.084,
+                "p95": 34.921,
+                "p99": 41.711
+              },
+              "search_ms": {
+                "p50": 29.871,
+                "p95": 45.607,
+                "p99": 51.147
+              },
+              "dense_service_ms": {
+                "p50": 55.345,
+                "p95": 71.879,
+                "p99": 89.105
+              },
+              "dense_total_ms": {
+                "p50": 12375.693,
+                "p95": 20227.172,
+                "p99": 20489.071
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 10,
+        "profile": "scoped-hybrid",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 103476,
+        "elapsed_seconds": 21.695484,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 18.032,
+                "p95": 34.625,
+                "p99": 38.554
+              },
+              "search_ms": {
+                "p50": 87.768,
+                "p95": 133.352,
+                "p99": 165.222
+              },
+              "dense_service_ms": {
+                "p50": 111.437,
+                "p95": 155.644,
+                "p99": 180.899
+              },
+              "dense_total_ms": {
+                "p50": 9621.931,
+                "p95": 18312.083,
+                "p99": 21552.747
+              },
+              "lexical_ms": {
+                "p50": 0.56,
+                "p95": 1.108,
+                "p99": 2.295
+              },
+              "hybrid_service_ms": {
+                "p50": 112.135,
+                "p95": 156.491,
+                "p99": 181.989
+              },
+              "hybrid_total_ms": {
+                "p50": 9622.263,
+                "p95": 18312.668,
+                "p99": 21553.269
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 20.902,
+                "p95": 39.694,
+                "p99": 41.344
+              },
+              "search_ms": {
+                "p50": 8.578,
+                "p95": 17.701,
+                "p99": 22.479
+              },
+              "dense_service_ms": {
+                "p50": 38.755,
+                "p95": 51.733,
+                "p99": 57.305
+              },
+              "dense_total_ms": {
+                "p50": 14036.693,
+                "p95": 21379.531,
+                "p99": 21431.413
+              },
+              "lexical_ms": {
+                "p50": 6.311,
+                "p95": 15.894,
+                "p99": 25.391
+              },
+              "hybrid_service_ms": {
+                "p50": 45.5,
+                "p95": 61.286,
+                "p99": 69.229
+              },
+              "hybrid_total_ms": {
+                "p50": 14048.344,
+                "p95": 21388.399,
+                "p99": 21437.97
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 20.116,
+                "p95": 41.065,
+                "p99": 44.672
+              },
+              "search_ms": {
+                "p50": 30.942,
+                "p95": 45.686,
+                "p99": 50.759
+              },
+              "dense_service_ms": {
+                "p50": 56.243,
+                "p95": 80.136,
+                "p99": 91.095
+              },
+              "dense_total_ms": {
+                "p50": 12701.677,
+                "p95": 20706.751,
+                "p99": 21014.479
+              },
+              "lexical_ms": {
+                "p50": 0.695,
+                "p95": 2.396,
+                "p99": 3.879
+              },
+              "hybrid_service_ms": {
+                "p50": 57.191,
+                "p95": 80.803,
+                "p99": 92.31
+              },
+              "hybrid_total_ms": {
+                "p50": 12705.668,
+                "p95": 20707.738,
+                "p99": 21014.798
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 10,
+        "profile": "global-dense",
+        "requests": 90,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 36752,
+        "elapsed_seconds": 1.957464,
+        "scopes": {
+          "whole-corpus": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 22.653,
+                "p95": 37.778,
+                "p99": 43.733
+              },
+              "search_ms": {
+                "p50": 58.877,
+                "p95": 112.781,
+                "p99": 146.887
+              },
+              "dense_service_ms": {
+                "p50": 84.298,
+                "p95": 130.886,
+                "p99": 167.257
+              },
+              "dense_total_ms": {
+                "p50": 1186.613,
+                "p95": 1886.831,
+                "p99": 1952.736
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 100,
+        "profile": "scoped-dense",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 132932,
+        "elapsed_seconds": 21.316744,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.305,
+                "p95": 30.505,
+                "p99": 40.815
+              },
+              "search_ms": {
+                "p50": 91.314,
+                "p95": 133.901,
+                "p99": 160.139
+              },
+              "dense_service_ms": {
+                "p50": 112.557,
+                "p95": 153.788,
+                "p99": 183.472
+              },
+              "dense_total_ms": {
+                "p50": 11801.705,
+                "p95": 20615.199,
+                "p99": 21172.63
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 24.158,
+                "p95": 36.826,
+                "p99": 43.564
+              },
+              "search_ms": {
+                "p50": 8.858,
+                "p95": 18.383,
+                "p99": 22.528
+              },
+              "dense_service_ms": {
+                "p50": 38.331,
+                "p95": 52.096,
+                "p99": 55.669
+              },
+              "dense_total_ms": {
+                "p50": 11130.173,
+                "p95": 18300.614,
+                "p99": 18344.96
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 20.294,
+                "p95": 36.528,
+                "p99": 41.804
+              },
+              "search_ms": {
+                "p50": 30.163,
+                "p95": 45.928,
+                "p99": 51.398
+              },
+              "dense_service_ms": {
+                "p50": 55.016,
+                "p95": 75.469,
+                "p99": 85.041
+              },
+              "dense_total_ms": {
+                "p50": 9898.446,
+                "p95": 17680.3,
+                "p99": 17952.895
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 100,
+        "profile": "scoped-hybrid",
+        "requests": 1050,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 182840,
+        "elapsed_seconds": 22.283013,
+        "scopes": {
+          "all-agents": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.397,
+                "p95": 35.362,
+                "p99": 40.407
+              },
+              "search_ms": {
+                "p50": 93.56,
+                "p95": 143.025,
+                "p99": 168.311
+              },
+              "dense_service_ms": {
+                "p50": 116.659,
+                "p95": 172.03,
+                "p99": 191.23
+              },
+              "dense_total_ms": {
+                "p50": 12804.05,
+                "p95": 21545.671,
+                "p99": 22145.715
+              },
+              "lexical_ms": {
+                "p50": 0.691,
+                "p95": 1.728,
+                "p99": 2.447
+              },
+              "hybrid_service_ms": {
+                "p50": 117.696,
+                "p95": 172.85,
+                "p99": 191.971
+              },
+              "hybrid_total_ms": {
+                "p50": 12804.855,
+                "p95": 21547.249,
+                "p99": 22148.589
+              }
+            }
+          },
+          "mission": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.321,
+                "p95": 35.041,
+                "p99": 45.656
+              },
+              "search_ms": {
+                "p50": 8.423,
+                "p95": 19.082,
+                "p99": 29.318
+              },
+              "dense_service_ms": {
+                "p50": 31.159,
+                "p95": 49.818,
+                "p99": 66.165
+              },
+              "dense_total_ms": {
+                "p50": 12077.02,
+                "p95": 19267.004,
+                "p99": 19307.259
+              },
+              "lexical_ms": {
+                "p50": 8.287,
+                "p95": 17.659,
+                "p99": 24.368
+              },
+              "hybrid_service_ms": {
+                "p50": 39.961,
+                "p95": 59.182,
+                "p99": 72.458
+              },
+              "hybrid_total_ms": {
+                "p50": 12085.269,
+                "p95": 19275.3,
+                "p99": 19313.371
+              }
+            }
+          },
+          "single-agent": {
+            "requests": 480,
+            "timing": {
+              "embedding_ms": {
+                "p50": 17.225,
+                "p95": 31.467,
+                "p99": 42.616
+              },
+              "search_ms": {
+                "p50": 33.489,
+                "p95": 52.382,
+                "p99": 62.209
+              },
+              "dense_service_ms": {
+                "p50": 55.06,
+                "p95": 77.112,
+                "p99": 85.254
+              },
+              "dense_total_ms": {
+                "p50": 10729.75,
+                "p95": 18673.061,
+                "p99": 18934.291
+              },
+              "lexical_ms": {
+                "p50": 0.707,
+                "p95": 2.362,
+                "p99": 4.535
+              },
+              "hybrid_service_ms": {
+                "p50": 55.802,
+                "p95": 78.735,
+                "p99": 85.587
+              },
+              "hybrid_total_ms": {
+                "p50": 10731.777,
+                "p95": 18673.332,
+                "p99": 18934.613
+              }
+            }
+          }
+        }
+      },
+      {
+        "clients": 100,
+        "profile": "global-dense",
+        "requests": 90,
+        "request_errors": 0,
+        "admitted_operations": 4,
+        "client_peak_rss_kib": 69716,
+        "elapsed_seconds": 1.906368,
+        "scopes": {
+          "whole-corpus": {
+            "requests": 90,
+            "timing": {
+              "embedding_ms": {
+                "p50": 28.076,
+                "p95": 40.87,
+                "p99": 43.754
+              },
+              "search_ms": {
+                "p50": 51.003,
+                "p95": 103.982,
+                "p99": 169.106
+              },
+              "dense_service_ms": {
+                "p50": 78.298,
+                "p95": 130.404,
+                "p99": 199.685
+              },
+              "dense_total_ms": {
+                "p50": 1197.416,
+                "p95": 1841.086,
+                "p99": 1890.535
+              }
+            }
+          }
+        }
+      }
+    ],
+    "ann_effort_probe": {
+      "development_queries": 15,
+      "efforts": [
+        128,
+        512,
+        2048
+      ],
+      "samples_per_query_effort": 1,
+      "score_tolerance": 1e-06,
+      "timing_excludes_embedding_and_source_validation": true,
+      "summary": [
+        {
+          "hnsw_ef": 128,
+          "scope": "all-agents",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 0.3359375,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 0.3359375,
+          "mean_search_only_ms": 84.75702149735298,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 128,
+          "scope": "single-agent",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 4.137799496675143,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 128,
+          "scope": "mission",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 2.1507614947040565,
+          "complete_evidence_cases_at_8": 4,
+          "complete_evidence_cases_at_32": 4
+        },
+        {
+          "hnsw_ef": 128,
+          "scope": "whole-corpus",
+          "development_queries": 3,
+          "mean_literal_id_recall_at_32": 0.7395833333333334,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 0.7395833333333334,
+          "mean_search_only_ms": 117.13929900239843,
+          "complete_evidence_cases_at_8": 1,
+          "complete_evidence_cases_at_32": 2
+        },
+        {
+          "hnsw_ef": 512,
+          "scope": "all-agents",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 0.515625,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 0.515625,
+          "mean_search_only_ms": 246.52359225365217,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 512,
+          "scope": "single-agent",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 3.2628925000608433,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 512,
+          "scope": "mission",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 2.1153257475816645,
+          "complete_evidence_cases_at_8": 4,
+          "complete_evidence_cases_at_32": 4
+        },
+        {
+          "hnsw_ef": 512,
+          "scope": "whole-corpus",
+          "development_queries": 3,
+          "mean_literal_id_recall_at_32": 0.7395833333333334,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 0.7395833333333334,
+          "mean_search_only_ms": 249.50655833041915,
+          "complete_evidence_cases_at_8": 1,
+          "complete_evidence_cases_at_32": 2
+        },
+        {
+          "hnsw_ef": 2048,
+          "scope": "all-agents",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 0.890625,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 0.890625,
+          "mean_search_only_ms": 843.7294755058247,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 2048,
+          "scope": "single-agent",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 3.490799750579754,
+          "complete_evidence_cases_at_8": 0,
+          "complete_evidence_cases_at_32": 0
+        },
+        {
+          "hnsw_ef": 2048,
+          "scope": "mission",
+          "development_queries": 4,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 2.0584855010383762,
+          "complete_evidence_cases_at_8": 4,
+          "complete_evidence_cases_at_32": 4
+        },
+        {
+          "hnsw_ef": 2048,
+          "scope": "whole-corpus",
+          "development_queries": 3,
+          "mean_literal_id_recall_at_32": 1.0,
+          "mean_fraction_at_exact_score_cutoff_minus_1e_6": 1.0,
+          "mean_search_only_ms": 918.2048179985335,
+          "complete_evidence_cases_at_8": 1,
+          "complete_evidence_cases_at_32": 2
+        }
+      ]
+    },
+    "resources": {
+      "qdrant_limit_bytes": 2147483648,
+      "qdrant_cpu_cores": 4,
+      "qdrant_observed_sampled_peak_bytes": 2147483648,
+      "observed_oom_kills": 0,
+      "embedding_cuda_allocator_limit_bytes": 2147483648,
+      "total_deployment_memory_limit": null,
+      "qdrant_collection_logical_bytes": 4858046572,
+      "qdrant_collection_allocated_bytes": 4471296000,
+      "vector_cache_bytes": 3678855168,
+      "id_cache_bytes": 9580352,
+      "frozen_fts_metadata_bytes": 1156468736,
+      "server_storage_measured_after_index_and_probes": true
+    },
+    "scoring_correction": {
+      "boundary_spanning_test_hashes": 20,
+      "adjacent_returned_parts_can_reconstruct_needle": true,
+      "missing_or_foreign_parts_never_joined": true,
+      "all_timed_profiles_rerun": true,
+      "prior_raw_reports_preserved": true
+    },
+    "measurement_limits": [
+      "shared Linux ARM64 GB10 development host; approximately 122 GiB RAM and 20 CPUs",
+      "warm burst; four admitted operations; queues counted separately",
+      "offline verification overlapped late rerun profiles on shared host",
+      "component caps do not bound total model/host/client memory",
+      "repetitive synthetic logs and 30 previously used LongMemEval questions",
+      "gold source session/piece coverage is not generated answer accuracy",
+      "index adapter and Temporal prompt path remain separate; 5 GB, 300 GB, code and dynamic-source qualification remain open",
+      "ANN effort probe uses only 15 development queries; not a concurrent latency SLO"
+    ],
+    "embedding_profile": {
+      "model": "nomic-ai/nomic-embed-text-v1.5",
+      "revision": "e9b6763023c676ca8431644204f50c2b100d9aab",
+      "precision": "GPU FP16",
+      "pooling": "mean, layer normalization, unit normalization at 768 dimensions",
+      "document_prefix": "search_document: ",
+      "query_prefix": "search_query: ",
+      "max_sequences_per_internal_batch": 64,
+      "max_padded_tokens_per_internal_batch": 32768,
+      "max_actual_tokens_per_input": 2048,
+      "truncation": false,
+      "service_source_sha256": "8bb48a984253c831be59c04fe6d9357e9c66f3e486a613bcee53eba817f579f7"
+    }
+  },
+  "reproduction_status": "Aggregate results and dataset/model pins are public here; internal runner implementation and raw runtime histories are not included. This is not a turnkey independent reproduction package.",
+  "provenance": {
+    "source_artifacts_sha256": {
+      "functional-pilot-results": "803b09ce061dd3df980192df3b62d4c0815fc76de5833fac84fdfed4fe04bea7",
+      "hindsight-checkpoints": "2a879381c252b3de5f0e9aa08414ad7fec97ae3b40a90b3c456681701867a4a2",
+      "paired-selector-results": "03afbd77f421746b4fd300cf3be6db3a25024519217a6ff617cff8cac055a57c",
+      "qdrant-partial-results": "3416324c9c10cb80e67b390cb07476dbe7e160cc024f92dc771d947f015231e9"
+    }
+  },
+  "unqualified": [
+    "full 5 GB Qdrant run",
+    "300+ GB external RAG",
+    "codebase retrieval",
+    "100 simultaneous complete agents or model generations",
+    "month-long workflow reliability",
+    "production prompt/context integration"
+  ]
+}
